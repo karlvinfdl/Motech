@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/alexis_style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}">
 {% endblock %}
 
 
@@ -14,7 +14,7 @@
     {# --- ÉTAPE 0 : ACCUEIL --- #}
     <section id="section-accueil" class="section-jeuAB active-AB">
         <div class="game-containerAB">
-            <img src="{{ asset('images/Alexis/titrefinal2.png') }}" alt="Devine le Mot" class="game-titleAB">
+            <img src="{{ asset('assets/images/Alexis/titrefinal2.png') }}" alt="Devine le Mot" class="game-titleAB">
             <div class="btn-containerAB">
                 <button class="blink-buttonAB">Press ESPACE pour commencer</button>
             </div>
@@ -69,7 +69,7 @@
         <main class="ecran-splitAB">
             <section class="coteAB gaucheAB">
                 <div class="personnage-containerAB">
-                    <img src="{{ asset('images/Alexis/.gif/licorne.gif') }}" alt="Licorne" class="pixel-spriteAB licorne-animAB">
+                    <img src="{{ asset('assets/.gif/Alexis/licorne.gif') }}" alt="Licorne" class="pixel-spriteAB licorne-animAB">
                 </div>
                 <div class="interaction-zoneAB">
                     <div class="bulle-roseAB" id="bulle-indiceAB">Chargement...</div>
@@ -80,7 +80,7 @@
             <section class="coteAB droiteAB">
                 <div class="sorcier-containerAB">
                     <div class="bulle-dialogueAB" id="bulle-sorcierAB">Tu ne trouveras pas !</div>
-                    <img src="{{ asset('images/Alexis/.gif/Sorcier.gif') }}" id="image-sorcierAB" class="pixel-spriteAB">
+                    <img src="{{ asset('assets/.gif/Alexis/Sorcier.gif') }}" id="image-sorcierAB" class="pixel-spriteAB">
                 </div>
                 <div class="interaction-zoneAB">
                     <input type="text" id="input-reponseAB" class="bulle-roseAB input-reponseAB" placeholder="Tape ta réponse..." autocomplete="off">
@@ -96,20 +96,21 @@
         <div id="overlay-game-overAB" class="overlay-ecranAB">
             <div class="overlay-contenuAB">
                 <h1>GAME OVER</h1>
-                <img src="{{ asset('images/Alexis/.gif/Licorne qui pleure.gif') }}" class="licorne-mortAB">
+                <img src="{{ asset('assets/.gif/Alexis/Licorne qui pleure.gif') }}" class="licorne-mortAB">
                 <p>Press ESPACE pour recommencer</p>
             </div>
         </div>
 
         <div id="overlay-you-winAB" class="overlay-ecranAB">
             <div class="overlay-contenuAB">
-                <img src="{{ asset('images/Alexis/écran victoire.png') }}" class="trophee-winAB">
+                <img src="{{ asset('assets/images/Alexis/écran victoire.png') }}" class="trophee-winAB">
                 <p>Félicitations ! Le sorcier est vaincu.</p>
                 <p class="instructionAB">Press ESPACE pour rejouer</p>
             </div>
         </div>
     </section>
 </div>
+
 
 <script>
 /* -----------------------------------------------------

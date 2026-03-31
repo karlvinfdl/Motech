@@ -50,7 +50,6 @@ body {
     background-size: cover;
 }
 
-
 /* Assure que le contenu reste au-dessus */
 body > * {
     position: relative;
@@ -79,7 +78,7 @@ body > * {
     background: linear-gradient(
         to bottom,
         rgba(255, 255, 255, 0.18) 0%,
-        rgba(220, 235, 255, 0.10) 40%,
+        rgba(220, 235, 255, 0.1) 40%,
         rgba(255, 255, 255, 0.06) 100%
     );
     pointer-events: none;
@@ -114,7 +113,6 @@ body > * {
 
     z-index: 5;
 }
-
 
 /* CARTES */
 .card1 {
@@ -183,7 +181,9 @@ button {
     cursor: pointer;
     display: block;
     width: 50%;
-    transition: transform 0.2s ease, background 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
 }
 
 .btn1:hover {
@@ -201,7 +201,9 @@ button {
     cursor: pointer;
     text-align: center;
     text-decoration: none;
-    transition: transform 0.2s ease, background 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
 }
 
 .big-btn1:hover {
@@ -251,17 +253,18 @@ button {
 .island1 {
     display: block;
     height: auto;
-    transition: transform 0.25s ease, filter 0.25s ease, opacity 0.25s ease;
+    transition:
+        transform 0.25s ease,
+        filter 0.25s ease,
+        opacity 0.25s ease;
     transform-origin: center center;
-    filter:
-        drop-shadow(0 12px 18px rgba(0, 0, 0, 0.10))
+    filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.1))
         drop-shadow(0 26px 34px rgba(0, 0, 0, 0.18));
 }
 
 .island-link1:hover .island1 {
     transform: scale(1.04) translateY(-4px);
-    filter:
-        drop-shadow(0 16px 22px rgba(0, 0, 0, 0.12))
+    filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.12))
         drop-shadow(0 34px 42px rgba(0, 0, 0, 0.22));
 }
 
@@ -270,11 +273,8 @@ button {
 .island-devine1 .island1,
 .island-pinata1 .island1 {
     opacity: 0.94;
-    filter:
-        blur(0.4px)
-        saturate(0.92)
-        brightness(1.02)
-        drop-shadow(0 12px 18px rgba(0, 0, 0, 0.10))
+    filter: blur(0.4px) saturate(0.92) brightness(1.02)
+        drop-shadow(0 12px 18px rgba(0, 0, 0, 0.1))
         drop-shadow(0 26px 34px rgba(0, 0, 0, 0.18));
 }
 
@@ -317,7 +317,8 @@ button {
 
 /* Animation flottante */
 @keyframes float1 {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateY(0);
     }
     50% {
@@ -348,7 +349,6 @@ button {
         width: 100%;
         height: 60vh;
     }
-    
 
     .island-roue1 {
         top: 4%;
@@ -2481,7 +2481,14 @@ body * {
     --ink: #111;
     --btn-beige: #ead9ab;
     --btn-bleu: #0d5f76;
-    --bg-image: url("/images/Karlvin/backgroundeasy1.png");
+    --bg-image: url("/assets/images/Karlvin/backgroundeasy1.png");
+    --ember-1: url("/assets/images/Karlvin/braise1.png");
+    --ember-2: url("/assets/images/Karlvin/braise2.png");
+    --leaf-1: url("/assets/images/Karlvin/feuille-rouge.png");
+    --leaf-2: url("/assets/images/Karlvin/feuille-jaune.png");
+    --leaf-3: url("/assets/images/Karlvin/feuille-verte.png");
+    --wind-1: url("/assets/images/Karlvin/desert1.png");
+    --wind-2: url("/assets/images/Karlvin/desert2.png");
 }
 
 /* ============================================================
@@ -2544,8 +2551,8 @@ body * {
 
 /* Fond règles */
 .jeu--reglesKF::before {
-    background: url("/images/Karlvin/backgroundregles.png") center / cover
-        no-repeat;
+    background: url("/assets/images/Karlvin/backgroundregles.png") center /
+        cover no-repeat;
     z-index: -1;
 }
 
@@ -2553,7 +2560,8 @@ body * {
 .jeu--victoireKF::before {
     background:
         linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
-        url("/images/Karlvin/backgroundeasy1.png") center / cover no-repeat;
+        url("/assets/images/Karlvin/backgroundeasy1.png") center / cover
+            no-repeat;
 }
 
 /* Fond récompense / score */
@@ -2561,14 +2569,14 @@ body * {
 .jeu--scoreKF::before {
     background:
         linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
-        url("/images/Karlvin/background2.png") center / cover no-repeat;
+        url("/assets/images/Karlvin/background2.png") center / cover no-repeat;
     z-index: -1;
 }
 
 /* Fond défaite */
 .jeu--defaiteKF::before {
-    background: url("/images/Karlvin/backgrounddefaite1.png") center / cover
-        no-repeat;
+    background: url("/assets/images/Karlvin/backgrounddefaite1.png") center /
+        cover no-repeat;
 }
 
 /* ============================================================
@@ -2965,7 +2973,8 @@ body * {
 .tuileKF {
     width: 90px;
     height: 92px;
-    background: url("/images/Karlvin/tilelettre.png") center / contain no-repeat;
+    background: url("/assets/images/Karlvin/tilelettre.png") center / contain
+        no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -3428,17 +3437,17 @@ body * {
 }
 
 .windKF span:nth-child(3n) {
-    background-image: var(--wind-1, url("/images/Karlvin/desert1.png"));
+    background-image: var(--wind-1, url("/assets/images/Karlvin/desert1.png"));
     width: 70px;
     height: 70px;
 }
 .windKF span:nth-child(3n + 1) {
-    background-image: var(--wind-2, url("/images/Karlvin/desert2.png"));
+    background-image: var(--wind-2, url("/assets/images/Karlvin/desert2.png"));
     width: 90px;
     height: 90px;
 }
 .windKF span:nth-child(3n + 2) {
-    background-image: var(--wind-1, url("/images/Karlvin/desert1.png"));
+    background-image: var(--wind-1, url("/assets/images/Karlvin/desert1.png"));
     width: 75px;
     height: 75px;
 }
@@ -4150,7 +4159,7 @@ main.jeuKF {
     }
 
     .jeuKF::before {
-        background-image: url("/images/Karlvin/testmobile3.png");
+        background-image: url("/assets/images/Karlvin/testmobile3.png");
         background-position: 50% 45%;
     }
 
