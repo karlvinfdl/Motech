@@ -7,25 +7,27 @@
 <!-- ÎLES À GAUCHE -->
 <!-- ===================== -->
 <div class="iles1" aria-label="Jeux">
-  <a href="{{ path('app_wheel') }}" class="island-link1">
-    <img class="island1 island-roue1" src="{{ asset('assets/images/ile-axel1.png') }}" alt="Roue Magique" />
+  <a href="{{ path('app_wheel') }}" class="island-link1 island-roue1">
+    <img class="island1" src="{{ asset('assets/images/ile-axel1.png') }}" alt="Roue Magique" />
   </a>
 
-  <a href="{{ path('app_devinelemot') }}" class="island-link1">
-    <img class="island1 island-devine1" src="{{ asset('assets/images/ile-alexis1.png') }}" alt="Devine le mot" />
+  <a href="{{ path('app_devinelemot') }}" class="island-link1 island-devine1">
+    <img class="island1" src="{{ asset('assets/images/ile-alexis1.png') }}" alt="Devine le mot" />
   </a>
 
-  <a href="{{ path('app_ptinata') }}" class="island-link1">
-    <img class="island1 island-pinata1" src="{{ asset('assets/images/ile-kyllian1.png') }}" alt="Pinata" />
+  <a href="{{ path('app_ptinata') }}" class="island-link1 island-pinata1">
+    <img class="island1" src="{{ asset('assets/images/ile-kyllian1.png') }}" alt="Pinata" />
   </a>
 
-  <a href="{{ path('app_scrabble') }}" class="island-link1">
-    <img class="island1 island-scrabble1" src="{{ asset('assets/images/ile-karlvin1.png') }}" alt="Scrabble des licornes" />
+  <a href="{{ path('app_scrabble') }}" class="island-link1 island-scrabble1">
+    <img class="island1" src="{{ asset('assets/images/ile-karlvin1.png') }}" alt="Scrabble des licornes" />
   </a>
 
-  <a href="{{ path('app_coaster') }}" class="island-link1">
-    <img class="island1 island-star1" src="{{ asset('assets/images/ile-elodie1.png') }}" alt="Star Coaster" />
+  <a href="{{ path('app_coaster') }}" class="island-link1 island-star1">
+    <img class="island1" src="{{ asset('assets/images/ile-elodie1.png') }}" alt="Star Coaster" />
   </a>
+
+  <img class="clouds-front1" src="{{ asset('assets/images/clouds-front.png') }}" alt="">
 </div>
 
 
@@ -74,14 +76,14 @@
   </section>
 
   <!-- Bouton équipe -->
-  <button class="big-btn1" id="teamBtn1" type="button">
-    Découvrir l'équipe
-  </button>
+  <a href="{{ path('app_coaster') }}" class="big-btn1" id="teamBtn1" >
+  Découvrir l'équipe
+  </a>
 
   <!-- Easter egg -->
   <section class="card1 card-egg1">
     <div class="egg1">
-      <img src="{{ asset('/images/tokyo.png') }}" alt="Tokyo">
+      <img src="{{ asset('assets/images/tokyo.png') }}" alt="Tokyo">
       <div class="egg-text1">
         <h3 class="egg-title1">Easter egg</h3>
         <p class="egg-desc1">
