@@ -1052,14 +1052,14 @@ body.page-jeuAB {
 }
 
 .gaucheAB {
-    background-image: url("../images/fond1.png");
+    background-image: url("../images/Alexis/fond1.png");
     background-size: cover;
     background-position: left center;
     border-right: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .droiteAB {
-    background-image: url("../images/fond2.png");
+    background-image: url("../images/Alexis/fond2.png");
     background-size: 200% 100%;
     background-position: right center;
 }
