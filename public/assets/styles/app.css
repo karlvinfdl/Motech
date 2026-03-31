@@ -2481,7 +2481,14 @@ body * {
     --ink: #111;
     --btn-beige: #ead9ab;
     --btn-bleu: #0d5f76;
-    --bg-image: url("/images/Karlvin/backgroundeasy1.png");
+    --bg-image: url("/assets/images/Karlvin/backgroundeasy1.png");
+    --ember-1: url("/assets/images/Karlvin/braise1.png");
+    --ember-2: url("/assets/images/Karlvin/braise2.png");
+    --leaf-1: url("/assets/images/Karlvin/feuille-rouge.png");
+    --leaf-2: url("/assets/images/Karlvin/feuille-jaune.png");
+    --leaf-3: url("/assets/images/Karlvin/feuille-verte.png");
+    --wind-1: url("/assets/images/Karlvin/desert1.png");
+    --wind-2: url("/assets/images/Karlvin/desert2.png");
 }
 
 /* ============================================================
@@ -2544,7 +2551,7 @@ body * {
 
 /* Fond règles */
 .jeu--reglesKF::before {
-    background: url("/images/Karlvin/backgroundregles.png") center / cover
+    background: url("/assets/images/Karlvin/backgroundregles.png") center / cover
         no-repeat;
     z-index: -1;
 }
@@ -2553,7 +2560,7 @@ body * {
 .jeu--victoireKF::before {
     background:
         linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
-        url("/images/Karlvin/backgroundeasy1.png") center / cover no-repeat;
+        url("/assets/images/Karlvin/backgroundeasy1.png") center / cover no-repeat;
 }
 
 /* Fond récompense / score */
@@ -2561,13 +2568,13 @@ body * {
 .jeu--scoreKF::before {
     background:
         linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
-        url("/images/Karlvin/background2.png") center / cover no-repeat;
+        url("/assets/images/Karlvin/background2.png") center / cover no-repeat;
     z-index: -1;
 }
 
 /* Fond défaite */
 .jeu--defaiteKF::before {
-    background: url("/images/Karlvin/backgrounddefaite1.png") center / cover
+    background: url("/assets/images/Karlvin/backgrounddefaite1.png") center / cover
         no-repeat;
 }
 
@@ -2965,7 +2972,7 @@ body * {
 .tuileKF {
     width: 90px;
     height: 92px;
-    background: url("/images/Karlvin/tilelettre.png") center / contain no-repeat;
+    background: url("/assets/images/Karlvin/tilelettre.png") center / contain no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -3428,17 +3435,17 @@ body * {
 }
 
 .windKF span:nth-child(3n) {
-    background-image: var(--wind-1, url("/images/Karlvin/desert1.png"));
+    background-image: var(--wind-1, url("/assets/images/Karlvin/desert1.png"));
     width: 70px;
     height: 70px;
 }
 .windKF span:nth-child(3n + 1) {
-    background-image: var(--wind-2, url("/images/Karlvin/desert2.png"));
+    background-image: var(--wind-2, url("/assets/images/Karlvin/desert2.png"));
     width: 90px;
     height: 90px;
 }
 .windKF span:nth-child(3n + 2) {
-    background-image: var(--wind-1, url("/images/Karlvin/desert1.png"));
+    background-image: var(--wind-1, url("/assets/images/Karlvin/desert1.png"));
     width: 75px;
     height: 75px;
 }
@@ -4150,7 +4157,7 @@ main.jeuKF {
     }
 
     .jeuKF::before {
-        background-image: url("/images/Karlvin/testmobile3.png");
+        background-image: url("/assets/images/Karlvin/testmobile3.png");
         background-position: 50% 45%;
     }
 
