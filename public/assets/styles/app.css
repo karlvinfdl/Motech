@@ -478,7 +478,7 @@ button {
 /* Rendu Pixel Art propre et transition de taille */
 .pixel-art5 {
     image-rendering: pixelated;
-    width: 140px;
+    width: 220px;
     height: auto;
     display: block;
     transition: width 0.3s ease-in-out; /* Animation de gonflement */
@@ -486,7 +486,7 @@ button {
 
 /* Le personnage sélectionné (leader) grossit */
 .leader5 .pixel-art5 {
-    width: 180px;
+    width: 260px;
 }
 
 /* Gestion du badge de nom (Noto Serif par défaut) */
