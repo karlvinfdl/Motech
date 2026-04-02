@@ -478,7 +478,7 @@ button {
 /* Rendu Pixel Art propre et transition de taille */
 .pixel-art5 {
     image-rendering: pixelated;
-    width: 140px;
+    width: 220px;
     height: auto;
     display: block;
     transition: width 0.3s ease-in-out; /* Animation de gonflement */
@@ -486,7 +486,7 @@ button {
 
 /* Le personnage sélectionné (leader) grossit */
 .leader5 .pixel-art5 {
-    width: 180px;
+    width: 260px;
 }
 
 /* Gestion du badge de nom (Noto Serif par défaut) */
@@ -843,7 +843,7 @@ button {
 ===================================================== */
 #section-accueil.section-jeuAB {
     /* L'image de fond ne prend pas tout l'écran pour garder l'aspect cadre */
-    background-image: url("../images/Alexis/fondfinal.png");
+    background-image: url("../images/Alexis/fond_accueil.png");
     background-size: contain;
     background-position: center;
 }
@@ -911,14 +911,14 @@ button {
     background-color: #074151;
 
     /* Image de fond en mode "cadre" */
-    background-image: url("../images/Alexis/ecranDeTitre.png");
+    background-image: url("../images/Alexis/fond_regles.png");
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 /* On s'assure que si la section est active, elle s'affiche */
-.section-reglesAB.active-AB {
+.section-reglesAB .active-AB {
     display: flex !important;
 }
 
@@ -989,18 +989,42 @@ body.page-jeuAB {
 }
 
 .jeu-hudAB {
-    position: absolute;
+    /* On utilise fixed pour sortir du flux de section-jeu */
+    position: fixed; 
     top: 0;
+    left: 0;
     width: 100%;
+    height: 80px; /* On lui donne une hauteur explicite */
     padding: 20px 30px;
     box-sizing: border-box;
-    z-index: 10;
-    font-size: 1.1rem;
+    
+    /* LE SECRET : Un z-index supérieur à tout le reste dans le viewport */
+    z-index: 10000 !important; 
+    
     display: flex;
     align-items: center;
     justify-content: space-between;
+    
+    /* On empêche le HUD de bloquer les clics sur les personnages */
+    pointer-events: none; 
 }
 
+.vies-containerAB, .infos-topAB, #timer-displayAB {
+    pointer-events: auto;
+}
+
+#timer-displayAB, .stat-indiceAB, .stat-progressionAB {
+    color: white !important;
+    text-shadow: 2px 2px 0px #000, -1px -1px 0px #000;
+}
+
+#section-jeu.section-jeuAB {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* On s'assure que rien ne dépasse bizarrement */
+    overflow: hidden; 
+}
 .vies-containerAB {
     display: flex;
     flex-direction: row;
@@ -1027,8 +1051,11 @@ body.page-jeuAB {
     right: 30px;
 }
 
-#timer-display {
-    font-size: 1.5rem;
+#timer-displayAB {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Ajoute une ombre pour qu'il ressorte */
 }
 
 /* =====================================================
@@ -1037,8 +1064,13 @@ body.page-jeuAB {
 
 .ecran-splitAB {
     display: flex;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* On s'assure qu'il est tout en bas */
+    z-index: 1; 
 }
 
 .coteAB {
@@ -1052,14 +1084,14 @@ body.page-jeuAB {
 }
 
 .gaucheAB {
-    background-image: url("../images/fond1.png");
+    background-image: url("/assets/images/Alexis/fond1.png");
     background-size: cover;
     background-position: left center;
     border-right: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .droiteAB {
-    background-image: url("../images/fond2.png");
+    background-image: url("/assets/images/Alexis/fond2.png");
     background-size: 200% 100%;
     background-position: right center;
 }
