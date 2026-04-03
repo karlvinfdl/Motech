@@ -1,15 +1,16 @@
-# TODO - Modification Hub Section Jeu (Coaster)
+# PLAN CHIRURGICAL HUD STAR COASTER
 
-## Plan Approuvé
-- [ ] Comprendre fichiers (fait : coaster/index.html.twig est le hub accueil → jeu)
-- [ ] Modifier disposition seulement :
-  - Accueil : Centrer logo/texte/bouton en colonne flex
-  - Jeu : HUD en barre fixe bas (niveau | vies | étoiles | coins centrés)
-  - Canvas pleine viewport
-  - Responsive mobile
-- [x] Éditer templates/coaster/index.html.twig
-- [x] Ajouter CSS minimal dans public/assets/styles/app.css si besoin
-- [x] Tester : symfony serve, /coaster et ?page=jeu
-- [x] Compléter tâche
+## ✅ ÉTAPE 1 : CSS Flexbox Alignement Licorne+Niveau + Suppressions
+- [x] `.mini-avatar-EM` : Suppression cercle gris, `flex align-items: center`
+- [x] Supprimer ligne "0 ❤️" du HTML
+- [x] Ajouter `.coeur-perdu { filter: grayscale(100%); opacity: 0.3; }`
 
-**Changements : disposition uniquement, pas de logique/texte/images/JS**
+## ✅ ÉTAPE 2 : JavaScript updateLivesDisplay() + Popups
+- [x] Modifier `updateLivesDisplay(lives)` : ajouter classe `coeur-perdu` aux cœurs
+- [x] Nettoyer popups victoire/défaite : supprimer icônes cœurs/vies
+
+## 🎉 HUD STAR COASTER 100% TERMINÉ
+**Structure :** 3 lignes parfaites (Licorne+Niveau | Étoiles | 3 Cœurs fixes)
+**Logique :** Classe `coeur-perdu` pour vies perdues (grayscale/opacité)
+**Popups :** Score étoiles + boutons uniquement
+

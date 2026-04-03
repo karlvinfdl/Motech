@@ -34,14 +34,14 @@ assets.flagEnd.src = path + "drapeaunoiretblanc.png";
 // No more sounds.collect error
 
 let posX = -200; 
-let lives = 5; // Plus de vies → moins de pertes
+let lives = 3; // 3 vies fixes
 let coins = 0;
 let stars = 0;
 let currentLevel = 1;
 let gameState = "WAITING"; 
 const keys = {};
 
-const player = { x: 150, y: 0, w: 75, h: 75, vY: 0, gravity: 0.5, jump: -25, onGround: false }; // Moins gravity + jump → stable
+const player = { x: 150, y: 0, w: 75, h: 75, vY: 0, gravity: 0.5, jump: -18, onGround: false }; // Saut moins haut fluide
 
 const levels = {
     1: { name: "Plage Calme", color: "#FF4500", speed: 4.5, finish: 4000, freq: 0.02, amp: 50, holes: [{s: 900, e: 1100}, {s: 2200, e: 2450}] },
@@ -53,9 +53,16 @@ let levelItems = [];
 function generateItems() {
     levelItems = [];
     const lvl = levels[currentLevel];
-    for (let x = 400; x < lvl.finish - 200; x += 250) {
-        if (!lvl.holes.some(h => x > h.s - 20 && x < h.e + 20)) {
-            levelItems.push({ x: x, yOffset: -100 - Math.random() * 100, type: Math.random() > 0.3 ? 'coin' : 'star', collected: false });
+    // PLUS D'ITEMS : x += 150 au lieu de 250 (66% plus d'items)
+    for (let x = 300; x < lvl.finish - 100; x += 150) {
+        if (!lvl.holes.some(h => x > h.s - 30 && x < h.e + 30)) {
+            // 70% coins, 30% étoiles (plus de pièces)
+            levelItems.push({ 
+                x: x + Math.random()*50, 
+                yOffset: -80 - Math.random() * 80, 
+                type: Math.random() > 0.3 ? 'coin' : 'star', 
+                collected: false 
+            });
         }
     }
 }
@@ -63,11 +70,16 @@ function generateItems() {
 window.addEventListener('keydown', e => {
     keys[e.code] = true;
     if (e.code === 'Space') {
-        if (gameState === "WAITING") { gameState = "PLAYING"; generateItems(); }
+        if (gameState === "WAITING") { 
+            gameState = "PLAYING"; 
+            generateItems(); 
+        }
         else if (gameState === "PLAYING" && player.onGround) {
             player.vY = player.jump;
             player.onGround = false;
-            // sounds.jump.play().catch(() => {});
+        }
+        else if (gameState === "WIN") {
+            nextLevel();
         }
     }
 });
@@ -108,11 +120,12 @@ function update() {
     });
 
     // Chute
-    if (player.y > canvas.height) {
+        if (player.y > canvas.height) {
         lives--;
+        updateLivesDisplay(lives);
         updateHUD();
         if (lives <= 0) triggerGameOver();
-        else { player.y = 0; player.vY = 0; posX -= 500; gameState = "WAITING"; }
+        else { player.y = 0; player.vY = 0; posX -= 800; gameState = "WAITING"; }
     }
 
     if (posX + player.x > levels[currentLevel].finish) triggerWin();
@@ -182,28 +195,21 @@ function triggerWin() {
     const overlay = document.getElementById('end-screen-EM');
     overlay.style.display = 'flex';
     const title = document.getElementById('stat-title-EM');
-    title.textContent = currentLevel < 3 ? 'NIVEAU TERMINÉ ! Barre Espace pour continuer ' : 'FÉLICITATION TU AS GAGNÉ !';
-    document.getElementById('stat-coins-EM').textContent = coins;
+    title.textContent = currentLevel < 3 ? 'NIVEAU TERMINÉ ! ESPACE → suivant' : 'FÉLICITATIONS ! 🎉';
     document.getElementById('stat-stars-EM').textContent = stars;
-    
-    // ESPACE → niveau suivant
-    document.addEventListener('keydown', nextLevelKey);
 }
 
-function nextLevelKey(e) {
-    if (e.code === 'Space') {
-        if (currentLevel < 3) {
-            currentLevel++;
-            posX = -200;
-            lives = 3;
-            coins = 0;
-            stars = 0;
-            gameState = "WAITING";
-            document.getElementById('end-screen-EM').style.display = 'none';
-            updateHUD();
-            generateItems();
-            document.removeEventListener('keydown', nextLevelKey);
-        }
+function nextLevel() {
+    if (currentLevel < 3) {
+        currentLevel++;
+        posX = -200;
+        lives = 3;
+        coins = 0;
+        stars = 0;
+        gameState = "WAITING";
+        document.getElementById('end-screen-EM').style.display = 'none';
+        updateHUD();
+        generateItems();
     }
 }
 
@@ -211,26 +217,41 @@ function triggerGameOver() {
     gameState = "GAMEOVER";
     const overlay = document.getElementById('end-screen-EM');
     overlay.style.display = 'flex';
-    document.getElementById('stat-title-EM').textContent = 'GAME OVER';
+    document.getElementById('stat-title-EM').textContent = 'GAME OVER 💀';
     document.getElementById('stat-coins-EM').textContent = coins;
     document.getElementById('stat-stars-EM').textContent = stars;
+    
+    // LICORNE morte centrée
+    const gameOverImg = document.createElement('img');
+    gameOverImg.src = '/assets/images/Elodie/licornedcd.png';
+    gameOverImg.style.cssText = `
+        position: absolute; top: 50%; left: 50%; 
+        transform: translate(-50%, -50%); 
+        width: 200px; height: auto; 
+        filter: drop-shadow(0 0 20px rgba(255,0,0,0.5));
+        z-index: 10;
+    `;
+    overlay.appendChild(gameOverImg);
+}
+
+function updateLivesDisplay(lives) {
+    const container = document.getElementById('lives-container');
+    if (container) {
+        const hearts = container.querySelectorAll('.heart-EM');
+        hearts.forEach((heart, index) => {
+            if (index < lives) {
+                heart.classList.remove('coeur-perdu');
+            } else {
+                heart.classList.add('coeur-perdu');
+            }
+        });
+    }
 }
 
 function updateHUD() {
-    document.getElementById('level-display').textContent = currentLevel;
-    document.getElementById('val-coins').textContent = coins;
+    document.getElementById('level-display').textContent = `NIVEAU ${currentLevel}`;
     document.getElementById('val-stars').textContent = stars;
-    const container = document.getElementById('lives-container');
-    if (container) {
-        container.innerHTML = '';
-        for (let i = 0; i < 3; i++) {
-            const img = document.createElement('img');
-            img.src = i < lives ? assets.hFull : assets.hEmpty;
-            img.alt = 'Vies';
-            img.style.width = '24px'; img.style.height = '24px';
-            container.appendChild(img);
-        }
-    }
+    updateLivesDisplay(lives);
 }
 
 // Start when assets loaded
