@@ -6,12 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class CoasterController extends AbstractController
+class GameController extends AbstractController
 {
-    #[Route('/coaster', name: 'app_coaster')]
+    #[Route('/game', name: 'app_game')]
     public function index(): Response
     {
-        return $this->render('coaster/index.html.twig');
+        return new Response('Page du jeu - À développer');
     }
-
 }
+

@@ -3867,116 +3867,353 @@ main.jeuKF {
 
 
 /* ===================================== */
-/* ===== CSS ELODIE  DEBUT =============== */
+/* ===== CSS ELODIE  DEBUT ============= */
 /* ===================================== */
-
-/* ===================================================
-   I. CONFIGURATION COMMUNE (FOND ET TYPO)
-   ================================================= */
-#game-viewportEM {
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background: url('/images/elodie/cielsoleil.png') no-repeat center center fixed;
-    background-size: cover;
-    font-family: 'Arial', sans-serif;
+/* ========================================== 
+   1. RESET & CONFIGURATION DE BASE
+   ========================================== */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
 }
 
-/* ============================================================
-   II. PARTIE 1 : MENU D'ACCUEIL (STAR COASTER)
-   ============================================================ */
-.hero-EM {
-    width: 100vw; height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
+body, html { 
+    width: 100%; 
+    height: 100%; 
+    overflow: hidden; 
+    font-family: 'Poppins', 'Arial', sans-serif; 
+}
+
+/* ========================================== 
+   2. FOND GÉNÉRAL (ACCUEIL & JEU)
+   ========================================== */
+.hero-EM, #game-ui-wrapper-EM {
+    width: 100vw; 
+    height: 100vh;
+    background: url('../assets/images/Elodie/nuages.png') no-repeat center center fixed;
+    background-size: cover;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
     position: relative;
 }
 
-.brand-EM { 
+/* ========================================== 
+   3. LOGOS ACCUEIL
+   ========================================== */
+.logo-top-left-EM { 
     position: absolute; 
     top: 20px; 
     left: 20px; 
-    z-index: 10; }
-.brand-logo-EM { 
     width: 60px; 
-    height: auto; 
+    height: auto;
+    z-index: 10; 
 }
 
-.hero-content-EM { 
+.hero-logo-EM { 
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); 
     margin-bottom: 20px; 
     z-index: 2; 
-}
-.hero-logo-EM { 
-    width: 280px; 
-    height: auto; 
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); 
+    max-width: 280px;
 }
 
+/* ========================================== 
+   4. PANNEAU EFFET VERRE (GLASSMORPHISM)
+   ========================================== */
 .glass-panel-EM {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 30px; padding: 40px;
-    width: 80%; max-width: 500px; text-align: center; color: #000;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); z-index: 1;
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 30px; 
+    padding: 35px; 
+    width: min(550px, 90vw);
+    text-align: center; 
+    color: #000000; 
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
-.g-title-EM { font-size: 22px; font-weight: bold; margin-bottom: 15px; }
-.g-mission-EM { font-size: 18px; margin-bottom: 10px; }
-.g-text-EM { font-size: 16px; margin: 5px 0; }
+.g-title-EM { 
+    font-size: 22px; 
+    font-weight: 800; 
+    margin-bottom: 15px; 
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.4); 
+}
 
+.controls-hint-EM {
+    margin-top: 15px;
+    font-size: 0.9em;
+    font-weight: bold;
+    opacity: 0.9;
+}
+
+/* ========================================== 
+   5. BOUTON JOUER JAUNE EN RELIEF
+   ========================================== */
 .bulle-jouer-EM {
-    margin-top: 30px; padding: 15px 60px;
-    font-size: 24px; font-weight: bold; color: #fff;
-    background: #FFD700; border: none; border-radius: 50px;
-    cursor: pointer; box-shadow: 0 6px #ccac00;
-    transition: all 0.2s ease; z-index: 2;
+    margin-top: 20px; 
+    padding: 16px 50px; 
+    font-size: 26px; 
+    font-weight: 900;
+    color: #fff; 
+    background-color: #FFD84D; 
+    border: none; 
+    border-radius: 18px;
+    cursor: pointer; 
+    text-transform: uppercase; 
+    box-shadow: 0 6px 0 #d4a900;
+    transition: all 0.1s ease;
 }
 
-/* ============================================================
-   III. PARTIE 2 : LE JEU (HUD PIXEL ET CANVAS)
-   ============================================================ */
-.canvas-game-EM {
-    display: block; width: 100vw; height: 100vh; background: transparent;
+.bulle-jouer-EM:active { 
+    transform: translateY(4px); 
+    box-shadow: 0 2px 0 #d4a900; 
 }
 
-.pixel-hud-EM {
-    position: absolute; top: 20px; left: 20px;
-    background: white; border: 3px solid #000; border-radius: 12px;
-    padding: 15px; z-index: 100; min-width: 170px;
-    box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
-    font-family: 'Courier New', monospace;
+/* ========================================== 
+   6. HUD DE JEU (CORRIGÉ : TAILLE NORMALE)
+   ========================================== */
+.pixel-hud-EM { 
+    position: absolute; 
+    top: 20px; 
+    left: 20px; 
+    z-index: 100; 
+    background: rgba(255, 255, 255, 0.25); 
+    backdrop-filter: blur(8px); 
+    padding: 12px 18px; 
+    border-radius: 15px; 
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    
+    /* Empêche le HUD d'être géant */
+    width: auto;
+    min-width: 180px;
+    max-width: 280px;
+    height: auto;
 }
 
-.hud-header-EM { display: flex; align-items: center; gap: 15px; }
-.mini-logo-EM { width: 50px; height: 50px; border-radius: 8px; border: 1px solid #ddd; }
-.elements-column-EM { display: flex; flex-direction: column; gap: 5px; color: #000; font-weight: bold; }
-.hud-row-EM, .level-row-EM { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-.level-row-EM { border-bottom: 2px solid #eee; padding-bottom: 5px; margin-bottom: 5px; }
-
-.hearts-row-EM img { width: 18px; height: 18px; margin-left: 2px; }
-
-/* ============================================================
-   IV. MODALES ET OVERLAYS (FIN DE PARTIE)
-   ============================================================ */
-.overlay-EM {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 200;
+.hud-content-wrapper-EM { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 15px; 
 }
 
-.modal-EM { 
-    background: white; padding: 30px; border-radius: 15px; 
-    border: 4px solid #000; text-align: center; 
+.elements-column-EM { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 6px; 
 }
 
-.button-modal-EM { 
-    padding: 10px 20px; background: #FFD700; border: 2px solid #000; 
-    cursor: pointer; font-weight: bold; 
+.hud-row-EM { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    font-weight: 900; 
+    color: white; 
+    text-shadow: 1px 1px 3px black;
+    font-size: 14px;
 }
 
+/* TAILLE FORCÉE DES ICONES DANS LE HUD */
+.icon-hud-EM { 
+    width: 20px !important; 
+    height: 20px !important; 
+    object-fit: contain; 
+}
+
+/* TAILLE DE L'AVATAR LICORNE A DROITE DU HUD */
+.mini-logo-EM { 
+    width: 50px !important; 
+    height: auto; 
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+}
+
+.hearts-row-EM { 
+    display: flex; 
+    gap: 3px; 
+}
+
+.heart-lost-EM { 
+    filter: grayscale(100%) brightness(40%); 
+    opacity: 0.3; 
+    transform: scale(0.8); 
+    transition: 0.5s; 
+}
+
+/* ========================================== 
+   7. CANVAS & OVERLAY DE FIN
+   ========================================== */
+#gameCanvas { 
+    display: block; 
+    width: 100vw; 
+    height: 100vh; 
+    background: transparent; 
+}
+
+.overlay-EM { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.8); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 500; 
+}
+
+/* Style spécifique pour les stats dans la popup finale */
+#modal-content p {
+    color: white;
+    font-weight: bold;
+    margin-top: 5px;
+}
 /* ===================================== */
 /* ===== CSS ELODIE  FIN =============== */
 /* ===================================== */
+
+/* ========================================== */
+/* MODIFICATIONS DISPOSITION COASTER HUB     */
+/* ========================================== */
+
+/* Accueil centré */
+.hero-centered-EM {
+    flex-direction: column !important;
+    gap: 20px;
+    padding: 20px;
+}
+
+.hero-centered-EM .hero-logo-EM {
+    align-self: center;
+    margin: 0;
+}
+
+/* HUD bas fixe */
+.hud-bottom-EM {
+    top: auto !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 25px !important;
+    min-width: 320px;
+    max-width: 90vw;
+}
+
+.hud-stats-row-EM {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+/* HUD haut gauche column */
+.hud-top-left-EM {
+    top: 20px !important;
+    left: 20px !important;
+    bottom: auto !important;
+    right: auto !important;
+    transform: none !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    padding: 20px !important;
+    min-width: 200px;
+    max-width: 250px;
+}
+
+.hud-avatar-section-EM {
+    margin-bottom: 10px;
+}
+
+.mini-avatar-EM {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.5);
+}
+
+.hud-stats-vertical-EM {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hud-stars-left-EM {
+    align-self: flex-start;
+}
+
+.hud-stars-left-EM .icon-hud-EM {
+    margin-right: 8px;
+}
+
+.hud-top-left-EM .hud-row-EM {
+    font-size: 14px !important;
+    justify-content: flex-start !important;
+}
+
+/* Canvas pleine viewport */
+#game-ui-wrapper-EM {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#game-ui-wrapper-EM #gameCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hud-bottom-EM {
+        bottom: 10px !important;
+        padding: 12px 20px !important;
+        min-width: 280px;
+    }
+    
+    .hud-stats-row-EM {
+        gap: 15px;
+    }
+    
+    .hud-bottom-EM .hud-row-EM {
+        font-size: 14px !important;
+    }
+    
+    .hero-centered-EM {
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .hero-centered-EM .glass-panel-EM {
+        padding: 25px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hud-stats-row-EM {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .hud-bottom-EM .hud-row-EM {
+        font-size: 15px !important;
+        justify-content: center;
+    }
+}
 
 
 
@@ -4408,3 +4645,127 @@ main.jeuKF {
 /* ===================================== */
 /* ======= RESPONSIVE FIN=============== */
 /* ===================================== */
+
+/* ========================================== */
+/* STAR COASTER - STYLES JEU (VÉRIFIÉS/AJOUTÉS) */
+/* ========================================== */
+/* ========================================== */
+/* RESET & BASE (Ne rien changer ici)         */
+/* ========================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Empêche le scroll pour le jeu */
+    font-family: 'Arial', sans-serif;
+}
+
+/* ========================================== */
+/* PAGE D'ACCUEIL (Landing Screen)            */
+/* ========================================== */
+.landing-screen {
+    background-image: url('../img/nuages.png'); /* Chemin Symfony */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.initial-EM {
+    /* Classe pour tes tests */
+}
+
+.bulle-jouer-EM {
+    background-color: #fdd817;
+    color: white;
+    padding: 15px 45px;
+    border: none;
+    border-radius: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+}
+
+.bulle-jouer-EM:hover {
+    transform: scale(1.1);
+}
+
+/* ========================================== */
+/* PAGE DE JEU & HUD TRANSPARENT              */
+/* ========================================== */
+
+/* Le Canvas prend tout l'écran en arrière-plan */
+#gameCanvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+
+}
+
+/* TON HUB TRANSPARENT (Exactement comme avant) */
+#hud-jeu.pixel-hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    background: transparent !important; /* TRANSPARENCE TOTALE */
+    border: none;
+    color: white;
+    pointer-events: none; /* Pour ne pas gêner le clic sur le jeu */
+}
+
+.hud-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.mini-logo {
+    width: 60px;
+    height: auto;
+}
+
+.elements-column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hud-row {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    /* Petit contour noir pour que le blanc soit lisible sur le ciel */
+    text-shadow: 2px 2px 0px #000; 
+}
+
+.hearts-row {
+    display: flex;
+    gap: 5px;
+}
+
+/* ECRANS DE FIN (Overlay) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+}
+

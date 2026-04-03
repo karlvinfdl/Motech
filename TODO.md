@@ -1,16 +1,15 @@
-# TODO: Fix Composer importmap:install OpenSSL Error
+# TODO - Modification Hub Section Jeu (Coaster)
 
-## Approved Plan Steps:
-- [x] Step 1: Edit importmap.php to use local vendor paths for Turbo/Stimulus instead of CDN.
-- [x] Step 2: Run `bin/console importmap:install` to verify. (Success: No assets to install, no cert error)
-- [x] Step 3: Clear cache with `bin/console cache:clear`. (Success)
-- [x] Step 4: Test with `symfony serve` (check no JS errors, assets load). (Server: http://127.0.0.1:8000)
-- [x] Step 5: Run full `composer install` to confirm post-scripts pass. (Running successfully so far, no cert error)
-**Final Status:**
-- [x] Composer install passes (no importmap script error).
-- [x] Site server running http://127.0.0.1:8000.
-- [x] All good.
-- [x] Complete task.
+## Plan Approuvé
+- [ ] Comprendre fichiers (fait : coaster/index.html.twig est le hub accueil → jeu)
+- [ ] Modifier disposition seulement :
+  - Accueil : Centrer logo/texte/bouton en colonne flex
+  - Jeu : HUD en barre fixe bas (niveau | vies | étoiles | coins centrés)
+  - Canvas pleine viewport
+  - Responsive mobile
+- [x] Éditer templates/coaster/index.html.twig
+- [x] Ajouter CSS minimal dans public/assets/styles/app.css si besoin
+- [x] Tester : symfony serve, /coaster et ?page=jeu
+- [x] Compléter tâche
 
-Progress will be updated after each step.
-
+**Changements : disposition uniquement, pas de logique/texte/images/JS**
