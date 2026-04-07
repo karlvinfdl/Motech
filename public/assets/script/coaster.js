@@ -217,13 +217,13 @@ function triggerGameOver() {
     gameState = "GAMEOVER";
     const overlay = document.getElementById('end-screen-EM');
     overlay.style.display = 'flex';
-    document.getElementById('stat-title-EM').textContent = 'GAME OVER 💀';
+    document.getElementById('stat-title-EM').textContent = 'GAME OVER licorne est tombée... ure';
     document.getElementById('stat-coins-EM').textContent = coins;
     document.getElementById('stat-stars-EM').textContent = stars;
     
     // LICORNE morte centrée
     const gameOverImg = document.createElement('img');
-    gameOverImg.src = '/assets/images/Elodie/licornedcd.png';
+    gameOverImg.src = '../images/Elodie/licornedcd.png';
     gameOverImg.style.cssText = `
         position: absolute; top: 50%; left: 50%; 
         transform: translate(-50%, -50%); 
