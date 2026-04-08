@@ -1,16 +1,26 @@
-# PLAN CHIRURGICAL HUD STAR COASTER
+## Star Coaster Fix Plan (Approved ✅)
 
-## ✅ ÉTAPE 1 : CSS Flexbox Alignement Licorne+Niveau + Suppressions
-- [x] `.mini-avatar-EM` : Suppression cercle gris, `flex align-items: center`
-- [x] Supprimer ligne "0 ❤️" du HTML
-- [x] Ajouter `.coeur-perdu { filter: grayscale(100%); opacity: 0.3; }`
+### Current Progress: 6/6 ✅ **COMPLETE**
 
-## ✅ ÉTAPE 2 : JavaScript updateLivesDisplay() + Popups
-- [x] Modifier `updateLivesDisplay(lives)` : ajouter classe `coeur-perdu` aux cœurs
-- [x] Nettoyer popups victoire/défaite : supprimer icônes cœurs/vies
+✅ **Step 1**: `public/images/Elodie/nuages.png` created
 
-## 🎉 HUD STAR COASTER 100% TERMINÉ
-**Structure :** 3 lignes parfaites (Licorne+Niveau | Étoiles | 3 Cœurs fixes)
-**Logique :** Classe `coeur-perdu` pour vies perdues (grayscale/opacité)
-**Popups :** Score étoiles + boutons uniquement
+**Step 2: Fix duplicate bgImg declaration**  
+- Edit `templates/coaster/index.html.twig`: Remove duplicate `const bgImg`, fix src path to `{{ asset('images/Elodie/nuages.png') }}`
+
+**Step 3: Clean up drawBackground() function**  
+- Ensure fallback gradient works if image fails
+
+✅ **Step 4**: `assets/app.js` → Stimulus import disabled
+
+**Step 5: Verify asset paths**  
+- All images use `{{ asset('images/...') }}` (Symfony standard)
+
+**Step 6: Test game**  
+- `symfony serve` → `/coaster?page=jeu`  
+- Check console: No errors, bg loads, rails RGB (Rouge/Orange/Violet), 3 difficulty levels
+
+### Notes
+- JS stays **inline in Twig** (no external coaster.js)
+- Rails: 3 colors `[#ff4444, #ffaa00, #aa44ff]`, pentu = currentLevel * 0.1
+- Post-completion: Run `attempt_completion`
 

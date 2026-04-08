@@ -3869,9 +3869,9 @@ main.jeuKF {
 /* ===================================== */
 /* ===== CSS ELODIE  DEBUT ============= */
 /* ===================================== */
-/* ========================================== 
-   1. RESET & CONFIGURATION DE BASE
-   ========================================== */
+/* ============================================================
+   GROS COMMENTAIRE : RÉGLAGES DE BASE
+   ============================================================ */
 * { 
     box-sizing: border-box; 
     margin: 0; 
@@ -3885,12 +3885,13 @@ body, html {
     font-family: 'Poppins', 'Arial', sans-serif; 
 }
 
-/* ========================================== 
-   2. FOND GÉNÉRAL (ACCUEIL & JEU)
-   ========================================== */
+/* ============================================================
+   GROS COMMENTAIRE : FOND GÉNÉRAL (ACCUEIL & JEU)
+   ============================================================ */
 .hero-EM, #game-ui-wrapper-EM {
     width: 100vw; 
     height: 100vh;
+    /* On garde nuages.png par défaut, le JS changera pour cielsoleil/etoile */
     background: url('../assets/images/Elodie/nuages.png') no-repeat center center fixed;
     background-size: cover;
     display: flex; 
@@ -3900,32 +3901,12 @@ body, html {
     position: relative;
 }
 
-/* ========================================== 
-   3. LOGOS ACCUEIL
-   ========================================== */
-.logo-top-left-EM { 
-    position: absolute; 
-    top: 20px; 
-    left: 20px; 
-    width: 60px; 
-    height: auto;
-    z-index: 10; 
-}
-
-.hero-logo-EM { 
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); 
-    margin-bottom: 20px; 
-    z-index: 2; 
-    max-width: 280px;
-}
-
-/* ========================================== 
-   4. PANNEAU EFFET VERRE (GLASSMORPHISM)
-   ========================================== */
+/* ============================================================
+   GROS COMMENTAIRE : LE PANNEAU TRANSPARENT (Style Verre)
+   ============================================================ */
 .glass-panel-EM {
     background: rgba(255, 255, 255, 0.22);
-    backdrop-filter: blur(12px) saturate(130%);
-    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 30px; 
     padding: 35px; 
@@ -3933,25 +3914,12 @@ body, html {
     text-align: center; 
     color: #000000; 
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    z-index: 10;
 }
 
-.g-title-EM { 
-    font-size: 22px; 
-    font-weight: 800; 
-    margin-bottom: 15px; 
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.4); 
-}
-
-.controls-hint-EM {
-    margin-top: 15px;
-    font-size: 0.9em;
-    font-weight: bold;
-    opacity: 0.9;
-}
-
-/* ========================================== 
-   5. BOUTON JOUER JAUNE EN RELIEF
-   ========================================== */
+/* ============================================================
+   GROS COMMENTAIRE : LE BOUTON JAUNE "JOUER"
+   ============================================================ */
 .bulle-jouer-EM {
     margin-top: 20px; 
     padding: 16px 50px; 
@@ -3963,7 +3931,7 @@ body, html {
     border-radius: 18px;
     cursor: pointer; 
     text-transform: uppercase; 
-    box-shadow: 0 6px 0 #d4a900;
+    box-shadow: 0 6px 0 #d4a900; 
     transition: all 0.1s ease;
 }
 
@@ -3972,38 +3940,39 @@ body, html {
     box-shadow: 0 2px 0 #d4a900; 
 }
 
-/* ========================================== 
-   6. HUD DE JEU (CORRIGÉ : TAILLE NORMALE)
-   ========================================== */
+/* ============================================================
+   GROS COMMENTAIRE : L'INTERFACE DU HAUT (HUD)
+   ============================================================ */
 .pixel-hud-EM { 
     position: absolute; 
     top: 20px; 
     left: 20px; 
     z-index: 100; 
     background: rgba(255, 255, 255, 0.25); 
-    backdrop-filter: blur(8px); 
-    padding: 12px 18px; 
+    backdrop-filter: blur(8px);
+    padding: 15px 20px; 
     border-radius: 15px; 
     border: 1px solid rgba(255, 255, 255, 0.4);
-    
-    /* Empêche le HUD d'être géant */
-    width: auto;
-    min-width: 180px;
-    max-width: 280px;
-    height: auto;
+    min-width: 200px;
 }
 
-.hud-content-wrapper-EM { 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    gap: 15px; 
+.hud-avatar-section-EM {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
 }
 
-.elements-column-EM { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 6px; 
+.mini-avatar-EM { 
+    width: 45px !important; 
+    height: auto !important; 
+}
+
+.niveau-label-EM {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-shadow: 2px 2px 0 black;
 }
 
 .hud-row-EM { 
@@ -4013,45 +3982,27 @@ body, html {
     font-weight: 900; 
     color: white; 
     text-shadow: 1px 1px 3px black;
-    font-size: 14px;
+    margin-bottom: 8px;
 }
 
-/* TAILLE FORCÉE DES ICONES DANS LE HUD */
 .icon-hud-EM { 
-    width: 20px !important; 
-    height: 20px !important; 
-    object-fit: contain; 
-}
-
-/* TAILLE DE L'AVATAR LICORNE A DROITE DU HUD */
-.mini-logo-EM { 
-    width: 50px !important; 
-    height: auto; 
-    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+    width: 25px !important; 
+    height: auto !important; 
 }
 
 .hearts-row-EM { 
     display: flex; 
-    gap: 3px; 
+    gap: 5px; 
 }
 
-.heart-lost-EM { 
-    filter: grayscale(100%) brightness(40%); 
-    opacity: 0.3; 
-    transform: scale(0.8); 
-    transition: 0.5s; 
+.heart-EM {
+    width: 22px !important;
+    height: auto !important;
 }
 
-/* ========================================== 
-   7. CANVAS & OVERLAY DE FIN
-   ========================================== */
-#gameCanvas { 
-    display: block; 
-    width: 100vw; 
-    height: 100vh; 
-    background: transparent; 
-}
-
+/* ============================================================
+   GROS COMMENTAIRE : ÉCRANS DE FIN (GAME OVER)
+   ============================================================ */
 .overlay-EM { 
     position: fixed; 
     top: 0; 
@@ -4060,178 +4011,56 @@ body, html {
     height: 100%; 
     background: rgba(0, 0, 0, 0.8); 
     display: flex; 
+    flex-direction: column;
     align-items: center; 
     justify-content: center; 
-    z-index: 500; 
+    z-index: 1000; 
 }
 
-/* Style spécifique pour les stats dans la popup finale */
-#modal-content p {
-    color: white;
-    font-weight: bold;
-    margin-top: 5px;
-}
-/* ===================================== */
-/* ===== CSS ELODIE  FIN =============== */
-/* ===================================== */
-
-/* ========================================== */
-/* MODIFICATIONS DISPOSITION COASTER HUB     */
-/* ========================================== */
-
-/* Accueil centré */
-.hero-centered-EM {
-    flex-direction: column !important;
-    gap: 20px;
-    padding: 20px;
+.licorne-gameover-img {
+    max-width: 350px;
+    height: auto;
+    filter: drop-shadow(0 10px 30px rgba(255, 182, 193, 0.4));
+    animation: bounceIn 0.8s ease-out;
+    margin-bottom: 20px;
 }
 
-.hero-centered-EM .hero-logo-EM {
-    align-self: center;
-    margin: 0;
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-/* HUD bas fixe */
-.hud-bottom-EM {
-    top: auto !important;
-    bottom: 20px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    right: auto !important;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px 25px !important;
-    min-width: 320px;
-    max-width: 90vw;
+/* Style spécifique pour le bouton REJOUER dans le code JS */
+.replay-btn, .retour-btn {
+    transition: transform 0.2s;
 }
 
-.hud-stats-row-EM {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
+.replay-btn:hover, .retour-btn:hover {
+    transform: translate(-50%, -50%) scale(1.1) !important;
 }
 
-/* HUD haut gauche column */
-.hud-top-left-EM {
-    top: 20px !important;
-    left: 20px !important;
-    bottom: auto !important;
-    right: auto !important;
-    transform: none !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 10px !important;
-    padding: 20px !important;
-    min-width: 200px;
-    max-width: 250px;
+/* ============================================================
+   GROS COMMENTAIRE : CANVAS & LOGOS
+   ============================================================ */
+#gameCanvas { 
+    display: block; 
+    width: 100vw; 
+    height: 100vh; 
 }
 
-.hud-avatar-section-EM {
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    margin-bottom: 10px;
+.logo-top-left-EM { 
+    position: absolute; 
+    top: 20px; 
+    left: 20px; 
+    width: 60px; 
+    z-index: 10; 
 }
 
-.heart-EM.coeur-perdu {
-    filter: grayscale(100%) !important;
-    opacity: 0.3 !important;
-}
-
-.mini-avatar-EM {
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-}
-
-.coeur-perdu {
-    filter: grayscale(100%);
-    opacity: 0.3;
-}
-
-.niveau-label-EM {
-    color: white !important;
-    font-weight: bold !important;
-    font-size: 20px !important;
-    text-shadow: 2px 2px 0 black !important;
-
-}
-
-.hud-stats-vertical-EM {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.hud-stars-left-EM {
-    align-self: flex-start;
-}
-
-.hud-stars-left-EM .icon-hud-EM {
-    margin-right: 8px;
-}
-
-.hud-top-left-EM .hud-row-EM {
-    font-size: 14px !important;
-    justify-content: flex-start !important;
-}
-
-.hud-avatar-section-EM {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.level-next-to-avatar-EM {
-    font-size: 18px !important;
-    font-weight: bold;
-}
-
-.coin-icon-right-EM {
-    margin-left: 8px;
-}
-
-.pixel-hud-EM img {
-    width: 25px !important;
-    height: auto !important;
-}
-
-.mini-avatar-EM {
-    width: 35px !important;
-    height: auto !important;
-}
-
-.heart-EM {
-    width: 20px !important;
-    height: auto !important;
-    object-fit: contain;
-}
-
-.icon-hud-EM {
-    width: 20px !important;
-    height: auto !important;
-}
-
-.pixel-hud-EM {
-    padding: 8px 12px !important;
-    min-width: 160px !important;
-}
-
-#end-screen-EM img[width="40"] {
-    width: 48px !important;
-}
-
-/* Canvas pleine viewport */
-#game-ui-wrapper-EM {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+.hero-logo-EM { 
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); 
+    margin-bottom: 20px; 
+    max-width: 280px;
 }
 
 #game-ui-wrapper-EM #gameCanvas {

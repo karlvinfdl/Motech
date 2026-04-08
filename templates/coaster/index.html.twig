@@ -4,87 +4,299 @@
 
 {% block body %}
 
-    {# --- SYSTÈME DE NAVIGATION --- #}
     {% if app.request.query.get('page') != 'jeu' %}
-
-        {# ========================================== #}
-        {# 1. SECTION ACCUEIL - ORIGINAL              #}
-        {# ========================================== #}
         <main class="hero-EM">
-            {# LOGO 1 : Haut gauche #}
             <img src="{{ asset('assets/images/Elodie/licorne.png') }}" class="logo-top-left-EM">
-            
-            {# LOGO 2 : Central #}
             <img src="{{ asset('assets/images/Elodie/logostar.png') }}" alt="Logo principal" class="hero-logo-EM" width="280">
-            
+
             <section class="glass-panel-EM">
-                <p class="g-title-EM">Bienvenue dans le jeu des montagnes Russes !
-                </p>
-            
-                <p><strong>Ta mission :</strong></p>
-                <p>Guide la licorne jusqu'au bout du parcours...</p>
-                <p>Attention : ne la laisse surtout pas tomber !</p>
+                <p class="g-title-EM">BIENVENUE !</p>
+                <p>Aide la licorne dans son wagon à parcourir les rails magiques.</p>
                 <p class="controls-hint-EM">ESPACE POUR SAUTER</p>
             </section>
 
-            <div class="button-container-EM">
-                <button class="bulle-jouer-EM" onclick="window.location.href='?page=jeu'">JOUER</button>
-            </div>
+            <button class="bulle-jouer-EM" onclick="window.location.href='?page=jeu'">JOUER</button>
         </main>
 
     {% else %}
-
-        {# ========================================== #}
-        {# 2. SECTION JEU - COMPLÈTE                  #}
-        {# ========================================== #}
         <div id="game-ui-wrapper-EM">
             <canvas id="gameCanvas"></canvas>
 
-            {# HUD HAUT GAUCHE AVATAR + STATS VERTICAL #}
-            <div id="hud-jeu-EM" class="pixel-hud-EM hud-top-left-EM">
-                {# LIGNE 1 : LICORNE + NIVEAU (même ligne flex) #}
+            <div id="hud-jeu-EM" class="pixel-hud-EM">
                 <div class="hud-avatar-section-EM">
-                    <img src="{{ asset('assets/images/Elodie/licornee.png') }}" class="mini-avatar-EM" alt="Licorne">
+                    <img src="{{ asset('assets/images/Elodie/licornee.png') }}" class="mini-avatar-EM">
                     <span id="level-display" class="niveau-label-EM">NIVEAU 1</span>
                 </div>
                 
-                {# LIGNE 2 : ÉTOILES #}
-                <div class="hud-row-EM hud-stars-row">
-                    <img src="{{ asset('assets/images/Elodie/star1.png') }}" class="icon-hud-EM" alt="Stars">
+                <div class="hud-row-EM">
+                    <img src="{{ asset('assets/images/Elodie/star1.png') }}" class="icon-hud-EM" style="width:20px;">
                     <span id="val-stars">0</span>
                 </div>
-                
-                {# LIGNE 3 : 3 CŒURS UNIQUEMENT #}
-                <div class="hearts-row-EM" id="lives-container">
-                    <img src="{{ asset('assets/images/Elodie/heart1.png') }}" class="heart-EM" alt="Vie">
-                    <img src="{{ asset('assets/images/Elodie/heart1.png') }}" class="heart-EM" alt="Vie">
-                    <img src="{{ asset('assets/images/Elodie/heart1.png') }}" class="heart-EM" alt="Vie">
+
+                <div class="hud-row-EM">
+                    <img src="{{ asset('assets/images/Elodie/coin.png') }}" class="icon-hud-EM" style="width:20px;">
+                    <span id="val-coins">0</span>
                 </div>
+
+                <div class="hearts-row-EM" id="lives-container"></div>
             </div>
 
-            {# POP-UP DE FIN DE NIVEAU AVEC STATS #}
             <div id="end-screen-EM" class="overlay-EM" style="display: none;">
                 <div class="glass-panel-EM">
                     <h1 id="stat-title-EM" style="color: #ffd900; margin-bottom: 20px;">NIVEAU RÉUSSI !</h1>
-                    
-                    <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 25px;">
-
-                        <div style="text-align: center;">
-                            <img src="{{ asset('assets/images/Elodie/licornedcd.png') }}" width="100%" style="display: block; margin: 0 auto 5px;">
-                            <img src="{{ asset('assets/images/Elodie/star1.png') }}" width="48" style="display: block; margin: 0 auto 5px;">
-                            <span id="stat-stars-EM" style="font-size: 24px; font-weight: bold; color: #ffffff;">0</span>
-                            <br>
-                            <small style="color: #ddd;">Étoiles</small>
-                        </div>
-                    </div>
-
-                    <div id="button-area-EM"></div>
+                    <p>Étoiles récoltées : <span id="stat-stars-EM">0</span></p>
+                    <p style="margin-top: 30px; font-weight: bold; color: #333; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 10px;">
+                            APPUI SUR ESPACE POUR LE NIVEAU SUIVANT
+                    </p>
                 </div>
             </div>
 
-            <script src="{{ asset('assets/script/coaster.js') }}" defer></script>
-        </div>
+            <div id="gameOverOverlay" class="overlay-EM" style="display: none;">
+                <div class="glass-panel-EM">
+                    <img src="{{ asset('assets/images/Elodie/licornedcd.png') }}" class="licorne-gameover-img" style="max-width:200px;">
+                    <h1 style="color: #ff4444;">GAME OVER</h1>
+                    <button class="bulle-jouer-EM" onclick="location.reload()">RECOMMENCER</button>
+                </div>
+            </div>
 
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // --- CONFIGURATION ---
+    let gameState = 'PLAYING';
+    let currentLevel = 1;
+    let stars = 0; let coins = 0; let lives = 3;
+    let speed = 6; let railOffset = 0;
+    let gameItems = [];
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // --- CHARGEMENT DES IMAGES AVEC SÉCURITÉ ---
+    function loadSafeImage(src) {
+        const img = new Image();
+        img.src = src;
+        return img;
+    }
+
+    const imgLicorne = loadSafeImage("{{ asset('assets/images/Elodie/licornee.png') }}");
+    const imgWagon   = loadSafeImage("{{ asset('assets/images/Elodie/wagonjeu.jpg') }}");
+    const imgStar    = loadSafeImage("{{ asset('assets/images/Elodie/star1.png') }}");
+    const imgCoin    = loadSafeImage("{{ asset('assets/images/Elodie/coin.png') }}");
+    const bgDay      = loadSafeImage("{{ asset('assets/images/Elodie/cielsoleil.png') }}");
+    const bgNight    = loadSafeImage("{{ asset('assets/images/Elodie/ciel_etoile.png') }}");
+
+    const softCollectSound = new Audio('/assets/sound/Karlvin/ok.mp3');
+    softCollectSound.volume = 0.3;
+
+    const player = { 
+        x: 150, y: 0, width: 80, height: 80, 
+        dy: 0, jumpForce: 20, gravity: 0.8, 
+        isGrounded: true, isFalling: false 
+    };
+
+    function getRailY(x) {
+        const baseLine = canvas.height * 0.75;
+        let amplitude = 15 + (currentLevel * 12); 
+        let frequency = 0.005;
+        return baseLine + Math.sin((x + railOffset) * frequency) * amplitude;
+    }
+
+    function drawRails() {
+        let railColor = (currentLevel === 1) ? '#ff1616' : (currentLevel === 2 ? '#ffaa00' : '#aa44ff');
+        railOffset += speed;
+
+        let segment = 500; let gap = 150;
+        if (currentLevel === 3) { segment = 450; gap = 200; }
+        const cycle = segment + gap;
+
+        for (let x = 0; x <= canvas.width + 100; x += 10) {
+            const posInCycle = (x + railOffset) % cycle;
+            if (posInCycle < segment && Math.floor(x + railOffset) % 200 < 10) {
+                const y = getRailY(x);
+                ctx.save(); ctx.strokeStyle = '#aaaaaa'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, canvas.height); ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        ctx.strokeStyle = railColor;
+        ctx.lineWidth = 8; 
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        for (let x = 0; x <= canvas.width + 100; x += 5) {
+            const posInCycle = (x + railOffset) % cycle;
+            const y = getRailY(x);
+            if (posInCycle < segment) {
+                if (x === 0 || posInCycle < 10) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+        }
+        ctx.stroke();
+    }
+
+    function updatePlayer() {
+        const targetY = getRailY(player.x) - player.height + 5;
+        let segment = 500; let gap = 150;
+        if (currentLevel === 3) { segment = 450; gap = 200; }
+        const cycle = segment + gap;
+        const posInCycle = (player.x + railOffset) % cycle;
+        const isOverGap = posInCycle > segment;
+
+        if (!player.isFalling) {
+            player.dy += player.gravity;
+            player.y += player.dy;
+
+            if (!isOverGap && player.y > targetY && player.dy >= 0) {
+                player.y = targetY; 
+                player.dy = 0; 
+                player.isGrounded = true;
+            } else {
+                player.isGrounded = false;
+            }
+
+            if ((isOverGap && player.y > targetY + 10) || player.y > canvas.height) {
+                player.isFalling = true;
+            }
+        } else {
+            player.y += 15; 
+            if (player.y > canvas.height + 100) {
+                lives--; 
+                updateHUD();
+                player.isFalling = false;
+                if (lives > 0) {
+                    player.y = -100; 
+                    player.dy = 0;
+                    railOffset += 250; 
+                } else {
+                    triggerGameOver();
+                }
+            }
+        }
+    }
+
+    function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Sécurité Background
+        let bg = (currentLevel === 3) ? bgNight : bgDay;
+        if (bg.complete && bg.naturalWidth !== 0) {
+            ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+        } else {
+            ctx.fillStyle = (currentLevel === 3) ? "#000b1e" : "#87CEEB";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        drawRails();
+
+        if (gameState === 'PLAYING') {
+            if (Math.random() < 0.02) gameItems.push({ x: canvas.width, type: Math.random() > 0.5 ? 'STAR' : 'COIN' });
+            
+            gameItems.forEach((item, index) => {
+                item.x -= speed;
+                let iy = getRailY(item.x) - 50;
+                
+                if (Math.abs(item.x - player.x) < 45 && Math.abs(iy - player.y) < 45) {
+                    if (item.type === 'STAR') stars++; else coins++;
+                    softCollectSound.play().catch(()=>{});
+                    gameItems.splice(index, 1); updateHUD();
+                }
+                
+                // Sécurité Items
+                let img = (item.type === 'STAR' ? imgStar : imgCoin);
+                if (img.complete && img.naturalWidth !== 0) {
+                    ctx.drawImage(img, item.x, iy, 30, 30);
+                } else {
+                    ctx.fillStyle = (item.type === 'STAR') ? "yellow" : "orange";
+                    ctx.fillRect(item.x, iy, 20, 20);
+                }
+            });
+
+            updatePlayer();
+            
+            // Sécurité Wagon + Licorne
+            if (imgWagon.complete && imgWagon.naturalWidth !== 0) {
+                ctx.drawImage(imgWagon, player.x, player.y, player.width, player.height);
+            }
+            if (imgLicorne.complete && imgLicorne.naturalWidth !== 0) {
+                ctx.drawImage(imgLicorne, player.x + 12, player.y - 15, 60, 70);
+            }
+            
+            if (stars >= currentLevel * 15) triggerWin();
+        }
+        requestAnimationFrame(gameLoop);
+    }
+
+    function updateHUD() {
+        document.getElementById('val-stars').textContent = stars;
+        document.getElementById('val-coins').textContent = coins;
+        document.getElementById('level-display').textContent = "NIVEAU " + currentLevel;
+        let cont = document.getElementById('lives-container');
+        if(cont) {
+            cont.innerHTML = '';
+            for(let i=1; i<=3; i++) {
+                let h = document.createElement('img');
+                h.src = "{{ asset('assets/images/Elodie/heart1.png') }}";
+                h.className = (i > lives) ? 'heart-EM heart-lost-EM' : 'heart-EM';
+                h.style.width = "25px"; cont.appendChild(h);
+            }
+        }
+    }
+
+    function triggerWin() {
+        if (currentLevel < 3) {
+            gameState = 'PAUSE'; 
+            document.getElementById('end-screen-EM').style.display = 'flex';
+        } else {
+            gameState = 'FINISHED';
+            const winOverlay = document.getElementById('end-screen-EM');
+            winOverlay.innerHTML = `
+                <div class="glass-panel-EM">
+                    <h1 style="color: #ffd900; font-size: 30px;">FÉLICITATIONS TU AS GAGNÉ !</h1>
+                    <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center;">
+                        <button class="bulle-jouer-EM" style="background-color: #4CAF50; box-shadow: 0 6px 0 #2E7D32;" onclick="location.reload()">REJOUER</button>
+                        <button class="bulle-jouer-EM" style="background-color: #f44336; box-shadow: 0 6px 0 #C62828;" onclick="window.location.href='/'">RETOUR À LA FÊTE</button>
+                    </div>
+                </div>
+            `;
+            winOverlay.style.display = 'flex';
+        }
+    }
+
+    function triggerGameOver() {
+        gameState = 'GAMEOVER';
+        const goOverlay = document.getElementById('gameOverOverlay');
+        goOverlay.innerHTML = `
+            <div class="glass-panel-EM">
+                <h1 style="color: #FFD84D; font-size: 50px; margin-bottom: 10px;">GAME OVER</h1>
+                <img src="{{ asset('assets/images/Elodie/licornedcd.png') }}" style="max-width:200px; margin-bottom: 20px;">
+                <br>
+                <button class="bulle-jouer-EM" onclick="location.reload()">RECOMMENCER</button>
+            </div>
+        `;
+        goOverlay.style.display = 'flex';
+    }
+
+    window.addEventListener('keydown', e => { 
+        if (e.code === 'Space') {
+            if (gameState === 'PLAYING' && player.isGrounded) {
+                player.dy = -player.jumpForce; player.isGrounded = false; 
+            } else if (gameState === 'PAUSE') {
+                currentLevel++; gameState = 'PLAYING';
+                document.getElementById('end-screen-EM').style.display = 'none';
+                updateHUD();
+            }
+        }
+    });
+    
+    updateHUD(); gameLoop();
+</script>
+        </div>
     {% endif %}
 
 {% endblock %}
