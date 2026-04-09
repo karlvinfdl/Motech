@@ -3870,7 +3870,7 @@ main.jeuKF {
 /* ===== CSS ELODIE  DEBUT ============= */
 /* ===================================== */
 /* ============================================================
-   GROS COMMENTAIRE : RÉGLAGES DE BASE
+             RÉGLAGES DE BASE
    ============================================================ */
 * { 
     box-sizing: border-box; 
@@ -3886,12 +3886,11 @@ body, html {
 }
 
 /* ============================================================
-   GROS COMMENTAIRE : FOND GÉNÉRAL (ACCUEIL & JEU)
+   FOND GÉNÉRAL (ACCUEIL & JEU)
    ============================================================ */
 .hero-EM, #game-ui-wrapper-EM {
     width: 100vw; 
     height: 100vh;
-    /* On garde nuages.png par défaut, le JS changera pour cielsoleil/etoile */
     background: url('../assets/images/Elodie/nuages.png') no-repeat center center fixed;
     background-size: cover;
     display: flex; 
@@ -3902,7 +3901,7 @@ body, html {
 }
 
 /* ============================================================
-   GROS COMMENTAIRE : LE PANNEAU TRANSPARENT (Style Verre)
+  LE PANNEAU TRANSPARENT (Style Verre)
    ============================================================ */
 .glass-panel-EM {
     background: rgba(255, 255, 255, 0.22);
@@ -3941,7 +3940,7 @@ body, html {
 }
 
 /* ============================================================
-   GROS COMMENTAIRE : L'INTERFACE DU HAUT (HUD)
+   L'INTERFACE DU HAUT (HUD)
    ============================================================ */
 .pixel-hud-EM { 
     position: absolute; 

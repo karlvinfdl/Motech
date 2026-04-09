@@ -7,7 +7,7 @@
     {% if app.request.query.get('page') != 'jeu' %}
         <main class="hero-EM">
             <img src="{{ asset('assets/images/Elodie/licorne.png') }}" class="logo-top-left-EM">
-            <img src="{{ asset('assets/images/Elodie/logostar.png') }}" alt="Logo principal" class="hero-logo-EM" width="280">
+            <img src="{{ asset('assets/images/Elodie/logostar.png') }}" alt="Logo principal" class="hero-logo-EM" width="400px">
 
             <section class="glass-panel-EM">
                 <p class="g-title-EM">BIENVENUE !</p>
@@ -45,7 +45,7 @@
                 <div class="glass-panel-EM">
                     <h1 id="stat-title-EM" style="color: #ffd900; margin-bottom: 20px;">NIVEAU RÉUSSI !</h1>
                     <p>Étoiles récoltées : <span id="stat-stars-EM">0</span></p>
-                    <p style="margin-top: 30px; font-weight: bold; color: #333; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 10px;">
+                    <p style="margin-top: 30px; font-weight: bold; color: #ffffff; background: rgba(255, 255, 255, 0.5); padding: 10px; border-radius: 10px;">
                             APPUI SUR ESPACE POUR LE NIVEAU SUIVANT
                     </p>
                 </div>
@@ -67,8 +67,15 @@
     let gameState = 'PLAYING';
     let currentLevel = 1;
     let stars = 0; let coins = 0; let lives = 3;
-    let speed = 6; let railOffset = 0;
+    let speed = 7; 
+    let railOffset = 0;
     let gameItems = [];
+    
+    // Position du drapeau de fin (X)
+    let finishFlagX = null; 
+
+    // OBJECTIF : Nombre d'étoiles pour faire apparaître le drapeau
+    const STARS_TO_WIN = 10; 
 
     function resize() {
         canvas.width = window.innerWidth;
@@ -77,7 +84,7 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // --- CHARGEMENT DES IMAGES AVEC SÉCURITÉ ---
+    // --- CHARGEMENT DES IMAGES ---
     function loadSafeImage(src) {
         const img = new Image();
         img.src = src;
@@ -96,7 +103,7 @@
 
     const player = { 
         x: 150, y: 0, width: 80, height: 80, 
-        dy: 0, jumpForce: 20, gravity: 0.8, 
+        dy: 0, jumpForce: 16, gravity: 0.7, 
         isGrounded: true, isFalling: false 
     };
 
@@ -105,6 +112,31 @@
         let amplitude = 15 + (currentLevel * 12); 
         let frequency = 0.005;
         return baseLine + Math.sin((x + railOffset) * frequency) * amplitude;
+    }
+
+    // --- FONCTION POUR DESSINER LE DRAPEAU DE FIN ---
+    function drawFinishFlag(x, y) {
+        const flagWidth = 60;
+        const flagHeight = 80;
+        const poleWidth = 6;
+        const squareSize = 10;
+
+        ctx.save();
+        
+        // Le mât
+        ctx.fillStyle = '#8e8e8e';
+        ctx.fillRect(x, y - flagHeight, poleWidth, flagHeight);
+
+        // Le drapeau à damier
+        ctx.translate(x + poleWidth, y - flagHeight);
+        for (let r = 0; r < flagHeight / squareSize / 1.5; r++) {
+            for (let c = 0; c < flagWidth / squareSize; c++) {
+                ctx.fillStyle = (r + c) % 2 === 0 ? 'white' : 'black';
+                ctx.fillRect(c * squareSize, r * squareSize, squareSize, squareSize);
+            }
+        }
+        
+        ctx.restore();
     }
 
     function drawRails() {
@@ -141,7 +173,9 @@
     }
 
     function updatePlayer() {
-        const targetY = getRailY(player.x) - player.height + 5;
+        const railY = getRailY(player.x);
+        const targetY = railY - player.height + 10; 
+        
         let segment = 500; let gap = 150;
         if (currentLevel === 3) { segment = 450; gap = 200; }
         const cycle = segment + gap;
@@ -152,7 +186,7 @@
             player.dy += player.gravity;
             player.y += player.dy;
 
-            if (!isOverGap && player.y > targetY && player.dy >= 0) {
+            if (!isOverGap && player.y >= targetY - 10 && player.dy >= 0) {
                 player.y = targetY; 
                 player.dy = 0; 
                 player.isGrounded = true;
@@ -160,19 +194,21 @@
                 player.isGrounded = false;
             }
 
-            if ((isOverGap && player.y > targetY + 10) || player.y > canvas.height) {
-                player.isFalling = true;
+            if (player.y > targetY + 50) {
+                if (isOverGap || player.y > canvas.height) {
+                    player.isFalling = true;
+                }
             }
         } else {
-            player.y += 15; 
+            player.y += 12; 
             if (player.y > canvas.height + 100) {
                 lives--; 
                 updateHUD();
                 player.isFalling = false;
                 if (lives > 0) {
-                    player.y = -100; 
+                    player.y = -150;
                     player.dy = 0;
-                    railOffset += 250; 
+                    railOffset += (cycle - posInCycle) + 50; 
                 } else {
                     triggerGameOver();
                 }
@@ -183,7 +219,6 @@
     function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Sécurité Background
         let bg = (currentLevel === 3) ? bgNight : bgDay;
         if (bg.complete && bg.naturalWidth !== 0) {
             ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
@@ -195,47 +230,71 @@
         drawRails();
 
         if (gameState === 'PLAYING') {
-            if (Math.random() < 0.02) gameItems.push({ x: canvas.width, type: Math.random() > 0.5 ? 'STAR' : 'COIN' });
+            // Apparition d'objets (seulement si le drapeau n'est pas là)
+            if (finishFlagX === null && Math.random() < 0.03) {
+                gameItems.push({ x: canvas.width + 50, type: Math.random() > 0.4 ? 'STAR' : 'COIN' });
+            }
             
             gameItems.forEach((item, index) => {
                 item.x -= speed;
-                let iy = getRailY(item.x) - 50;
+                let iy = getRailY(item.x) - 75; 
                 
-                if (Math.abs(item.x - player.x) < 45 && Math.abs(iy - player.y) < 45) {
+                if (Math.abs(item.x - player.x) < 50 && Math.abs(iy - player.y) < 70) {
                     if (item.type === 'STAR') stars++; else coins++;
                     softCollectSound.play().catch(()=>{});
-                    gameItems.splice(index, 1); updateHUD();
+                    gameItems.splice(index, 1); 
+                    updateHUD();
                 }
                 
-                // Sécurité Items
                 let img = (item.type === 'STAR' ? imgStar : imgCoin);
                 if (img.complete && img.naturalWidth !== 0) {
-                    ctx.drawImage(img, item.x, iy, 30, 30);
+                    ctx.drawImage(img, item.x, iy, 40, 40);
                 } else {
                     ctx.fillStyle = (item.type === 'STAR') ? "yellow" : "orange";
-                    ctx.fillRect(item.x, iy, 20, 20);
+                    ctx.fillRect(item.x, iy, 25, 25);
                 }
+
+                if (item.x < -50) gameItems.splice(index, 1);
             });
+
+            // --- GESTION DU DRAPEAU DE FIN ---
+            // Si on a assez d'étoiles et que le drapeau n'existe pas encore
+            if (stars >= STARS_TO_WIN && finishFlagX === null) {
+                finishFlagX = canvas.width + 100; // Il apparaît juste hors écran
+            }
+
+            // Si le drapeau existe, on le fait avancer
+            if (finishFlagX !== null) {
+                finishFlagX -= speed;
+                const flagY = getRailY(finishFlagX);
+                drawFinishFlag(finishFlagX, flagY);
+
+                // COLLISION AVEC LE DRAPEAU (Victoire)
+                if (player.x + player.width > finishFlagX && player.x < finishFlagX + 20) {
+                    // Vérification sommaire de la hauteur pour être sûr qu'on est sur le rail
+                    if (Math.abs(player.y - (flagY - player.height)) < 50) {
+                        triggerWin();
+                    }
+                }
+            }
 
             updatePlayer();
             
-            // Sécurité Wagon + Licorne
             if (imgWagon.complete && imgWagon.naturalWidth !== 0) {
                 ctx.drawImage(imgWagon, player.x, player.y, player.width, player.height);
             }
             if (imgLicorne.complete && imgLicorne.naturalWidth !== 0) {
-                ctx.drawImage(imgLicorne, player.x + 12, player.y - 15, 60, 70);
+                ctx.drawImage(imgLicorne, player.x + 10, player.y - 28, 65, 75);
             }
-            
-            if (stars >= currentLevel * 15) triggerWin();
         }
         requestAnimationFrame(gameLoop);
     }
 
     function updateHUD() {
-        document.getElementById('val-stars').textContent = stars;
-        document.getElementById('val-coins').textContent = coins;
-        document.getElementById('level-display').textContent = "NIVEAU " + currentLevel;
+        if(document.getElementById('val-stars')) document.getElementById('val-stars').textContent = stars + " / " + STARS_TO_WIN;
+        if(document.getElementById('val-coins')) document.getElementById('val-coins').textContent = coins;
+        if(document.getElementById('level-display')) document.getElementById('level-display').textContent = "NIVEAU " + currentLevel;
+
         let cont = document.getElementById('lives-container');
         if(cont) {
             cont.innerHTML = '';
@@ -243,58 +302,82 @@
                 let h = document.createElement('img');
                 h.src = "{{ asset('assets/images/Elodie/heart1.png') }}";
                 h.className = (i > lives) ? 'heart-EM heart-lost-EM' : 'heart-EM';
-                h.style.width = "25px"; cont.appendChild(h);
+                h.style.width = "25px"; h.style.marginRight = "5px";
+                cont.appendChild(h);
             }
         }
     }
 
-    function triggerWin() {
-        if (currentLevel < 3) {
-            gameState = 'PAUSE'; 
-            document.getElementById('end-screen-EM').style.display = 'flex';
-        } else {
-            gameState = 'FINISHED';
-            const winOverlay = document.getElementById('end-screen-EM');
-            winOverlay.innerHTML = `
-                <div class="glass-panel-EM">
-                    <h1 style="color: #ffd900; font-size: 30px;">FÉLICITATIONS TU AS GAGNÉ !</h1>
-                    <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center;">
-                        <button class="bulle-jouer-EM" style="background-color: #4CAF50; box-shadow: 0 6px 0 #2E7D32;" onclick="location.reload()">REJOUER</button>
-                        <button class="bulle-jouer-EM" style="background-color: #f44336; box-shadow: 0 6px 0 #C62828;" onclick="window.location.href='/'">RETOUR À LA FÊTE</button>
-                    </div>
-                </div>
-            `;
-            winOverlay.style.display = 'flex';
-        }
+    function restartLevel() {
+        document.getElementById('gameOverOverlay').style.display = 'none';
+        lives = 3;
+        stars = 0; 
+        finishFlagX = null; // Reset du drapeau
+        player.isFalling = false;
+        player.y = -200;
+        player.dy = 0;
+        gameItems = [];
+        gameState = 'PLAYING';
+        updateHUD();
     }
 
     function triggerGameOver() {
         gameState = 'GAMEOVER';
         const goOverlay = document.getElementById('gameOverOverlay');
-        goOverlay.innerHTML = `
-            <div class="glass-panel-EM">
-                <h1 style="color: #FFD84D; font-size: 50px; margin-bottom: 10px;">GAME OVER</h1>
-                <img src="{{ asset('assets/images/Elodie/licornedcd.png') }}" style="max-width:200px; margin-bottom: 20px;">
-                <br>
-                <button class="bulle-jouer-EM" onclick="location.reload()">RECOMMENCER</button>
-            </div>
-        `;
-        goOverlay.style.display = 'flex';
+        if(goOverlay) {
+            goOverlay.innerHTML = `
+                <div class="glass-panel-EM">
+                    <h1 style="color: #FFD84D; font-size: 50px; margin-bottom: 10px;">GAME OVER</h1>
+                    <p style="color: white; font-size: 20px;">Tu étais au Niveau ${currentLevel}</p>
+                    <img src="{{ asset('assets/images/Elodie/licornedcd.png') }}" style="max-width:200px; margin-bottom: 20px;">
+                    <br>
+                    <button class="bulle-jouer-EM" onclick="restartLevel()">RECOMMENCER LE NIVEAU</button>
+                </div>
+            `;
+            goOverlay.style.display = 'flex';
+        }
+    }
+
+    function triggerWin() {
+        gameState = 'FINISHED'; // Stop le jeu
+        finishFlagX = null; // Reset pour le prochain niveau
+        
+        if (currentLevel < 3) {
+            // Écran de pause entre niveaux
+            document.getElementById('end-screen-EM').style.display = 'flex';
+        } else {
+            // Écran de victoire finale
+            const winOverlay = document.getElementById('end-screen-EM');
+            if(winOverlay) {
+                winOverlay.innerHTML = `
+                    <div class="glass-panel-EM">
+                        <h1 style="color: #ffd900; font-size: 30px;">FÉLICITATIONS TU AS GAGNÉ !</h1>
+                        <button class="bulle-jouer-EM" onclick="location.reload()">REJOUER TOUT</button>
+                    </div>
+                `;
+                winOverlay.style.display = 'flex';
+            }
+        }
     }
 
     window.addEventListener('keydown', e => { 
         if (e.code === 'Space') {
+            e.preventDefault();
             if (gameState === 'PLAYING' && player.isGrounded) {
                 player.dy = -player.jumpForce; player.isGrounded = false; 
-            } else if (gameState === 'PAUSE') {
-                currentLevel++; gameState = 'PLAYING';
+            } else if (gameState === 'PAUSE' || gameState === 'FINISHED' && currentLevel < 3) {
+                currentLevel++; 
+                stars = 0; 
+                finishFlagX = null; // Sécurité
+                gameState = 'PLAYING';
                 document.getElementById('end-screen-EM').style.display = 'none';
                 updateHUD();
             }
         }
     });
     
-    updateHUD(); gameLoop();
+    updateHUD(); 
+    gameLoop();
 </script>
         </div>
     {% endif %}
