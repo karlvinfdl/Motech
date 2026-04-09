@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="hud-row-EM">
-                    <img src="{{ asset('assets/images/Elodie/coin.png') }}" class="icon-hud-EM" style="width:20px;">
+                    <img src="{{ asset('assets/images/Elodie/coins.png') }}" class="icon-hud-EM" style="width:20px;">
                     <span id="val-coins">0</span>
                 </div>
 
@@ -94,7 +94,7 @@
     const imgLicorne = loadSafeImage("{{ asset('assets/images/Elodie/licornee.png') }}");
     const imgWagon   = loadSafeImage("{{ asset('assets/images/Elodie/wagonjeu.jpg') }}");
     const imgStar    = loadSafeImage("{{ asset('assets/images/Elodie/star1.png') }}");
-    const imgCoin    = loadSafeImage("{{ asset('assets/images/Elodie/coin.png') }}");
+    const imgCoin    = loadSafeImage("{{ asset('assets/images/Elodie/coins.png') }}");
     const bgDay      = loadSafeImage("{{ asset('assets/images/Elodie/cielsoleil.png') }}");
     const bgNight    = loadSafeImage("{{ asset('assets/images/Elodie/ciel_etoile.png') }}");
 
@@ -352,7 +352,7 @@
                 winOverlay.innerHTML = `
                     <div class="glass-panel-EM">
                         <h1 style="color: #ffd900; font-size: 30px;">FÉLICITATIONS TU AS GAGNÉ !</h1>
-                        <button class="bulle-jouer-EM" onclick="location.reload()">REJOUER TOUT</button>
+                        <button class="bulle-jouer-EM" onclick="location.reload()">RETOUR A LA FÉTE </button>
                     </div>
                 `;
                 winOverlay.style.display = 'flex';

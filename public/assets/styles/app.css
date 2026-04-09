@@ -3917,7 +3917,7 @@ body, html {
 }
 
 /* ============================================================
-   GROS COMMENTAIRE : LE BOUTON JAUNE "JOUER"
+    LE BOUTON JAUNE "JOUER"
    ============================================================ */
 .bulle-jouer-EM {
     margin-top: 20px; 
@@ -4040,7 +4040,7 @@ body, html {
 }
 
 /* ============================================================
-   GROS COMMENTAIRE : CANVAS & LOGOS
+   CANVAS & LOGOS
    ============================================================ */
 #gameCanvas { 
     display: block; 
