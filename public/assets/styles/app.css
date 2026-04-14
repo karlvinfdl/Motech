@@ -118,54 +118,16 @@ a.island1:hover img {
         drop-shadow(0 34px 42px rgba(0, 0, 0, 0.24));
 }
  
-/* petites îles un peu plus discrètes */
-.ile1-1 img,
-.ile2-1 img,
-.ile3-1 img,
-.ile4-1 img,
-.ile5-1 img,
-.ile6-1 img {
-    opacity: 0.95;
-    filter: blur(0.2px) saturate(0.96)
-        drop-shadow(0 10px 14px rgba(0, 0, 0, 0.10))
-        drop-shadow(0 18px 28px rgba(0, 0, 0, 0.16));
-}
- 
 /* ===================================== */
 /* POSITIONS DES ÎLES                    */
-/*                                       */
-/* Chemin (bas → haut) :                */
-/* elodie → ile1 → ile2 → karlvin       */
-/*       → ile3 → ile4 → ile5           */
-/*       → axel → ile6 → alexis         */
-/*                                       */
-/* Les largeurs utilisent clamp() :      */
-/*   clamp(min, %, max)                  */
-/* Le % est relatif à .islands-zone1    */
 /* ===================================== */
- 
+
 /* ---- BAS-DROITE : ELODIE (Star Coaster) ---- */
 .elodie1 {
     bottom: 2%;
     left: 44%;
     width: clamp(260px, 48%, 620px);
     animation-delay: 0s;
-}
- 
-/* ---- ile1 : bas-centre, entre elodie et karlvin ---- */
-.ile1-1 {
-    bottom: 8%;
-    left: 26%;
-    width: clamp(90px, 13%, 170px);
-    animation-delay: 0.5s;
-}
- 
-/* ---- ile2 : bas-gauche, montée vers karlvin ---- */
-.ile2-1 {
-    bottom: 26%;
-    left: 18%;
-    width: clamp(100px, 14.5%, 195px);
-    animation-delay: 1s;
 }
  
 /* ---- GAUCHE-MILIEU : KARLVIN (Scrabble) ---- */
@@ -176,44 +138,12 @@ a.island1:hover img {
     animation-delay: 1.5s;
 }
  
-/* ---- ile3 : droite de karlvin, montée centrale ---- */
-.ile3-1 {
-    bottom: 38%;
-    left: 29%;
-    width: clamp(110px, 15%, 210px);
-    animation-delay: 0.8s;
-}
- 
-/* ---- ile4 : centre, entre ile3 et ile5 ---- */
-.ile4-1 {
-    bottom: 33%;
-    left: 40%;
-    width: clamp(105px, 14.5%, 200px);
-    animation-delay: 1.3s;
-}
- 
-/* ---- ile5 : centre-droite, montée vers alexis ---- */
-.ile5-1 {
-    top: 37%;
-    left: 52%;
-    width: clamp(105px, 14.5%, 205px);
-    animation-delay: 0.3s;
-}
- 
 /* ---- HAUT-GAUCHE : AXEL (Roue magique) ---- */
 .axel1 {
     top: 8%;
     left: 50%;
     width: clamp(220px, 35%, 455px);
     animation-delay: 2s;
-}
-
-/* ---- ile6 : haut-centre, entre axel et alexis ---- */
-.ile6-1 {
-    top: 17%;
-    left: 29%;
-    width: clamp(80px, 11%, 158px);
-    animation-delay: 0.7s;
 }
 
 /* ---- HAUT-DROITE : ALEXIS (Devine le mot) ---- */
@@ -353,7 +283,18 @@ button {
     background: var(--pink-dark1);
 }
  
-/* BOUTON ÉQUIPE */
+/* BOUTONS ÉQUIPE + AVIS */
+.btn-row1 {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-row1 .big-btn1 {
+    flex: 1;
+    font-size: 18px;
+    padding: 16px 12px;
+}
+
 .big-btn1 {
     border-radius: 999px;
     padding: 18px 24px;
@@ -472,60 +413,18 @@ button {
         width: clamp(230px, 42%, 560px);
     }
  
-    /* ile1 : bas-centre */
-    .ile1-1 {
-        bottom: 8%;
-        left: 26%;
-        width: clamp(78px, 11%, 148px);
-    }
- 
-    /* ile2 : bas-gauche */
-    .ile2-1 {
-        bottom: 26%;
-        left: 17%;
-        width: clamp(90px, 13%, 172px);
-    }
- 
     /* KARLVIN */
     .karlvin1 {
         bottom: 28%;
         left: 1%;
         width: clamp(195px, 30%, 408px);
     }
- 
-    /* ile3 : droite de karlvin */
-    .ile3-1 {
-        bottom: 38%;
-        left: 28%;
-        width: clamp(100px, 13.5%, 186px);
-    }
- 
-    /* ile4 : centre */
-    .ile4-1 {
-        bottom: 33%;
-        left: 39%;
-        width: clamp(96px, 13%, 178px);
-    }
- 
-    /* ile5 : centre-droite haut */
-    .ile5-1 {
-        top: 37%;
-        left: 52%;
-        width: clamp(96px, 13%, 178px);
-    }
- 
+
     /* AXEL */
     .axel1 {
         top: 8%;
         left: 51%;
         width: clamp(192px, 29%, 388px);
-    }
-
-    /* ile6 : haut-centre */
-    .ile6-1 {
-        top: 17%;
-        left: 28%;
-        width: clamp(70px, 10%, 140px);
     }
 
     /* ALEXIS */
@@ -577,60 +476,18 @@ button {
         width: clamp(180px, 46%, 340px);
     }
  
-    /* ile1 : bas-centre */
-    .ile1-1 {
-        bottom: 7%;
-        left: 26%;
-        width: clamp(58px, 11%, 96px);
-    }
- 
-    /* ile2 : bas-gauche */
-    .ile2-1 {
-        bottom: 25%;
-        left: 17%;
-        width: clamp(66px, 12%, 110px);
-    }
- 
     /* KARLVIN */
     .karlvin1 {
         bottom: 27%;
         left: 1%;
         width: clamp(145px, 35%, 264px);
     }
- 
-    /* ile3 : droite de karlvin */
-    .ile3-1 {
-        bottom: 37%;
-        left: 28%;
-        width: clamp(70px, 12.5%, 118px);
-    }
- 
-    /* ile4 : centre */
-    .ile4-1 {
-        bottom: 32%;
-        left: 39%;
-        width: clamp(66px, 12%, 114px);
-    }
- 
-    /* ile5 : centre-droite haut */
-    .ile5-1 {
-        top: 37%;
-        left: 52%;
-        width: clamp(68px, 12%, 114px);
-    }
- 
+
     /* AXEL */
     .axel1 {
         top: 7%;
         left: 51%;
         width: clamp(130px, 33%, 252px);
-    }
-
-    /* ile6 : haut-centre */
-    .ile6-1 {
-        top: 17%;
-        left: 28%;
-        width: clamp(50px, 9.5%, 88px);
     }
 
     /* ALEXIS */
@@ -915,77 +772,268 @@ button {
 /* ===================================== */
 /* ================= AVIS DEBUT========== */
 /* ===================================== */
-/*Elodie travail ici / MENU DEROULANT */
+
+/* Layout : tout sur un écran, sans scroll */
 .page-fin {
-    min-height: 100vh;
-    background-image: url("../images/page-de-fin.png");
+    height: 100vh;
+    overflow: hidden;
+    background-image: url(../images/page-de-fin.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 0 20px 56px;
+    gap: 50px;
+    box-sizing: border-box;
 }
 
+/* Titre principal */
+.fin-title {
+    font-family: 'Irish Grover', cursive;
+    color: #ffd700;
+    font-size: 1.8rem;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    margin: 0;
+    line-height: 1.1;
+}
+
+/* Carte formulaire */
 .formulaire-section {
     background-color: rgba(255, 255, 255, 0.95);
-    width: 60%;
-    max-width: 600px;
-    padding: 40px;
-    border-radius: 25px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-    margin: auto;
+    width: 90%;
+    max-width: 700px;
+    padding: 18px 28px 14px;
+    border-radius: 20px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* Titre */
+/* Titre du formulaire */
 .formulaire-title {
+    font-family: 'Irish Grover', cursive;
     text-align: center;
-    font-size: 28px;
-    margin-bottom: 35px;
+    font-size: 1.2rem;
+    margin: 0 0 12px;
     color: #000;
 }
 
-/* Champs */
+/* Deux colonnes dans le form */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Groupes de champs */
 .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 22px;
+    margin-bottom: 10px;
 }
 
 .form-group label {
-    margin-bottom: 8px;
+    margin-bottom: 3px;
     font-weight: 600;
+    font-size: 0.82rem;
     color: #333;
-    display: block;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-    padding: 14px;
-    border-radius: 12px;
+    padding: 7px 10px;
+    border-radius: 10px;
     border: 1px solid #bbb;
     background-color: #fff !important;
     color: #000 !important;
     width: 100%;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 13px;
+}
+
+/* Étoiles interactives */
+.star-rating {
+    display: flex;
+    gap: 3px;
+    margin-top: 2px;
+}
+
+.star-rating .star {
+    font-size: 1.6rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.12s, transform 0.1s;
+    user-select: none;
+    line-height: 1;
+}
+
+.star-rating .star:hover,
+.star-rating .star.active {
+    color: #ffd700;
+    transform: scale(1.12);
+}
+
+.note-hint {
+    margin: 2px 0 0;
+    font-size: 0.72rem;
+    color: #888;
 }
 
 /* Bouton */
 .btn-submit {
-    margin: 30px auto 0;
-    padding: 14px 40px;
+    margin: 10px auto 0;
+    padding: 9px 32px;
     background-color: #ff4f9a;
     color: white;
     border: none;
     border-radius: 30px;
     font-weight: bold;
+    font-size: 13px;
     cursor: pointer;
     display: block;
+    transition: opacity 0.2s;
 }
+
+.btn-submit:hover { opacity: 0.85; }
+
+/* Flash messages */
+.flash-success {
+    background-color: #d4edda;
+    border: 1px solid #a3d9a5;
+    color: #2d6a4f;
+    padding: 8px 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.flash-error {
+    background-color: #fde8e8;
+    border: 1px solid #f5a5a5;
+    color: #b00020;
+    padding: 8px 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* ---- Carousel d'avis ---- */
+.avis-section {
+    width: 90%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avis-arrow {
+    background: #ff4f9a;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.avis-arrow:hover { opacity: 0.8; }
+
+.avis-track-wrapper {
+    overflow: hidden;
+    flex: 1;
+}
+
+.avis-track {
+    display: flex;
+    gap: 12px;
+    transition: transform 0.35s ease;
+}
+
+.avis-card {
+    background: white;
+    border-radius: 14px;
+    padding: 12px;
+    min-width: 150px;
+    flex: 0 0 calc(25% - 9px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.avis-card-title {
+    font-family: 'Irish Grover', cursive;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    color: #222;
+}
+
+.avis-card-game {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #ff4f9a;
+    margin-bottom: 5px;
+}
+
+.avis-card-message {
+    font-size: 0.72rem;
+    color: #555;
+    margin-bottom: 7px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.avis-stars { font-size: 1rem; letter-spacing: 1px; }
+.avis-stars .star-on  { color: #ffd700; }
+.avis-stars .star-off { color: #ccc; }
+
+.avis-empty {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    text-align: center;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+/* ---- Boutons navigation (fixés en bas) ---- */
+.fin-nav {
+    position: fixed;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    pointer-events: none;
+}
+
+.fin-nav a {
+    pointer-events: all;
+    background: #ff4f9a;
+    color: white;
+    text-decoration: none;
+    padding: 9px 22px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.2s;
+}
+
+.fin-nav a:hover { opacity: 0.85; }
 
 /* ===================================== */
 /* ================= AVIS FIN============ */
