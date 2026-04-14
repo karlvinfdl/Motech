@@ -1,0 +1,11 @@
+<parameter name="content"># Star Coaster Améliorations HUD
+✅ 404 nuages.png fixé
+
+## 🔄 À faire :
+[ ] 1. HUD: NIVEAU 1 blanc + licorne
+[ ] 2. 3 coeurs fixes + pièces dessous  
+[ ] 3. Saut moins haut (-18) fluide
+[ ] 4. Restart point chute (lives=3)
+[ ] 5. Popup: ♥48px + "Pièces: X"
+[ ] ✅ Test & completion
+</parameter>
