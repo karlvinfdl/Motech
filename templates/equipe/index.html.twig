@@ -121,7 +121,28 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     handleMemberSelection();
-    console.log("Système de sélection de personnage prêt ! 🦄");
+
+    // Gestion de la popup
+    const popup = document.getElementById("popup");
+    const openBtn = document.getElementById("btn-popup5");
+    const closeBtn = document.getElementById("close-btn2");
+
+    const openPopup = () => {
+        popup.classList.add("visible");
+        popup.setAttribute("aria-hidden", "false");
+    };
+
+    const closePopup = () => {
+        popup.classList.remove("visible");
+        popup.setAttribute("aria-hidden", "true");
+    };
+
+    openBtn.addEventListener("click", openPopup);
+    closeBtn.addEventListener("click", closePopup);
+
+    popup.addEventListener("click", (e) => {
+        if (e.target === popup) closePopup();
+    });
 });
 </script>
 {% endblock %}
