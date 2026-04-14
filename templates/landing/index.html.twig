@@ -16,42 +16,15 @@
       <img src="{{ asset('assets/images/ile-elodie1.png') }}" alt="Star Coaster">
     </a>
 
-    <!-- CHEMIN -->
-    <div class="island1 ile1-1">
-      <img src="{{ asset('assets/images/ile1.png') }}" alt="">
-    </div>
-
-    <div class="island1 ile2-1">
-      <img src="{{ asset('assets/images/ile2.png') }}" alt="">
-    </div>
-
     <!-- KARLVIN -->
     <a href="{{ path('app_scrabble') }}" class="island1 karlvin1">
       <img src="{{ asset('assets/images/ile-karlvin1.png') }}" alt="Scrabble des licornes">
     </a>
 
-    <!-- CHEMIN -->
-    <div class="island1 ile3-1">
-      <img src="{{ asset('assets/images/ile3.png') }}" alt="">
-    </div>
-
-    <div class="island1 ile4-1">
-      <img src="{{ asset('assets/images/ile4.png') }}" alt="">
-    </div>
-
-    <div class="island1 ile5-1">
-      <img src="{{ asset('assets/images/ile5.png') }}" alt="">
-    </div>
-
     <!-- AXEL -->
     <a href="{{ path('app_wheel') }}" class="island1 axel1">
       <img src="{{ asset('assets/images/ile-axel1.png') }}" alt="Roue magique">
     </a>
-
-    <!-- CHEMIN -->
-    <div class="island1 ile6-1">
-      <img src="{{ asset('assets/images/ile6.png') }}" alt="">
-    </div>
 
     <!-- ALEXIS -->
     <a href="{{ path('app_devinelemot') }}" class="island1 alexis1">
@@ -76,7 +49,8 @@
     <section class="card1 card-form1">
       <h2 class="subtitle1">Formulaire</h2>
 
-      <form method="post" class="form1">
+      <form method="post" action="{{ path('app_landing') }}" class="form1">
+        <input type="hidden" name="_token" value="{{ csrf_token('landing_form') }}">
 
         <label class="field1">
           <span class="label-text1">Nom :</span>
@@ -110,10 +84,15 @@
       </form>
     </section>
 
-    <!-- BOUTON ÉQUIPE -->
-    <a href="{{ path('app_equipe') }}" class="big-btn1">
-      Découvrir l’équipe
-    </a>
+    <!-- BOUTONS ÉQUIPE + AVIS -->
+    <div class="btn-row1">
+      <a href="{{ path('app_equipe') }}" class="big-btn1">
+        Découvrir l'équipe
+      </a>
+      <a href="{{ path('app_avis') }}" class="big-btn1">
+        Laisser un avis
+      </a>
+    </div>
 
     <!-- EASTER EGG -->
     <section class="card1 card-egg1">
