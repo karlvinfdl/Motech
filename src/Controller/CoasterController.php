@@ -14,9 +14,4 @@ final class CoasterController extends AbstractController
         return $this->render('coaster/index.html.twig');
     }
 
-    #[Route('/jouer', name: 'app_game')]
-    public function jouer(): Response
-    {
-        return $this->render('coaster/game.html.twig');
-    }
 }
