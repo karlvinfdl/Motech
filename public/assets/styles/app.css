@@ -646,6 +646,26 @@ button {
     z-index: 100;       /* S'assure que l'icône reste au-dessus du fond et des personnages */
 }
 
+/* Position au centre/droite pour le Jeu (là où tu as fait le cercle rouge) */
+.icone-house-jeu5 {
+    position: absolute;
+    top: 15px; /* Ajuste selon la hauteur de ta barre d'infos */
+    left: 55%; /* Place l'icône un peu à droite de la bordure centrale */
+    z-index: 9999;
+    pointer-events: auto;
+}
+
+.icone-house-jeu5 a {
+    pointer-events: auto;
+    cursor: pointer; /* Force l'affichage de la petite main */
+}
+
+/* Optionnel : Rendre la maison un peu plus petite pendant le jeu pour qu'elle s'intègre mieux à ta barre d'HUD */
+.icone-house-jeu5 svg {
+    width: 40px;
+    height: 40px;
+}
+
 /* ===================================== */
 /* =============== POPUP DEBUT========== */
 /* ===================================== */
