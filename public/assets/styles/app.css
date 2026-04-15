@@ -21,27 +21,26 @@ body {
 :root {
     --pink1: #e60b62;
     --pink-dark1: #c80a55;
-
     --card-bg1: rgba(255, 255, 255, 0.88);
-    --shadow1: 10px 5px 0 rgba(0, 0, 0, 0.14);
-    --radius1: 24px;
+    --shadow1: 10px 8px 0 rgba(0, 0, 0, 0.14);
+    --radius1: 28px;
 }
-
+ 
 /* RESET */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
     margin: 0;
+    padding: 0;
 }
-
+ 
 html,
 body {
-    height: 100%;
+    min-height: 100%;
     font-family: "Irish Grover", system-ui, sans-serif;
 }
-
-/* BACKGROUND */
+ 
 body {
     position: relative;
     min-height: 100vh;
@@ -49,273 +48,311 @@ body {
     background: url("../images/fond-landing.png") no-repeat center center;
     background-size: cover;
 }
-
-/* Assure que le contenu reste au-dessus */
+ 
 body > * {
     position: relative;
     z-index: 1;
 }
-
-/* ZONE ÎLES */
-.iles1 {
+ 
+/* ===================================== */
+/* CONTENEUR GLOBAL */
+/* ===================================== */
+ 
+.landing-page1 {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+}
+ 
+/* ===================================== */
+/* ZONE DES ÎLES */
+/* ===================================== */
+ 
+.islands-zone1 {
     position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 1;
+    inset: 0 420px 0 0; /* laisse la place pour la colonne de droite */
     overflow: hidden;
 }
-
-.iles1 {
-    width: calc(100% - 320px); /* au lieu de 420px */
-}
-
-/* Voile atmosphérique pour mieux fondre les îles */
-.iles1::before {
+ 
+/* léger voile pour fondre les éléments */
+.islands-zone1::before {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(255, 255, 255, 0.18) 0%,
-        rgba(220, 235, 255, 0.1) 40%,
-        rgba(255, 255, 255, 0.06) 100%
+        rgba(255, 255, 255, 0.10) 0%,
+        rgba(255, 255, 255, 0.03) 40%,
+        rgba(255, 255, 255, 0.08) 100%
     );
     pointer-events: none;
-    z-index: 2;
+    z-index: 1;
 }
-
-/* Nuages devant les îles */
-.clouds-front1 {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.28;
-    z-index: 4;
-    pointer-events: none;
-}
-
-/* COLONNE DROITE */
-.right-col1 {
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    width: 420px;
-    min-height: 100vh;
-
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 30px;
-
-    z-index: 5;
-}
-
-/* CARTES */
-.card1 {
-    background: var(--card-bg1);
-    border: 3px solid var(--pink1);
-    border-radius: var(--radius1);
-    box-shadow: var(--shadow1);
-    padding: 18px;
-}
-
-/* TITRE */
-.card-title1 h1 {
-    text-align: center;
-    color: var(--pink1);
-    font-size: 30px;
-}
-
-/* FORMULAIRE */
-.card-form1 h2 {
-    text-align: center;
-    color: var(--pink1);
-    font-size: 28px;
-}
-
-.form1 {
-    display: grid;
-    gap: 10px;
-}
-
-.field1 {
-    display: grid;
-    grid-template-columns: 72px 1fr;
-    gap: 10px;
-    align-items: center;
-}
-
-.label-text1 {
-    color: var(--pink1);
-    font-weight: bold;
-}
-
-/* INPUT */
-input {
-    height: 34px;
-    border-radius: 10px;
-    border: 2px solid rgba(230, 11, 98, 0.35);
-    padding: 0 10px;
-    font-family: inherit;
-}
-
-/* BOUTONS */
-button {
-    border: none;
-    outline: none;
-    background: none;
-    font-family: inherit;
-}
-
-.btn1 {
-    margin: 6px auto;
-    padding: 8px 16px;
-    border-radius: 999px;
-    background: var(--pink1);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    display: block;
-    width: 50%;
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease;
-}
-
-.btn1:hover {
-    transform: translateY(-2px);
-    background: var(--pink-dark1);
-}
-
-/* GROS BOUTON */
-.big-btn1 {
-    border-radius: 50px;
-    padding: 12px;
-    background: var(--pink1);
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease;
-}
-
-.big-btn1:hover {
-    transform: translateY(-2px);
-    background: var(--pink-dark1);
-}
-
-/* EASTER EGG */
-.egg1 {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 10px;
-    align-items: center;
-}
-
-.egg1 img {
-    width: 60px;
-    border-radius: 10px;
-}
-
-.egg-title1,
-.egg-desc1 {
-    color: var(--pink1);
-}
-
-/* LIENS ÎLES */
-.island-link1 {
+ 
+/* style général des îles */
+.island1 {
     position: absolute;
     display: block;
     z-index: 3;
-    animation: float1 5s ease-in-out infinite;
     text-decoration: none;
+    animation: float1 5s ease-in-out infinite;
 }
-
-.island-link1 img {
+ 
+.island1 img {
     display: block;
     width: 100%;
-    height: auto;
-}
-
-.island-link1:not(.island-star1) .island1 {
-    filter: grayscale(100%) brightness(0.7) blur(1px);
-    opacity: 0.7;
-}
-
-/* ÎLES */
-.island1 {
-    display: block;
     height: auto;
     transition:
         transform 0.25s ease,
         filter 0.25s ease,
         opacity 0.25s ease;
     transform-origin: center center;
-    filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.1))
-        drop-shadow(0 26px 34px rgba(0, 0, 0, 0.18));
+    filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.12))
+        drop-shadow(0 28px 36px rgba(0, 0, 0, 0.20));
 }
-
-.island-link1:hover .island1 {
+ 
+/* hover seulement pour les liens */
+a.island1:hover img {
     transform: scale(1.04) translateY(-4px);
-    filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.12))
-        drop-shadow(0 34px 42px rgba(0, 0, 0, 0.22));
+    filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.16))
+        drop-shadow(0 34px 42px rgba(0, 0, 0, 0.24));
 }
+ 
+/* ===================================== */
+/* POSITIONS DES ÎLES                    */
+/* ===================================== */
 
-/* Îles plus lointaines = un peu plus fondues */
-.island-roue1 .island1,
-.island-devine1 .island1,
-.island-pinata1 .island1 {
-    opacity: 0.94;
-    filter: blur(0.4px) saturate(0.92) brightness(1.02)
-        drop-shadow(0 12px 18px rgba(0, 0, 0, 0.1))
-        drop-shadow(0 26px 34px rgba(0, 0, 0, 0.18));
+/* ---- BAS-DROITE : ELODIE (Star Coaster) ---- */
+.elodie1 {
+    bottom: 2%;
+    left: 44%;
+    width: clamp(260px, 48%, 620px);
+    animation-delay: 0s;
 }
-
-/* Îles proches = plus nettes */
-.island-scrabble1 .island1,
-.island-star1 .island1 {
-    opacity: 1;
+ 
+/* ---- GAUCHE-MILIEU : KARLVIN (Scrabble) ---- */
+.karlvin1 {
+    bottom: 28%;
+    left: 1%;
+    width: clamp(220px, 36%, 480px);
+    animation-delay: 1.5s;
 }
-
-/* POSITIONS */
-.island-roue1 {
-    top: 6%;
-    left: 10%;
-    width: 240px;
-}
-
-.island-devine1 {
+ 
+/* ---- HAUT-GAUCHE : AXEL (Roue magique) ---- */
+.axel1 {
     top: 8%;
-    left: 48%;
-    width: 260px;
+    left: 50%;
+    width: clamp(220px, 35%, 455px);
+    animation-delay: 2s;
 }
 
-.island-pinata1 {
-    top: 32%;
-    left: 34%;
-    width: 260px;
-}
-
-.island-scrabble1 {
-    top: 42%;
+/* ---- HAUT-DROITE : ALEXIS (Devine le mot) ---- */
+.alexis1 {
+    top: 5%;
     left: 4%;
-    width: 480px;
+    width: clamp(190px, 32%, 420px);
+    animation-delay: 1.7s;
+}
+ 
+/* ===================================== */
+/* COLONNE DROITE                        */
+/* ===================================== */
+ 
+.right-col1 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 420px;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 20px;
+    z-index: 5;
+}
+ 
+/* ===================================== */
+/* CARTES                                */
+/* ===================================== */
+ 
+.card1 {
+    background: var(--card-bg1);
+    border: 5px solid var(--pink1);
+    border-radius: var(--radius1);
+    box-shadow: var(--shadow1);
+    padding: 12px 16px;
+    backdrop-filter: blur(3px);
+}
+ 
+/* TITRE */
+.card-title1 {
+    padding: 12px 14px;
+}
+ 
+.card-title1 h1,
+.title1 {
+    text-align: center;
+    color: var(--pink1);
+    font-size: 26px;
+    line-height: 1.2;
+}
+ 
+/* FORMULAIRE */
+.card-form1 {
+    padding: 12px 16px 16px;
+}
+ 
+.card-form1 h2,
+.subtitle1 {
+    text-align: center;
+    color: var(--pink1);
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+ 
+.form1 {
+    display: grid;
+    gap: 8px;
 }
 
-.island-star1 {
-    top: 46%;
-    left: 52%;
-    width: 540px;
+.field1 {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 8px;
+    align-items: center;
+}
+ 
+.label-text1 {
+    color: var(--pink1);
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 1.1;
+}
+ 
+/* INPUTS */
+input {
+    height: 32px;
+    border-radius: 12px;
+    border: 2px solid rgba(230, 11, 98, 0.28);
+    padding: 0 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.92);
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+ 
+input:focus {
+    border-color: var(--pink1);
+    box-shadow: 0 0 0 3px rgba(230, 11, 98, 0.12);
+}
+ 
+/* BOUTONS GÉNÉRAUX */
+button {
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+}
+ 
+/* BOUTON ENVOYER */
+.btn1 {
+    margin: 4px auto 0;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: var(--pink1);
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    display: block;
+    min-width: 140px;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+    box-shadow: 0 6px 14px rgba(230, 11, 98, 0.25);
+}
+ 
+.btn1:hover {
+    transform: translateY(-2px);
+    background: var(--pink-dark1);
+}
+ 
+/* BOUTONS ÉQUIPE + AVIS */
+.btn-row1 {
+    display: flex;
+    gap: 12px;
 }
 
-/* Animation flottante */
+.btn-row1 .big-btn1 {
+    flex: 1;
+    font-size: 18px;
+    padding: 16px 12px;
+}
+
+.big-btn1 {
+    border-radius: 999px;
+    padding: 18px 24px;
+    background: var(--pink1);
+    color: white;
+    font-size: 24px;
+    line-height: 1.1;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 8px 18px rgba(230, 11, 98, 0.24);
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+ 
+.big-btn1:hover {
+    transform: translateY(-2px);
+    background: var(--pink-dark1);
+}
+ 
+/* EASTER EGG */
+.card-egg1 {
+    padding: 18px 18px;
+}
+ 
+.egg1 {
+    display: grid;
+    grid-template-columns: 78px 1fr;
+    gap: 14px;
+    align-items: center;
+}
+ 
+.egg1 img {
+    width: 68px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+}
+ 
+.egg-title1 {
+    color: var(--pink1);
+    font-size: 22px;
+    margin-bottom: 6px;
+    line-height: 1;
+}
+ 
+.egg-desc1 {
+    color: var(--pink1);
+    font-size: 15px;
+    line-height: 1.25;
+}
+ 
+/* ===================================== */
+/* ANIMATION FLOTTANTE                   */
+/* ===================================== */
+ 
 @keyframes float1 {
     0%,
     100% {
@@ -325,116 +362,139 @@ button {
         transform: translateY(-8px);
     }
 }
-
-/* RESPONSIVE */
-@media (max-width: 1200px) {
-    .island-scrabble1 {
+ 
+/* ===================================== */
+/* RESPONSIVE                            */
+/* ===================================== */
+ 
+/* ---- Grand écran : rétrécir légèrement la colonne ---- */
+@media (max-width: 1300px) {
+    .right-col1 {
         width: 360px;
     }
-
-    .island-star1 {
-        width: 400px;
+ 
+    .islands-zone1 {
+        inset: 0 360px 0 0;
     }
 }
-
-@media (max-width: 900px) {
+ 
+/* ---- Tablette : layout empilé (îles au-dessus, colonne dessous) ---- */
+@media (max-width: 1100px) {
+ 
+    .landing-page1 {
+        display: flex;
+        flex-direction: column;
+    }
+ 
+    /* La zone des îles devient un bloc avec hauteur proportionnelle */
+    .islands-zone1 {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        height: max(60vw, 420px);
+    }
+ 
+    /* Colonne centrée en dessous */
     .right-col1 {
         position: relative;
         width: 100%;
         min-height: auto;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 10px 20px 30px;
+    }
+ 
+    /* ---------- Repositionnement des îles (zone = 100vw × max(60vw,420px)) ---------- */
+ 
+    /* ELODIE */
+    .elodie1 {
+        bottom: 3%;
+        left: 44%;
+        width: clamp(230px, 42%, 560px);
+    }
+ 
+    /* KARLVIN */
+    .karlvin1 {
+        bottom: 28%;
+        left: 1%;
+        width: clamp(195px, 30%, 408px);
     }
 
-    .iles1 {
-        position: relative;
-        width: 100%;
-        height: 60vh;
-    }
-
-    .island-roue1 {
-        top: 4%;
-        left: 6%;
-        width: 140px;
-    }
-
-    .island-devine1 {
+    /* AXEL */
+    .axel1 {
         top: 8%;
-        left: 55%;
-        width: 150px;
+        left: 51%;
+        width: clamp(192px, 29%, 388px);
     }
 
-    .island-pinata1 {
-        top: 28%;
-        left: 36%;
-        width: 150px;
-    }
-
-    .island-scrabble1 {
-        top: 42%;
-        left: 4%;
-        width: 250px;
-    }
-
-    .island-star1 {
-        top: 48%;
-        left: 50%;
-        width: 280px;
+    /* ALEXIS */
+    .alexis1 {
+        top: 5%;
+        left: 3%;
+        width: clamp(172px, 27%, 368px);
     }
 }
-
-@media (max-width: 600px) {
-    .right-col1 {
-        padding: 20px;
+ 
+/* ---- Mobile ---- */
+@media (max-width: 700px) {
+ 
+    .islands-zone1 {
+        height: max(65vw, 340px);
     }
-
-    .card-title1 h1 {
+ 
+    /* Textes */
+    .card-title1 h1,
+    .title1 {
         font-size: 24px;
     }
-
-    .card-form1 h2 {
-        font-size: 22px;
+ 
+    .card-form1 h2,
+    .subtitle1 {
+        font-size: 24px;
     }
-
+ 
     .big-btn1 {
         font-size: 20px;
+        padding: 16px 18px;
     }
-
+ 
     .field1 {
         grid-template-columns: 1fr;
         gap: 6px;
     }
-
-    .iles1 {
-        height: 50vh;
+ 
+    .label-text1 {
+        font-size: 18px;
+    }
+ 
+    /* ---------- Îles redimensionnées (zone = 100vw × max(65vw,340px)) ---------- */
+ 
+    /* ELODIE */
+    .elodie1 {
+        bottom: 2%;
+        left: 44%;
+        width: clamp(180px, 46%, 340px);
+    }
+ 
+    /* KARLVIN */
+    .karlvin1 {
+        bottom: 27%;
+        left: 1%;
+        width: clamp(145px, 35%, 264px);
     }
 
-    .island-roue1 {
-        top: 5%;
-        left: 5%;
-        width: 100px;
+    /* AXEL */
+    .axel1 {
+        top: 7%;
+        left: 51%;
+        width: clamp(130px, 33%, 252px);
     }
 
-    .island-devine1 {
-        top: 10%;
-        left: 55%;
-        width: 110px;
-    }
-
-    .island-pinata1 {
-        top: 28%;
-        left: 36%;
-        width: 110px;
-    }
-
-    .island-scrabble1 {
-        top: 45%;
+    /* ALEXIS */
+    .alexis1 {
+        top: 4%;
         left: 2%;
-        width: 180px;
-    }
-
-    .island-star1 {
-        top: 50%;
-        left: 48%;
-        width: 200px;
+        width: clamp(120px, 29%, 232px);
     }
 }
 
@@ -578,6 +638,34 @@ button {
     transform: scale(1.05);
     filter: brightness(1.1);
 }
+
+.icone-house5 {
+    position: absolute; /* Sort l'élément du flux normal pour le placer librement */
+    top: 20px;          /* Distance par rapport au bord haut de la page */
+    left: 20px;         /* Distance par rapport au bord gauche de la page */
+    z-index: 100;       /* S'assure que l'icône reste au-dessus du fond et des personnages */
+}
+
+/* Position au centre/droite pour le Jeu (là où tu as fait le cercle rouge) */
+.icone-house-jeu5 {
+    position: absolute;
+    top: 15px; /* Ajuste selon la hauteur de ta barre d'infos */
+    left: 55%; /* Place l'icône un peu à droite de la bordure centrale */
+    z-index: 9999;
+    pointer-events: auto;
+}
+
+.icone-house-jeu5 a {
+    pointer-events: auto;
+    cursor: pointer; /* Force l'affichage de la petite main */
+}
+
+/* Optionnel : Rendre la maison un peu plus petite pendant le jeu pour qu'elle s'intègre mieux à ta barre d'HUD */
+.icone-house-jeu5 svg {
+    width: 40px;
+    height: 40px;
+}
+
 /* ===================================== */
 /* =============== POPUP DEBUT========== */
 /* ===================================== */
@@ -712,77 +800,268 @@ button {
 /* ===================================== */
 /* ================= AVIS DEBUT========== */
 /* ===================================== */
-/*Elodie travail ici / MENU DEROULANT */
+
+/* Layout : tout sur un écran, sans scroll */
 .page-fin {
-    min-height: 100vh;
-    background-image: url("../images/page-de-fin.png");
+    height: 100vh;
+    overflow: hidden;
+    background-image: url(../images/page-de-fin.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 0 20px 56px;
+    gap: 50px;
+    box-sizing: border-box;
 }
 
+/* Titre principal */
+.fin-title {
+    font-family: 'Irish Grover', cursive;
+    color: #ffd700;
+    font-size: 1.8rem;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    margin: 0;
+    line-height: 1.1;
+}
+
+/* Carte formulaire */
 .formulaire-section {
     background-color: rgba(255, 255, 255, 0.95);
-    width: 60%;
-    max-width: 600px;
-    padding: 40px;
-    border-radius: 25px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-    margin: auto;
+    width: 90%;
+    max-width: 700px;
+    padding: 18px 28px 14px;
+    border-radius: 20px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* Titre */
+/* Titre du formulaire */
 .formulaire-title {
+    font-family: 'Irish Grover', cursive;
     text-align: center;
-    font-size: 28px;
-    margin-bottom: 35px;
+    font-size: 1.2rem;
+    margin: 0 0 12px;
     color: #000;
 }
 
-/* Champs */
+/* Deux colonnes dans le form */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Groupes de champs */
 .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 22px;
+    margin-bottom: 10px;
 }
 
 .form-group label {
-    margin-bottom: 8px;
+    margin-bottom: 3px;
     font-weight: 600;
+    font-size: 0.82rem;
     color: #333;
-    display: block;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-    padding: 14px;
-    border-radius: 12px;
+    padding: 7px 10px;
+    border-radius: 10px;
     border: 1px solid #bbb;
     background-color: #fff !important;
     color: #000 !important;
     width: 100%;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 13px;
+}
+
+/* Étoiles interactives */
+.star-rating {
+    display: flex;
+    gap: 3px;
+    margin-top: 2px;
+}
+
+.star-rating .star {
+    font-size: 1.6rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.12s, transform 0.1s;
+    user-select: none;
+    line-height: 1;
+}
+
+.star-rating .star:hover,
+.star-rating .star.active {
+    color: #ffd700;
+    transform: scale(1.12);
+}
+
+.note-hint {
+    margin: 2px 0 0;
+    font-size: 0.72rem;
+    color: #888;
 }
 
 /* Bouton */
 .btn-submit {
-    margin: 30px auto 0;
-    padding: 14px 40px;
+    margin: 10px auto 0;
+    padding: 9px 32px;
     background-color: #ff4f9a;
     color: white;
     border: none;
     border-radius: 30px;
     font-weight: bold;
+    font-size: 13px;
     cursor: pointer;
     display: block;
+    transition: opacity 0.2s;
 }
+
+.btn-submit:hover { opacity: 0.85; }
+
+/* Flash messages */
+.flash-success {
+    background-color: #d4edda;
+    border: 1px solid #a3d9a5;
+    color: #2d6a4f;
+    padding: 8px 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.flash-error {
+    background-color: #fde8e8;
+    border: 1px solid #f5a5a5;
+    color: #b00020;
+    padding: 8px 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* ---- Carousel d'avis ---- */
+.avis-section {
+    width: 90%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avis-arrow {
+    background: #ff4f9a;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.avis-arrow:hover { opacity: 0.8; }
+
+.avis-track-wrapper {
+    overflow: hidden;
+    flex: 1;
+}
+
+.avis-track {
+    display: flex;
+    gap: 12px;
+    transition: transform 0.35s ease;
+}
+
+.avis-card {
+    background: white;
+    border-radius: 14px;
+    padding: 12px;
+    min-width: 150px;
+    flex: 0 0 calc(25% - 9px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.avis-card-title {
+    font-family: 'Irish Grover', cursive;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    color: #222;
+}
+
+.avis-card-game {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #ff4f9a;
+    margin-bottom: 5px;
+}
+
+.avis-card-message {
+    font-size: 0.72rem;
+    color: #555;
+    margin-bottom: 7px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.avis-stars { font-size: 1rem; letter-spacing: 1px; }
+.avis-stars .star-on  { color: #ffd700; }
+.avis-stars .star-off { color: #ccc; }
+
+.avis-empty {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    text-align: center;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+/* ---- Boutons navigation (fixés en bas) ---- */
+.fin-nav {
+    position: fixed;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    pointer-events: none;
+}
+
+.fin-nav a {
+    pointer-events: all;
+    background: #ff4f9a;
+    color: white;
+    text-decoration: none;
+    padding: 9px 22px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.2s;
+}
+
+.fin-nav a:hover { opacity: 0.85; }
 
 /* ===================================== */
 /* ================= AVIS FIN============ */
@@ -3899,116 +4178,247 @@ main.jeuKF {
 
 
 /* ===================================== */
-/* ===== CSS ELODIE  DEBUT =============== */
+/* ===== CSS ELODIE  DEBUT ============= */
 /* ===================================== */
+/* ============================================================
+             RÉGLAGES DE BASE
+   ============================================================ */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
 
-/* ===================================================
-   I. CONFIGURATION COMMUNE (FOND ET TYPO)
-   ================================================= */
-#game-viewportEM {
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background: url('/images/elodie/cielsoleil.png') no-repeat center center fixed;
-    background-size: cover;
-    font-family: 'Arial', sans-serif;
+body, html { 
+    width: 100%; 
+    height: 100%; 
+    overflow: hidden; 
+    font-family: 'Poppins', 'Arial', sans-serif; 
 }
 
 /* ============================================================
-   II. PARTIE 1 : MENU D'ACCUEIL (STAR COASTER)
+   FOND GÉNÉRAL (ACCUEIL & JEU)
    ============================================================ */
-.hero-EM {
-    width: 100vw; height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
+.hero-EM, #game-ui-wrapper-EM {
+    width: 100vw; 
+    height: 100vh;
+    background: url('../assets/images/Elodie/nuages.png') no-repeat center center fixed;
+    background-size: cover;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
     position: relative;
 }
 
-.brand-EM { 
+/* ============================================================
+  LE PANNEAU TRANSPARENT (Style Verre)
+   ============================================================ */
+.glass-panel-EM {
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 30px; 
+    padding: 35px; 
+    width: min(550px, 90vw);
+    text-align: center; 
+    color: #000000; 
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+/* ============================================================
+    LE BOUTON JAUNE "JOUER"
+   ============================================================ */
+.bulle-jouer-EM {
+    margin-top: 20px; 
+    padding: 16px 50px; 
+    font-size: 26px; 
+    font-weight: 900;
+    color: #fff; 
+    background-color: #FFD84D; 
+    border: none; 
+    border-radius: 18px;
+    cursor: pointer; 
+    text-transform: uppercase; 
+    box-shadow: 0 6px 0 #d4a900; 
+    transition: all 0.1s ease;
+}
+
+.bulle-jouer-EM:active { 
+    transform: translateY(4px); 
+    box-shadow: 0 2px 0 #d4a900; 
+}
+
+/* ============================================================
+   L'INTERFACE DU HAUT (HUD)
+   ============================================================ */
+.pixel-hud-EM { 
     position: absolute; 
     top: 20px; 
     left: 20px; 
-    z-index: 10; }
-.brand-logo-EM { 
+    z-index: 100; 
+    background: rgba(255, 255, 255, 0.25); 
+    backdrop-filter: blur(8px);
+    padding: 15px 20px; 
+    border-radius: 15px; 
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    min-width: 200px;
+}
+
+.hud-avatar-section-EM {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.mini-avatar-EM { 
+    width: 45px !important; 
+    height: auto !important; 
+}
+
+.niveau-label-EM {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-shadow: 2px 2px 0 black;
+}
+
+.hud-row-EM { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    font-weight: 900; 
+    color: white; 
+    text-shadow: 1px 1px 3px black;
+    margin-bottom: 8px;
+}
+
+.icon-hud-EM { 
+    width: 25px !important; 
+    height: auto !important; 
+}
+
+.hearts-row-EM { 
+    display: flex; 
+    gap: 5px; 
+}
+
+.heart-EM {
+    width: 22px !important;
+    height: auto !important;
+}
+
+/* ============================================================
+   GROS COMMENTAIRE : ÉCRANS DE FIN (GAME OVER)
+   ============================================================ */
+.overlay-EM { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.8); 
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    z-index: 1000; 
+}
+
+.licorne-gameover-img {
+    max-width: 350px;
+    height: auto;
+    filter: drop-shadow(0 10px 30px rgba(255, 182, 193, 0.4));
+    animation: bounceIn 0.8s ease-out;
+    margin-bottom: 20px;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Style spécifique pour le bouton REJOUER dans le code JS */
+.replay-btn, .retour-btn {
+    transition: transform 0.2s;
+}
+
+.replay-btn:hover, .retour-btn:hover {
+    transform: translate(-50%, -50%) scale(1.1) !important;
+}
+
+/* ============================================================
+   CANVAS & LOGOS
+   ============================================================ */
+#gameCanvas { 
+    display: block; 
+    width: 100vw; 
+    height: 100vh; 
+}
+
+.logo-top-left-EM { 
+    position: absolute; 
+    top: 20px; 
+    left: 20px; 
     width: 60px; 
-    height: auto; 
+    z-index: 10; 
 }
 
-.hero-content-EM { 
-    margin-bottom: 20px; 
-    z-index: 2; 
-}
 .hero-logo-EM { 
-    width: 280px; 
-    height: auto; 
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); 
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); 
+    margin-bottom: 20px; 
+    max-width: 280px;
 }
 
-.glass-panel-EM {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 30px; padding: 40px;
-    width: 80%; max-width: 500px; text-align: center; color: #000;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); z-index: 1;
+#game-ui-wrapper-EM #gameCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
-.g-title-EM { font-size: 22px; font-weight: bold; margin-bottom: 15px; }
-.g-mission-EM { font-size: 18px; margin-bottom: 10px; }
-.g-text-EM { font-size: 16px; margin: 5px 0; }
-
-.bulle-jouer-EM {
-    margin-top: 30px; padding: 15px 60px;
-    font-size: 24px; font-weight: bold; color: #fff;
-    background: #FFD700; border: none; border-radius: 50px;
-    cursor: pointer; box-shadow: 0 6px #ccac00;
-    transition: all 0.2s ease; z-index: 2;
+/* Responsive */
+@media (max-width: 768px) {
+    .hud-bottom-EM {
+        bottom: 10px !important;
+        padding: 12px 20px !important;
+        min-width: 280px;
+    }
+    
+    .hud-stats-row-EM {
+        gap: 15px;
+    }
+    
+    .hud-bottom-EM .hud-row-EM {
+        font-size: 14px !important;
+    }
+    
+    .hero-centered-EM {
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .hero-centered-EM .glass-panel-EM {
+        padding: 25px 20px;
+    }
 }
 
-/* ============================================================
-   III. PARTIE 2 : LE JEU (HUD PIXEL ET CANVAS)
-   ============================================================ */
-.canvas-game-EM {
-    display: block; width: 100vw; height: 100vh; background: transparent;
+@media (max-width: 480px) {
+    .hud-stats-row-EM {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .hud-bottom-EM .hud-row-EM {
+        font-size: 15px !important;
+        justify-content: center;
+    }
 }
-
-.pixel-hud-EM {
-    position: absolute; top: 20px; left: 20px;
-    background: white; border: 3px solid #000; border-radius: 12px;
-    padding: 15px; z-index: 100; min-width: 170px;
-    box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
-    font-family: 'Courier New', monospace;
-}
-
-.hud-header-EM { display: flex; align-items: center; gap: 15px; }
-.mini-logo-EM { width: 50px; height: 50px; border-radius: 8px; border: 1px solid #ddd; }
-.elements-column-EM { display: flex; flex-direction: column; gap: 5px; color: #000; font-weight: bold; }
-.hud-row-EM, .level-row-EM { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-.level-row-EM { border-bottom: 2px solid #eee; padding-bottom: 5px; margin-bottom: 5px; }
-
-.hearts-row-EM img { width: 18px; height: 18px; margin-left: 2px; }
-
-/* ============================================================
-   IV. MODALES ET OVERLAYS (FIN DE PARTIE)
-   ============================================================ */
-.overlay-EM {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 200;
-}
-
-.modal-EM { 
-    background: white; padding: 30px; border-radius: 15px; 
-    border: 4px solid #000; text-align: center; 
-}
-
-.button-modal-EM { 
-    padding: 10px 20px; background: #FFD700; border: 2px solid #000; 
-    cursor: pointer; font-weight: bold; 
-}
-
-/* ===================================== */
-/* ===== CSS ELODIE  FIN =============== */
-/* ===================================== */
 
 
 
@@ -4440,3 +4850,127 @@ main.jeuKF {
 /* ===================================== */
 /* ======= RESPONSIVE FIN=============== */
 /* ===================================== */
+
+/* ========================================== */
+/* STAR COASTER - STYLES JEU (VÉRIFIÉS/AJOUTÉS) */
+/* ========================================== */
+/* ========================================== */
+/* RESET & BASE (Ne rien changer ici)         */
+/* ========================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Empêche le scroll pour le jeu */
+    font-family: 'Arial', sans-serif;
+}
+
+/* ========================================== */
+/* PAGE D'ACCUEIL (Landing Screen)            */
+/* ========================================== */
+.landing-screen {
+    background-image: url('../img/nuages.png'); /* Chemin Symfony */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.initial-EM {
+    /* Classe pour tes tests */
+}
+
+.bulle-jouer-EM {
+    background-color: #fdd817;
+    color: white;
+    padding: 15px 45px;
+    border: none;
+    border-radius: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+}
+
+.bulle-jouer-EM:hover {
+    transform: scale(1.1);
+}
+
+/* ========================================== */
+/* PAGE DE JEU & HUD TRANSPARENT              */
+/* ========================================== */
+
+/* Le Canvas prend tout l'écran en arrière-plan */
+#gameCanvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+
+}
+
+/* TON HUB TRANSPARENT (Exactement comme avant) */
+#hud-jeu.pixel-hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    background: transparent !important; /* TRANSPARENCE TOTALE */
+    border: none;
+    color: white;
+    pointer-events: none; /* Pour ne pas gêner le clic sur le jeu */
+}
+
+.hud-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.mini-logo {
+    width: 60px;
+    height: auto;
+}
+
+.elements-column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hud-row {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    /* Petit contour noir pour que le blanc soit lisible sur le ciel */
+    text-shadow: 2px 2px 0px #000; 
+}
+
+.hearts-row {
+    display: flex;
+    gap: 5px;
+}
+
+/* ECRANS DE FIN (Overlay) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+}
+
