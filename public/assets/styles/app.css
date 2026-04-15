@@ -638,6 +638,14 @@ button {
     transform: scale(1.05);
     filter: brightness(1.1);
 }
+
+.icone-house5 {
+    position: absolute; /* Sort l'élément du flux normal pour le placer librement */
+    top: 20px;          /* Distance par rapport au bord haut de la page */
+    left: 20px;         /* Distance par rapport au bord gauche de la page */
+    z-index: 100;       /* S'assure que l'icône reste au-dessus du fond et des personnages */
+}
+
 /* ===================================== */
 /* =============== POPUP DEBUT========== */
 /* ===================================== */
