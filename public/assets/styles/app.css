@@ -125,32 +125,40 @@ a.island1:hover img {
 /* ---- BAS-DROITE : ELODIE (Star Coaster) ---- */
 .elodie1 {
     bottom: 2%;
-    left: 44%;
-    width: clamp(260px, 48%, 620px);
+    left: 55%;
+    width: 44%;
     animation-delay: 0s;
 }
- 
+
 /* ---- GAUCHE-MILIEU : KARLVIN (Scrabble) ---- */
 .karlvin1 {
-    bottom: 28%;
+    bottom: 10%;
     left: 1%;
-    width: clamp(220px, 36%, 480px);
+    width: 36%;
     animation-delay: 1.5s;
 }
- 
+
+/* ---- CENTRE : KYLLIAN (Ptinata) ---- */
+.kyllian1 {
+    top: 32%;
+    left: 34%;
+    width: 30%;
+    animation-delay: 2s;
+}
+
 /* ---- HAUT-GAUCHE : AXEL (Roue magique) ---- */
 .axel1 {
-    top: 8%;
-    left: 50%;
-    width: clamp(220px, 35%, 455px);
-    animation-delay: 2s;
+    top: 5%;
+    left: 4%;
+    width: 30%;
+    animation-delay: 2.5s;
 }
 
 /* ---- HAUT-DROITE : ALEXIS (Devine le mot) ---- */
 .alexis1 {
-    top: 5%;
-    left: 4%;
-    width: clamp(190px, 32%, 420px);
+    top: 8%;
+    left: 50%;
+    width: 33%;
     animation-delay: 1.7s;
 }
  
@@ -405,33 +413,40 @@ button {
     }
  
     /* ---------- Repositionnement des îles (zone = 100vw × max(60vw,420px)) ---------- */
- 
+
     /* ELODIE */
     .elodie1 {
         bottom: 3%;
         left: 44%;
-        width: clamp(230px, 42%, 560px);
+        width: clamp(175px, 30%, 380px);
     }
- 
+
     /* KARLVIN */
     .karlvin1 {
         bottom: 28%;
         left: 1%;
-        width: clamp(195px, 30%, 408px);
+        width: clamp(150px, 22%, 290px);
+    }
+
+    /* KYLLIAN */
+    .kyllian1 {
+        top: 32%;
+        left: 34%;
+        width: clamp(150px, 22%, 290px);
     }
 
     /* AXEL */
     .axel1 {
         top: 8%;
         left: 51%;
-        width: clamp(192px, 29%, 388px);
+        width: clamp(150px, 22%, 290px);
     }
 
     /* ALEXIS */
     .alexis1 {
         top: 5%;
         left: 3%;
-        width: clamp(172px, 27%, 368px);
+        width: clamp(135px, 20%, 265px);
     }
 }
  
@@ -468,33 +483,40 @@ button {
     }
  
     /* ---------- Îles redimensionnées (zone = 100vw × max(65vw,340px)) ---------- */
- 
+
     /* ELODIE */
     .elodie1 {
         bottom: 2%;
         left: 44%;
-        width: clamp(180px, 46%, 340px);
+        width: clamp(140px, 30%, 260px);
     }
- 
+
     /* KARLVIN */
     .karlvin1 {
         bottom: 27%;
         left: 1%;
-        width: clamp(145px, 35%, 264px);
+        width: clamp(110px, 22%, 200px);
+    }
+
+    /* KYLLIAN */
+    .kyllian1 {
+        top: 32%;
+        left: 34%;
+        width: clamp(110px, 22%, 200px);
     }
 
     /* AXEL */
     .axel1 {
         top: 7%;
         left: 51%;
-        width: clamp(130px, 33%, 252px);
+        width: clamp(110px, 22%, 200px);
     }
 
     /* ALEXIS */
     .alexis1 {
         top: 4%;
         left: 2%;
-        width: clamp(120px, 29%, 232px);
+        width: clamp(100px, 20%, 185px);
     }
 }
 
@@ -644,6 +666,26 @@ button {
     top: 20px;          /* Distance par rapport au bord haut de la page */
     left: 20px;         /* Distance par rapport au bord gauche de la page */
     z-index: 100;       /* S'assure que l'icône reste au-dessus du fond et des personnages */
+}
+
+/* Position au centre/droite pour le Jeu (là où tu as fait le cercle rouge) */
+.icone-house-jeu5 {
+    position: absolute;
+    top: 15px; /* Ajuste selon la hauteur de ta barre d'infos */
+    left: 55%; /* Place l'icône un peu à droite de la bordure centrale */
+    z-index: 9999;
+    pointer-events: auto;
+}
+
+.icone-house-jeu5 a {
+    pointer-events: auto;
+    cursor: pointer; /* Force l'affichage de la petite main */
+}
+
+/* Optionnel : Rendre la maison un peu plus petite pendant le jeu pour qu'elle s'intègre mieux à ta barre d'HUD */
+.icone-house-jeu5 svg {
+    width: 40px;
+    height: 40px;
 }
 
 /* ===================================== */
