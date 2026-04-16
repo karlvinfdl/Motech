@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php bin/console doctrine:query:sql \"SELECT COUNT\\(*\\) as total FROM word\")"
+    ]
+  }
+}

@@ -1,97 +1,124 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LandingController!{% endblock %}
+{% block title %}Fête des Licornes{% endblock %}
 
 {% block body %}
-<!-- ===================== -->
-<!-- ÎLES À GAUCHE -->
-<!-- ===================== -->
-<div class="iles1" aria-label="Jeux">
-  <a href="{{ path('app_wheel') }}" class="island-link1 island-roue1">
-    <img class="island1" src="{{ asset('assets/images/ile-axel1.png') }}" alt="Roue Magique" />
-  </a>
 
-  <a href="{{ path('app_devinelemot') }}" class="island-link1 island-devine1">
-    <img class="island1" src="{{ asset('assets/images/ile-alexis1.png') }}" alt="Devine le mot" />
-  </a>
+<div class="landing-page1">
 
-  <a href="{{ path('app_ptinata') }}" class="island-link1 island-pinata1">
-    <img class="island1" src="{{ asset('assets/images/ile-kyllian1.png') }}" alt="Pinata" />
-  </a>
+  <!-- ===================== -->
+  <!-- ZONE DES ÎLES -->
+  <!-- ===================== -->
+  <section class="islands-zone1" aria-label="Jeux de la fête">
 
-  <a href="{{ path('app_scrabble') }}" class="island-link1 island-scrabble1">
-    <img class="island1" src="{{ asset('assets/images/ile-karlvin1.png') }}" alt="Scrabble des licornes" />
-  </a>
+    <!-- ELODIE (bas) -->
+    <a href="{{ path('app_coaster') }}" class="island1 elodie1">
+      <img src="{{ asset('assets/images/ile-elodie1.png') }}" alt="Star Coaster">
+    </a>
 
-  <a href="{{ path('app_coaster') }}" class="island-link1 island-star1">
-    <img class="island1" src="{{ asset('assets/images/ile-elodie1.png') }}" alt="Star Coaster" />
-  </a>
+    <!-- KARLVIN -->
+    <a href="{{ path('app_scrabble') }}" class="island1 karlvin1">
+      <img src="{{ asset('assets/images/ile-karlvin1.png') }}" alt="Scrabble des licornes">
+    </a>
 
-  <img class="clouds-front1" src="{{ asset('assets/images/clouds-front.png') }}" alt="">
+    <!-- KYLLIAN -->
+    <a href="{{ path('app_ptinata') }}" class="island1 kyllian1">
+      <img src="{{ asset('assets/images/ile-kyllian1.png') }}" alt="Ile Ptinata">
+    </a>
+
+<!-- ALEXIS -->
+    <a href="{{ path('app_devinelemot') }}" class="island1 alexis1">
+      <img src="{{ asset('assets/images/ile-alexis1.png') }}" alt="Devine le mot">
+    </a>
+
+    <!-- AXEL -->
+    <a href="{{ path('app_wheel') }}" class="island1 axel1">
+      <img src="{{ asset('assets/images/ile-axel1.png') }}" alt="Roue magique">
+    </a>
+
+
+  </section>
+
+  <!-- ===================== -->
+  <!-- COLONNE DROITE -->
+  <!-- ===================== -->
+  <aside class="right-col1">
+
+    <!-- TITRE -->
+    <section class="card1 card-title1">
+      <h1 class="title1">
+        Bienvenue à la<br>Fête des Licornes !
+      </h1>
+    </section>
+
+    <!-- FORMULAIRE -->
+    <section class="card1 card-form1">
+      <h2 class="subtitle1">Formulaire</h2>
+
+      <form method="post" action="{{ path('app_landing') }}" class="form1">
+        <input type="hidden" name="_token" value="{{ csrf_token('landing_form') }}">
+
+        <label class="field1">
+          <span class="label-text1">Nom :</span>
+          <input name="nom" type="text" required>
+        </label>
+
+        <label class="field1">
+          <span class="label-text1">Prénom :</span>
+          <input name="prenom" type="text" required>
+        </label>
+
+        <label class="field1">
+          <span class="label-text1">Âge :</span>
+          <input name="age" type="number" min="0" max="120" required>
+        </label>
+
+        <label class="field1">
+          <span class="label-text1">Email :</span>
+          <input name="email" type="email" required>
+        </label>
+
+        <label class="field1">
+          <span class="label-text1">Ville :</span>
+          <input name="ville" type="text" required>
+        </label>
+
+        <button class="btn1" type="submit">
+          Envoyer
+        </button>
+
+      </form>
+    </section>
+
+    <!-- BOUTONS ÉQUIPE + AVIS -->
+    <div class="btn-row1">
+      <a href="{{ path('app_equipe') }}" class="big-btn1">
+        Découvrir l'équipe
+      </a>
+      <a href="{{ path('app_avis') }}" class="big-btn1">
+        Laisser un avis
+      </a>
+    </div>
+
+    <!-- EASTER EGG -->
+    <section class="card1 card-egg1">
+      <div class="egg1">
+
+        <img src="{{ asset('assets/images/tokyo.png') }}" alt="Tokyo">
+
+        <div class="egg-text1">
+          <h3 class="egg-title1">Easter egg</h3>
+          <p class="egg-desc1">
+            Je suis Tokyo aide moi à<br>
+            retrouver ma famille
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </aside>
+
 </div>
 
-
-<!-- ===================== -->
-<!-- COLONNE DROITE -->
-<!-- ===================== -->
-<main class="right-col1">
-
-  <!-- Carte titre -->
-  <section class="card1 card-title1">
-    <h1 class="title1">Bienvenue à la<br>Fête des Licornes !</h1>
-  </section>
-
-  <!-- Formulaire -->
-  <section class="card1 card-form1">
-    <h2 class="subtitle1">Formulaire</h2>
-
-    <form method="post" class="form1">
-      <label class="field1">
-        <span class="label-text1">Nom :</span>
-        <input name="nom" type="text" autocomplete="family-name" required>
-      </label>
-
-      <label class="field1">
-        <span class="label-text1">Prénom :</span>
-        <input name="prenom" type="text" autocomplete="given-name" required>
-      </label>
-
-      <label class="field1">
-        <span class="label-text1">Âge :</span>
-        <input name="age" type="number" min="0" max="120" required>
-      </label>
-
-      <label class="field1">
-        <span class="label-text1">Email :</span>
-        <input name="email" type="email" autocomplete="email" required>
-      </label>
-
-      <label class="field1">
-        <span class="label-text1">Ville :</span>
-        <input name="ville" type="text" required>
-      </label>
-
-      <button class="btn1" type="submit">Envoyer</button>
-    </form>
-  </section>
-
-  <!-- Bouton équipe -->
-  <a href="{{ path('app_equipe') }}" class="big-btn1" id="teamBtn1" >
-  Découvrir l'équipe
-  </a>
-
-  <!-- Easter egg -->
-  <section class="card1 card-egg1">
-    <div class="egg1">
-      <img src="{{ asset('assets/images/tokyo.png') }}" alt="Tokyo">
-      <div class="egg-text1">
-        <h3 class="egg-title1">Easter egg</h3>
-        <p class="egg-desc1">
-          Je suis Tokyo aide moi à<br>retrouver ma famille
-        </p>
-      </div>
-    </div>
-  </section>
-
-</main>
 {% endblock %}
