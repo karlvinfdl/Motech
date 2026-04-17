@@ -62,7 +62,7 @@ final class AvisController extends AbstractController
             $this->addFlash('success', 'Merci pour ton avis !');
 
             // Redirige vers la page fin de jeu (et non vers /avis)
-            return $this->redirectToRoute('app_fin');
+            return $this->redirectToRoute('app_avis');
         }
 
         $avisList = $em->getRepository(Avis::class)->findBy([], ['dateCreation' => 'DESC']);
