@@ -26,7 +26,7 @@
       <img src="{{ asset('assets/images/ile-kyllian1.png') }}" alt="Ile Ptinata">
     </a>
 
-<!-- ALEXIS -->
+    <!-- ALEXIS -->
     <a href="{{ path('app_devinelemot') }}" class="island1 alexis1">
       <img src="{{ asset('assets/images/ile-alexis1.png') }}" alt="Devine le mot">
     </a>
@@ -35,7 +35,6 @@
     <a href="{{ path('app_wheel') }}" class="island1 axel1">
       <img src="{{ asset('assets/images/ile-axel1.png') }}" alt="Roue magique">
     </a>
-
 
   </section>
 
@@ -53,41 +52,9 @@
 
     <!-- FORMULAIRE -->
     <section class="card1 card-form1">
-      <h2 class="subtitle1">Formulaire</h2>
-
-      <form method="post" action="{{ path('app_landing') }}" class="form1">
-        <input type="hidden" name="_token" value="{{ csrf_token('landing_form') }}">
-
-        <label class="field1">
-          <span class="label-text1">Nom :</span>
-          <input name="nom" type="text" required>
-        </label>
-
-        <label class="field1">
-          <span class="label-text1">Prénom :</span>
-          <input name="prenom" type="text" required>
-        </label>
-
-        <label class="field1">
-          <span class="label-text1">Âge :</span>
-          <input name="age" type="number" min="0" max="120" required>
-        </label>
-
-        <label class="field1">
-          <span class="label-text1">Email :</span>
-          <input name="email" type="email" required>
-        </label>
-
-        <label class="field1">
-          <span class="label-text1">Ville :</span>
-          <input name="ville" type="text" required>
-        </label>
-
-        <button class="btn1" type="submit">
-          Envoyer
-        </button>
-
-      </form>
+      <button class="btn1 btn-register1" type="button" onclick="openRegisterModal()">
+        S'enregistrer
+      </button>
     </section>
 
     <!-- BOUTONS ÉQUIPE + AVIS -->
@@ -120,5 +87,97 @@
   </aside>
 
 </div>
+
+<!-- ===================== -->
+<!-- MODALE S'ENREGISTRER -->
+<!-- ===================== -->
+<div id="registerModal" class="modal-overlay1" onclick="closeOnOverlay(event)">
+  <div class="modal-box1">
+
+    <button class="modal-close1" type="button" onclick="closeRegisterModal()" aria-label="Fermer">&times;</button>
+
+    <h2 class="modal-title1">Créer un compte</h2>
+
+    <form method="post" action="{{ path('app_landing') }}" class="modal-form1">
+      <input type="hidden" name="_token" value="{{ csrf_token('register_form') }}">
+      <input type="hidden" name="_action" value="register">
+
+      <div class="modal-grid1">
+
+        <label class="field1">
+          <span class="label-text1">Nom :</span>
+          <input name="reg_nom" type="text" placeholder="Dupont" required>
+        </label>
+
+        <label class="field1">
+          <span class="label-text1">Prénom :</span>
+          <input name="reg_prenom" type="text" placeholder="Marie" required>
+        </label>
+
+        <label class="field1">
+          <span class="label-text1">Naissance :</span>
+          <input name="reg_date_naissance" type="date">
+        </label>
+
+        <label class="field1">
+          <span class="label-text1">Email :</span>
+          <input name="reg_email" type="email" placeholder="marie@exemple.fr" required>
+        </label>
+
+        <label class="field1">
+          <span class="label-text1">Ville :</span>
+          <input name="reg_ville" type="text" placeholder="Paris">
+        </label>
+
+        <label class="field1">
+          <span class="label-text1">Siret :</span>
+          <input name="reg_siret" type="text" maxlength="17" placeholder="12345678901234">
+        </label>
+
+        <label class="field1 field-full1">
+          <span class="label-text1">Domaine :</span>
+          <input name="reg_nom_domaine" type="text" placeholder="monsite.fr">
+        </label>
+
+      </div>
+
+      {% if services is not empty %}
+      <h3 class="modal-services-title1">Dites nous comment vous aider :</h3>
+      <div class="modal-checkbox-grid1">
+        {% for service in services %}
+        <label class="modal-checkbox1">
+          <input type="checkbox" name="reg_services[]" value="{{ service.id }}">
+          {{ service.prenom }}
+        </label>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <textarea class="modal-textarea1" name="reg_notes" placeholder="Notes à l'équipe" maxlength="1500"></textarea>
+
+      <button class="btn1 btn-register1" type="submit">
+        Envoyer
+      </button>
+
+    </form>
+  </div>
+</div>
+
+<script>
+function openRegisterModal() {
+  document.getElementById('registerModal').classList.add('modal-open1');
+  document.body.style.overflow = 'hidden';
+}
+function closeRegisterModal() {
+  document.getElementById('registerModal').classList.remove('modal-open1');
+  document.body.style.overflow = '';
+}
+function closeOnOverlay(e) {
+  if (e.target === document.getElementById('registerModal')) closeRegisterModal();
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeRegisterModal();
+});
+</script>
 
 {% endblock %}
