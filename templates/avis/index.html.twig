@@ -24,16 +24,10 @@
         <form method="post" action="{{ path('app_avis') }}" class="formulaire">
             <input type="hidden" name="_token" value="{{ csrf_token('avis_form') }}">
 
-            {# Ligne 1 : Pseudo + Email #}
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="prenom">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" placeholder="Ton prénom" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="exemple@mail.com" required>
-                </div>
+            {# Ligne 1 : Prénom #}
+            <div class="form-group">
+                <label for="prenom">Prénom</label>
+                <input type="text" id="prenom" name="prenom" placeholder="Ton prénom" required>
             </div>
 
             {# Ligne 2 : Jeu préféré + Note #}
@@ -102,7 +96,8 @@
                         {% endif %}
                         <p class="avis-card-message">{{ avis.message }}</p>
                         <div class="avis-stars">
-                            {% set note = avis.note ?? 3 %}
+                            {# Correction : 0 étoiles par défaut si note null, pas 3 #}
+                            {% set note = avis.note ?? 0 %}
                             {% for i in 1..5 %}
                                 <span class="{{ i <= note ? 'star-on' : 'star-off' }}">★</span>
                             {% endfor %}
