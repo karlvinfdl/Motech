@@ -1,20 +1,176 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AvisController!{% endblock %}
+{% block title %}Fin de jeu{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello Avis! ✅</h1>
+<div class="page-fin">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/karlv/OneDrive/Desktop/Motech_licorne/Licorne/src/Controller/AvisController.php</code></li>
-        <li>Your template at <code>C:/Users/karlv/OneDrive/Desktop/Motech_licorne/Licorne/templates/avis/index.html.twig</code></li>
-    </ul>
+    {# ===== Titre ===== #}
+    <h1 class="fin-title">Merci d'avoir joué à nos jeux !</h1>
+
+    {# ===== Formulaire ===== #}
+    <div class="formulaire-section">
+
+        <h2 class="formulaire-title">Donne-nous ton avis</h2>
+
+        {% for msg in app.flashes('success') %}
+            <div class="flash-success">{{ msg }}</div>
+        {% endfor %}
+        {% for msg in app.flashes('error') %}
+            <div class="flash-error">{{ msg }}</div>
+        {% endfor %}
+
+        <form method="post" action="{{ path('app_avis') }}" class="formulaire">
+            <input type="hidden" name="_token" value="{{ csrf_token('avis_form') }}">
+
+            {# Ligne 1 : Pseudo + Email #}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" placeholder="Ton prénom" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="exemple@mail.com" required>
+                </div>
+            </div>
+
+            {# Ligne 2 : Jeu préféré + Note #}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="jeu_prefere">Jeu préféré</label>
+                    <select id="jeu_prefere" name="jeu_prefere" required>
+                        <option value="">-- Choisis --</option>
+                        <option value="star_coaster">Star Coaster</option>
+                        <option value="scrabble_licornes">Scrabble des licornes</option>
+                        <option value="pinata">Pinata</option>
+                        <option value="devine_mot">Devine le mot</option>
+                        <option value="roue_magique">Roue magique</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Note</label>
+                    <div class="star-rating" id="star-rating">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <input type="hidden" name="note" id="note-value" value="">
+                    <p class="note-hint" id="note-hint">Clique sur une étoile</p>
+                </div>
+            </div>
+
+            {# Ligne 3 : Message #}
+            <div class="form-group">
+                <label for="message">Ton avis</label>
+                <textarea id="message" name="message" rows="3" placeholder="Raconte-nous ton expérience..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">Envoyer mon avis</button>
+
+        </form>
+    </div>
+
+    {# ===== Carousel des avis ===== #}
+    <div class="avis-section">
+
+        <button class="avis-arrow" id="avis-prev" aria-label="Précédent">&#9664;</button>
+
+        <div class="avis-track-wrapper">
+            <div class="avis-track" id="avis-track">
+
+                {% if avis_list is empty %}
+                    <p class="avis-empty">Aucun avis pour le moment. Sois le premier !</p>
+                {% else %}
+                    {% for avis in avis_list %}
+                    <div class="avis-card">
+                        <div class="avis-card-title">{{ avis.utilisateur.prenom }}</div>
+                        {% if avis.jeuPrefere %}
+                        <div class="avis-card-game">
+                            {% set jeux = {
+                                'star_coaster':      'Star Coaster',
+                                'scrabble_licornes': 'Scrabble des licornes',
+                                'pinata':            'Pinata',
+                                'devine_mot':        'Devine le mot',
+                                'roue_magique':      'Roue magique'
+                            } %}
+                            {{ jeux[avis.jeuPrefere] ?? avis.jeuPrefere }}
+                        </div>
+                        {% endif %}
+                        <p class="avis-card-message">{{ avis.message }}</p>
+                        <div class="avis-stars">
+                            {% set note = avis.note ?? 3 %}
+                            {% for i in 1..5 %}
+                                <span class="{{ i <= note ? 'star-on' : 'star-off' }}">★</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+
+        <button class="avis-arrow" id="avis-next" aria-label="Suivant">&#9654;</button>
+
+    </div>
+
 </div>
+
+{# ===== Navigation bas ===== #}
+<nav class="fin-nav">
+    <a href="{{ path('app_landing') }}">ACCUEIL</a>
+    <a href="{{ path('app_equipe') }}">Découvrir l'équipe</a>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    /* ---- Étoiles ---- */
+    const stars     = document.querySelectorAll('#star-rating .star');
+    const noteInput = document.getElementById('note-value');
+    const hint      = document.getElementById('note-hint');
+    const labels    = ['', 'Pas top', 'Bof', 'Bien', 'Super !', 'Incroyable !'];
+
+    const paint = (val) => stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val));
+
+    stars.forEach(star => {
+        star.addEventListener('mouseenter', () => paint(star.dataset.value));
+        star.addEventListener('mouseleave', () => paint(noteInput.value || 0));
+        star.addEventListener('click', () => {
+            const val = parseInt(star.dataset.value);
+            noteInput.value = val;
+            paint(val);
+            hint.textContent = labels[val];
+            hint.style.color = '#ff4f9a';
+        });
+    });
+
+    /* ---- Carousel ---- */
+    const track = document.getElementById('avis-track');
+    const prev  = document.getElementById('avis-prev');
+    const next  = document.getElementById('avis-next');
+    if (!track || !track.children.length) return;
+
+    const cardWidth = () => track.children[0].offsetWidth + 16;
+    let index = 0;
+    const visible = () => Math.floor(track.parentElement.offsetWidth / cardWidth());
+    const max     = () => Math.max(0, track.children.length - visible());
+
+    const update = () => {
+        track.style.transform = `translateX(-${index * cardWidth()}px)`;
+        prev.style.opacity = index === 0     ? '0.4' : '1';
+        next.style.opacity = index >= max()  ? '0.4' : '1';
+    };
+
+    prev.addEventListener('click', () => { if (index > 0)     { index--; update(); } });
+    next.addEventListener('click', () => { if (index < max()) { index++; update(); } });
+
+    update();
+});
+</script>
+
 {% endblock %}

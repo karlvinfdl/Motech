@@ -5,7 +5,19 @@
 
 {% block body %}
 <main class="team-page5">
-    
+
+    <nav class="icone-house5">
+      <a href="{{ path('app_landing') }}">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="64" height="64" viewBox="0 0 32 32">
+            <polygon fill="#ffffff" points="27,16 27,28 5,28 5,16 7,16 7,14 9,14 9,12 11,12 11,10 13,10 13,8 15,8 15,6 17,6 17,8 19,8 19,10 21,10 21,12 23,12 23,14 25,14 25,16"></polygon>
+            <rect width="8" height="2" x="18" y="7" fill="#000000" transform="rotate(90 22 8)"></rect>
+            <rect width="5" height="5" x="18" y="19" fill="#000000"></rect>
+            <polygon fill="#000000" points="29,14 29,16 25,16 25,14 23,14 23,12 21,12 21,10 19,10 19,8 17,8 17,6 15,6 15,8 13,8 13,10 11,10 11,12 9,12 9,14 7,14 7,16 3,16 3,14 5,14 5,12 7,12 7,10 9,10 9,8 11,8 11,6 13,6 13,4 15,4 15,2 17,2 17,4 19,4 19,6 21,6 21,8 23,8 23,10 25,10 25,12 27,12 27,14"></polygon>
+            <rect width="9" height="5" x="7" y="21" fill="#000000" transform="rotate(90 11.5 23.5)"></rect>
+        </svg>
+      </a>
+    </nav>
+
     <div class="team-container5">
         <div class="member5 js-member5" data-name="Karlvin F." data-portfolio="https://karlvinfdl.github.io/portfolio/">
             <img src="{{ asset('assets/images/KFpixel.png') }}" class="pixel-art5" alt="Membre">
@@ -22,6 +34,11 @@
         <div class="member5 js-member5" data-name="Axel P. M." data-portfolio="https://axelpm4.github.io/Portfolio/">
             <img src="{{ asset('assets/images/APpixel.png') }}" class="pixel-art5" alt="Membre">
             <div class="name-tag5">Axel PAULINO M.</div>
+        </div>
+
+        <div class="member5 js-member5" data-name="Kyllian N." data-portfolio="https://kyl98.github.io/Portfolio/">
+            <img src="{{ asset('assets/images/KNpixel.png') }}" class="pixel-art5" alt="Membre">
+            <div class="name-tag5">Kyllian NGOMA</div>
         </div>
 
         <div class="member5 js-member5" data-name="Elodie M." data-portfolio="https://elodie-16.github.io/mon_portfolio/">
@@ -42,22 +59,29 @@
     <span id="close-btn2" class="close-btn2">&times;</span>
 
     <div id="ton-popup">
-      <form class="form-popup2">
+      <form class="form-popup2" method="post" action="{{ path('app_equipe') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('equipe_form') }}">
         <div class="grid2">
           <div class="col2">
             <label class="label2">*Nom :</label>
-            <input type="text" class="input2" required>
+            <input type="text" name="nom" class="input2" required>
 
             <label class="label2">*Prénom :</label>
-            <input type="text" class="input2" required>
+            <input type="text" name="prenom" class="input2" required>
+
+            <label class="label2">Site web :</label>
+            <input type="url" name="site_web" class="input2" placeholder="https://monsite.fr">
           </div>
 
           <div class="col2">
             <label class="label2">*Siret :</label>
-            <input type="text" class="input2" required>
+            <input type="text" name="siret" class="input2" required>
 
             <label class="label2">*Email :</label>
-            <input type="email" class="input2" required>
+            <input type="email" name="email" class="input2" required>
+
+            <label class="label2">Classification :</label>
+            <input type="text" name="classification" class="input2" placeholder="Ex : TPE, PME, Auto-entrepreneur...">
           </div>
         </div>
 
@@ -65,20 +89,20 @@
 
         <div class="checkbox-grid2">
           <label class="checkbox2">
-            <input type="checkbox"> Site Vitrine
+            <input type="checkbox" name="services[]" value="Site Vitrine"> Site Vitrine
           </label>
           <label class="checkbox2">
-            <input type="checkbox"> Prise de RDV
+            <input type="checkbox" name="services[]" value="Prise de RDV"> Prise de RDV
           </label>
           <label class="checkbox2">
-            <input type="checkbox"> Paiement en ligne
+            <input type="checkbox" name="services[]" value="Paiement en ligne"> Paiement en ligne
           </label>
           <label class="checkbox2">
-            <input type="checkbox"> Organisation des data
+            <input type="checkbox" name="services[]" value="Organisation des datas"> Organisation des datas
           </label>
         </div>
 
-        <textarea class="textarea2" placeholder="Notes à l’équipe" maxlength="1500"></textarea>
+        <textarea class="textarea2" name="notes" placeholder="Notes à l'équipe" maxlength="1500"></textarea>
 
         <div class="btn-container2">
           <button type="submit" class="submit-btn2">Envoyer</button>
@@ -116,7 +140,28 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     handleMemberSelection();
-    console.log("Système de sélection de personnage prêt ! 🦄");
+
+    // Gestion de la popup
+    const popup = document.getElementById("popup");
+    const openBtn = document.getElementById("btn-popup5");
+    const closeBtn = document.getElementById("close-btn2");
+
+    const openPopup = () => {
+        popup.classList.add("visible");
+        popup.setAttribute("aria-hidden", "false");
+    };
+
+    const closePopup = () => {
+        popup.classList.remove("visible");
+        popup.setAttribute("aria-hidden", "true");
+    };
+
+    openBtn.addEventListener("click", openPopup);
+    closeBtn.addEventListener("click", closePopup);
+
+    popup.addEventListener("click", (e) => {
+        if (e.target === popup) closePopup();
+    });
 });
 </script>
 {% endblock %}
