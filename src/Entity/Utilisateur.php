@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-#[ORM\Table(name: 'utilisateur')]
+#[ORM\Table(name: 'utilisateurs')]
 class Utilisateur
 {
     #[ORM\Id]
@@ -22,8 +22,8 @@ class Utilisateur
     #[ORM\Column(length: 60)]
     private string $prenom = '';
 
-    #[ORM\Column(type: 'date', nullable: true)]
-    private ?\DateTimeInterface $dateNaissance = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $dateNaissance = null;
 
     #[ORM\Column(length: 100, unique: true)]
     private string $email = '';
@@ -31,22 +31,26 @@ class Utilisateur
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $ville = null;
 
-    #[ORM\Column(length: 30, nullable: true)]
-    private ?string $genre = null;
+    #[ORM\Column(length: 17, unique: true, nullable: true)]
+    private ?string $siret = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $dateInscription;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nomDomaine = null;
 
-    #[ORM\OneToOne(mappedBy: 'utilisateur', targetEntity: Professionnel::class, cascade: ['persist', 'remove'])]
-    private ?Professionnel $professionnel = null;
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private \DateTimeImmutable $dateInscription;
 
-    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Avis::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Avis::class)]
     private Collection $avis;
+
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: UtilisateurService::class)]
+    private Collection $utilisateurServices;
 
     public function __construct()
     {
-        $this->dateInscription = new \DateTime();
+        $this->dateInscription = new \DateTimeImmutable();
         $this->avis = new ArrayCollection();
+        $this->utilisateurServices = new ArrayCollection();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -57,8 +61,8 @@ class Utilisateur
     public function getPrenom(): string { return $this->prenom; }
     public function setPrenom(string $prenom): static { $this->prenom = $prenom; return $this; }
 
-    public function getDateNaissance(): ?\DateTimeInterface { return $this->dateNaissance; }
-    public function setDateNaissance(?\DateTimeInterface $dateNaissance): static { $this->dateNaissance = $dateNaissance; return $this; }
+    public function getDateNaissance(): ?\DateTimeImmutable { return $this->dateNaissance; }
+    public function setDateNaissance(?\DateTimeImmutable $dateNaissance): static { $this->dateNaissance = $dateNaissance; return $this; }
 
     public function getEmail(): string { return $this->email; }
     public function setEmail(string $email): static { $this->email = $email; return $this; }
@@ -66,34 +70,15 @@ class Utilisateur
     public function getVille(): ?string { return $this->ville; }
     public function setVille(?string $ville): static { $this->ville = $ville; return $this; }
 
-    public function getGenre(): ?string { return $this->genre; }
-    public function setGenre(?string $genre): static { $this->genre = $genre; return $this; }
+    public function getSiret(): ?string { return $this->siret; }
+    public function setSiret(?string $siret): static { $this->siret = $siret; return $this; }
 
-    public function getDateInscription(): \DateTimeInterface { return $this->dateInscription; }
-    public function setDateInscription(\DateTimeInterface $dateInscription): static { $this->dateInscription = $dateInscription; return $this; }
+    public function getNomDomaine(): ?string { return $this->nomDomaine; }
+    public function setNomDomaine(?string $nomDomaine): static { $this->nomDomaine = $nomDomaine; return $this; }
 
-    public function getProfessionnel(): ?Professionnel { return $this->professionnel; }
-    public function setProfessionnel(?Professionnel $professionnel): static
-    {
-        if ($professionnel !== null) {
-            $professionnel->setUtilisateur($this);
-        }
-        $this->professionnel = $professionnel;
-        return $this;
-    }
+    public function getDateInscription(): \DateTimeImmutable { return $this->dateInscription; }
+    public function setDateInscription(\DateTimeImmutable $dateInscription): static { $this->dateInscription = $dateInscription; return $this; }
 
     public function getAvis(): Collection { return $this->avis; }
-    public function addAvis(Avis $avis): static
-    {
-        if (!$this->avis->contains($avis)) {
-            $this->avis->add($avis);
-            $avis->setUtilisateur($this);
-        }
-        return $this;
-    }
-    public function removeAvis(Avis $avis): static
-    {
-        $this->avis->removeElement($avis);
-        return $this;
-    }
+    public function getUtilisateurServices(): Collection { return $this->utilisateurServices; }
 }

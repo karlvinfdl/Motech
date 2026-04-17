@@ -17,20 +17,26 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
-    private string $nom = '';
+    private string $prenom = '';
 
-    #[ORM\ManyToMany(targetEntity: Professionnel::class, mappedBy: 'services')]
-    private Collection $professionnels;
+    #[ORM\Column(length: 300, nullable: true)]
+    private ?string $demandeSpecial = null;
+
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: UtilisateurService::class)]
+    private Collection $utilisateurServices;
 
     public function __construct()
     {
-        $this->professionnels = new ArrayCollection();
+        $this->utilisateurServices = new ArrayCollection();
     }
 
     public function getId(): ?int { return $this->id; }
 
-    public function getNom(): string { return $this->nom; }
-    public function setNom(string $nom): static { $this->nom = $nom; return $this; }
+    public function getPrenom(): string { return $this->prenom; }
+    public function setPrenom(string $prenom): static { $this->prenom = $prenom; return $this; }
 
-    public function getProfessionnels(): Collection { return $this->professionnels; }
+    public function getDemandeSpecial(): ?string { return $this->demandeSpecial; }
+    public function setDemandeSpecial(?string $demandeSpecial): static { $this->demandeSpecial = $demandeSpecial; return $this; }
+
+    public function getUtilisateurServices(): Collection { return $this->utilisateurServices; }
 }

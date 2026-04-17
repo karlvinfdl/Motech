@@ -521,6 +521,152 @@ button {
 }
 
 /* ===================================== */
+/* BOUTON S'ENREGISTRER                  */
+/* ===================================== */
+
+.btn-register1 {
+    background: white;
+    color: var(--pink1);
+    border: 2px solid var(--pink1);
+    margin-top: 6px;
+}
+
+.btn-register1:hover {
+    background: var(--pink1);
+    color: white;
+}
+
+/* ===================================== */
+/* MODALE INSCRIPTION                    */
+/* ===================================== */
+
+.modal-overlay1 {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+}
+
+.modal-overlay1.modal-open1 {
+    display: flex;
+}
+
+.modal-box1 {
+    position: relative;
+    background: var(--card-bg1);
+    border: 5px solid var(--pink1);
+    border-radius: var(--radius1);
+    box-shadow: var(--shadow1);
+    padding: 28px 32px 24px;
+    width: min(520px, 94vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalIn1 0.22s ease;
+}
+
+@keyframes modalIn1 {
+    from { transform: scale(0.88) translateY(-20px); opacity: 0; }
+    to   { transform: scale(1) translateY(0);        opacity: 1; }
+}
+
+.modal-close1 {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 26px;
+    color: var(--pink1);
+    cursor: pointer;
+    line-height: 1;
+    background: none;
+    border: none;
+    font-family: inherit;
+}
+
+.modal-close1:hover {
+    color: var(--pink-dark1);
+}
+
+.modal-title1 {
+    text-align: center;
+    color: var(--pink1);
+    font-size: 24px;
+    margin-bottom: 18px;
+}
+
+.modal-form1 {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modal-grid1 {
+    display: grid;
+    gap: 10px;
+}
+
+.field-full1 {
+    grid-column: 1 / -1;
+}
+
+.modal-services-title1 {
+    color: var(--pink1);
+    font-size: 17px;
+    margin: 16px 0 10px;
+}
+
+.modal-checkbox-grid1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    margin-bottom: 14px;
+}
+
+.modal-checkbox1 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--pink1);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.modal-checkbox1 input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--pink1);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.modal-textarea1 {
+    width: 100%;
+    min-height: 90px;
+    border-radius: 14px;
+    border: 2px solid rgba(230, 11, 98, 0.28);
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.92);
+    resize: vertical;
+    outline: none;
+    margin-bottom: 4px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-textarea1:focus {
+    border-color: var(--pink1);
+    box-shadow: 0 0 0 3px rgba(230, 11, 98, 0.12);
+}
+
+.modal-form1 .btn1 {
+    margin: 14px auto 0;
+}
+
+/* ===================================== */
 /* ============== LANDING FIN=========== */
 /* ===================================== */
 
