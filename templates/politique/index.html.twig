@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PolitiqueController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper-cgu">
+ <h1>Informations Légales</h1>
+
+    {# Le navigateur scrollera automatiquement jusqu'à cet ID #}
+    <section id="mentions-legales">
+        <h2>Mentions Légales</h2>
+        <p>1. Éditeur du site Le site est édité par Campus Motech. 
+            Contact : bonjour@campus-motech.fr
+            2. Hébergement [Insérer ici le nom de votre hébergeur, son adresse et son numéro de téléphone]
+            3. Propriété intellectuelle L'ensemble des contenus (textes, images, graphismes, logos, jeux) 
+            présents sur le site est la propriété exclusive de Campus Motech. Toute reproduction, 
+            distribution ou modification de ces éléments est strictement interdite sans accord écrit préalable.</p>
+    </section>
+
+    <section id="cgu">
+        <h2>Conditions Générales d'Utilisation</h2>
+        <p>Article 1 : Objet Les présentes Conditions Générales d’Utilisation encadrent juridiquement l’accès et l’utilisation du site par l’Utilisateur. L’accès au site signifie l’acceptation des présentes CGU.
+            Article 2 : Accès aux services Le site est ouvert à tout utilisateur, sans limite d’âge. Campus Motech met en œuvre tous les moyens raisonnables pour assurer un accès de qualité au service, mais n'est tenu à aucune obligation d'y parvenir en cas de force majeure ou de maintenance.
+            Article 3 : Protection des mineurs L'utilisation du site par un mineur se fait sous la responsabilité et la surveillance de ses représentants légaux.
+            Article 4 : Données personnelles Le site collecte des informations concernant les particuliers et les professionnels pour le bon fonctionnement des services. Conformément au RGPD et à la loi Informatique et Libertés, tout utilisateur dispose d’un droit d’accès, de rectification et d’opposition à ses données personnelles en contactant : bonjour@campus-motech.fr.
+            Article 5 : Responsabilité Campus Motech ne peut être tenu responsable des dommages directs ou indirects causés au matériel de l’utilisateur lors de l’accès au site, ou de l’apparition d’un bug ou d’une incompatibilité.
+        </p>
+    </section>
+
+    <section id="politique-confidentialite">
+        <h2>Politique de Confidentialité</h2>
+        <p>1. Collecte des données Nous collectons les informations suivantes :
+        * Particuliers : Données d'identification (nom, email) et données de navigation.
+
+            * Professionnels : Informations de contact et données relatives à l'activité professionnelle sur la plateforme.
+
+            2. Finalités Ces données sont utilisées pour la gestion des comptes, l'amélioration de l'expérience de jeu, la communication avec les utilisateurs et la gestion des partenariats professionnels.
+            3. Durée de conservation Les données sont conservées pendant une durée de 3 ans à compter de la dernière activité de l'utilisateur sur le site.
+            4. Cookies Le site utilise des cookies pour mesurer l'audience et personnaliser l'expérience. Vous pouvez configurer votre navigateur pour refuser ces cookies lors de votre première visite via notre bandeau de consentement.
+        </p>
+    </section>
+</div>
+{% endblock %}
