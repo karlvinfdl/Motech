@@ -2,14 +2,14 @@
 
 namespace App\Repository;
 
-use App\Entity\Professionnel;
+use App\Entity\UtilisateurService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class ProfessionnelRepository extends ServiceEntityRepository
+class UtilisateurServiceRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Professionnel::class);
+        parent::__construct($registry, UtilisateurService::class);
     }
 }
