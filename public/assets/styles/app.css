@@ -14,6 +14,52 @@ body {
 body {
     display: block;
 }
+
+/* =========================================
+   FOOTER LÉGAL (base.html.twig)
+   ========================================= */
+
+.site-footer {
+    position: fixed; /* Fixe le footer par rapport à l'écran */
+    bottom: 0; /* Le colle tout en bas */
+    left: 0; /* Le colle tout à gauche */
+    width: 100%; /* Lui fait prendre toute la largeur */
+    z-index: 99999; /* Force le passage au-dessus des nuages et avatars */
+    background-color: rgba(255, 255, 255, 0.9); /* Fond blanc légèrement transparent */
+    padding: 10px 0;
+    text-align: center;
+    border-top: 2px solid #ccc;
+    font-family: sans-serif; /* À adapter avec votre police si besoin */
+}
+
+.footer-content p {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Permet aux liens de passer à la ligne sur mobile */
+    gap: 20px; /* Espace entre les liens */
+}
+
+.footer-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #000;
+    text-decoration: underline;
+    transform: translateY(-2px); /* Petit effet de soulèvement au survol */
+}
+
+
 /* ===================================== */
 /* ============== LANDING DEBUT========= */
 /* ===================================== */
