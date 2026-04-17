@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Service;
 use App\Entity\Utilisateur;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,7 +48,9 @@ final class LandingController extends AbstractController
             return $this->redirectToRoute('app_landing');
         }
 
-        return $this->render('landing/index.html.twig');
+        $services = $em->getRepository(Service::class)->findAll();
+
+        return $this->render('landing/index.html.twig', ['services' => $services]);
     }
 
     #[Route('/wheel', name: 'app_wheel')]
