@@ -118,109 +118,47 @@ a.island1:hover img {
         drop-shadow(0 34px 42px rgba(0, 0, 0, 0.24));
 }
  
-/* petites îles un peu plus discrètes */
-.ile1-1 img,
-.ile2-1 img,
-.ile3-1 img,
-.ile4-1 img,
-.ile5-1 img,
-.ile6-1 img {
-    opacity: 0.95;
-    filter: blur(0.2px) saturate(0.96)
-        drop-shadow(0 10px 14px rgba(0, 0, 0, 0.10))
-        drop-shadow(0 18px 28px rgba(0, 0, 0, 0.16));
-}
- 
 /* ===================================== */
 /* POSITIONS DES ÎLES                    */
-/*                                       */
-/* Chemin (bas → haut) :                */
-/* elodie → ile1 → ile2 → karlvin       */
-/*       → ile3 → ile4 → ile5           */
-/*       → axel → ile6 → alexis         */
-/*                                       */
-/* Les largeurs utilisent clamp() :      */
-/*   clamp(min, %, max)                  */
-/* Le % est relatif à .islands-zone1    */
 /* ===================================== */
- 
+
 /* ---- BAS-DROITE : ELODIE (Star Coaster) ---- */
 .elodie1 {
     bottom: 2%;
-    left: 44%;
-    width: clamp(260px, 48%, 620px);
+    left: 55%;
+    width: 44%;
     animation-delay: 0s;
 }
- 
-/* ---- ile1 : bas-centre, entre elodie et karlvin ---- */
-.ile1-1 {
-    bottom: 8%;
-    left: 26%;
-    width: clamp(90px, 13%, 170px);
-    animation-delay: 0.5s;
-}
- 
-/* ---- ile2 : bas-gauche, montée vers karlvin ---- */
-.ile2-1 {
-    bottom: 26%;
-    left: 18%;
-    width: clamp(100px, 14.5%, 195px);
-    animation-delay: 1s;
-}
- 
+
 /* ---- GAUCHE-MILIEU : KARLVIN (Scrabble) ---- */
 .karlvin1 {
-    bottom: 28%;
+    bottom: 10%;
     left: 1%;
-    width: clamp(220px, 36%, 480px);
+    width: 36%;
     animation-delay: 1.5s;
 }
- 
-/* ---- ile3 : droite de karlvin, montée centrale ---- */
-.ile3-1 {
-    bottom: 38%;
-    left: 29%;
-    width: clamp(110px, 15%, 210px);
-    animation-delay: 0.8s;
-}
- 
-/* ---- ile4 : centre, entre ile3 et ile5 ---- */
-.ile4-1 {
-    bottom: 33%;
-    left: 40%;
-    width: clamp(105px, 14.5%, 200px);
-    animation-delay: 1.3s;
-}
- 
-/* ---- ile5 : centre-droite, montée vers alexis ---- */
-.ile5-1 {
-    top: 37%;
-    left: 52%;
-    width: clamp(105px, 14.5%, 205px);
-    animation-delay: 0.3s;
-}
- 
-/* ---- HAUT-GAUCHE : AXEL (Roue magique) ---- */
-.axel1 {
-    top: 8%;
-    left: 50%;
-    width: clamp(220px, 35%, 455px);
+
+/* ---- CENTRE : KYLLIAN (Ptinata) ---- */
+.kyllian1 {
+    top: 32%;
+    left: 34%;
+    width: 30%;
     animation-delay: 2s;
 }
 
-/* ---- ile6 : haut-centre, entre axel et alexis ---- */
-.ile6-1 {
-    top: 17%;
-    left: 29%;
-    width: clamp(80px, 11%, 158px);
-    animation-delay: 0.7s;
+/* ---- HAUT-GAUCHE : AXEL (Roue magique) ---- */
+.axel1 {
+    top: 5%;
+    left: 4%;
+    width: 30%;
+    animation-delay: 2.5s;
 }
 
 /* ---- HAUT-DROITE : ALEXIS (Devine le mot) ---- */
 .alexis1 {
-    top: 5%;
-    left: 4%;
-    width: clamp(190px, 32%, 420px);
+    top: 8%;
+    left: 50%;
+    width: 33%;
     animation-delay: 1.7s;
 }
  
@@ -353,7 +291,18 @@ button {
     background: var(--pink-dark1);
 }
  
-/* BOUTON ÉQUIPE */
+/* BOUTONS ÉQUIPE + AVIS */
+.btn-row1 {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-row1 .big-btn1 {
+    flex: 1;
+    font-size: 18px;
+    padding: 16px 12px;
+}
+
 .big-btn1 {
     border-radius: 999px;
     padding: 18px 24px;
@@ -464,75 +413,40 @@ button {
     }
  
     /* ---------- Repositionnement des îles (zone = 100vw × max(60vw,420px)) ---------- */
- 
+
     /* ELODIE */
     .elodie1 {
         bottom: 3%;
         left: 44%;
-        width: clamp(230px, 42%, 560px);
+        width: clamp(175px, 30%, 380px);
     }
- 
-    /* ile1 : bas-centre */
-    .ile1-1 {
-        bottom: 8%;
-        left: 26%;
-        width: clamp(78px, 11%, 148px);
-    }
- 
-    /* ile2 : bas-gauche */
-    .ile2-1 {
-        bottom: 26%;
-        left: 17%;
-        width: clamp(90px, 13%, 172px);
-    }
- 
+
     /* KARLVIN */
     .karlvin1 {
         bottom: 28%;
         left: 1%;
-        width: clamp(195px, 30%, 408px);
+        width: clamp(150px, 22%, 290px);
     }
- 
-    /* ile3 : droite de karlvin */
-    .ile3-1 {
-        bottom: 38%;
-        left: 28%;
-        width: clamp(100px, 13.5%, 186px);
+
+    /* KYLLIAN */
+    .kyllian1 {
+        top: 32%;
+        left: 34%;
+        width: clamp(150px, 22%, 290px);
     }
- 
-    /* ile4 : centre */
-    .ile4-1 {
-        bottom: 33%;
-        left: 39%;
-        width: clamp(96px, 13%, 178px);
-    }
- 
-    /* ile5 : centre-droite haut */
-    .ile5-1 {
-        top: 37%;
-        left: 52%;
-        width: clamp(96px, 13%, 178px);
-    }
- 
+
     /* AXEL */
     .axel1 {
         top: 8%;
         left: 51%;
-        width: clamp(192px, 29%, 388px);
-    }
-
-    /* ile6 : haut-centre */
-    .ile6-1 {
-        top: 17%;
-        left: 28%;
-        width: clamp(70px, 10%, 140px);
+        width: clamp(150px, 22%, 290px);
     }
 
     /* ALEXIS */
     .alexis1 {
         top: 5%;
         left: 3%;
-        width: clamp(172px, 27%, 368px);
+        width: clamp(135px, 20%, 265px);
     }
 }
  
@@ -569,76 +483,187 @@ button {
     }
  
     /* ---------- Îles redimensionnées (zone = 100vw × max(65vw,340px)) ---------- */
- 
+
     /* ELODIE */
     .elodie1 {
         bottom: 2%;
         left: 44%;
-        width: clamp(180px, 46%, 340px);
+        width: clamp(140px, 30%, 260px);
     }
- 
-    /* ile1 : bas-centre */
-    .ile1-1 {
-        bottom: 7%;
-        left: 26%;
-        width: clamp(58px, 11%, 96px);
-    }
- 
-    /* ile2 : bas-gauche */
-    .ile2-1 {
-        bottom: 25%;
-        left: 17%;
-        width: clamp(66px, 12%, 110px);
-    }
- 
+
     /* KARLVIN */
     .karlvin1 {
         bottom: 27%;
         left: 1%;
-        width: clamp(145px, 35%, 264px);
+        width: clamp(110px, 22%, 200px);
     }
- 
-    /* ile3 : droite de karlvin */
-    .ile3-1 {
-        bottom: 37%;
-        left: 28%;
-        width: clamp(70px, 12.5%, 118px);
+
+    /* KYLLIAN */
+    .kyllian1 {
+        top: 32%;
+        left: 34%;
+        width: clamp(110px, 22%, 200px);
     }
- 
-    /* ile4 : centre */
-    .ile4-1 {
-        bottom: 32%;
-        left: 39%;
-        width: clamp(66px, 12%, 114px);
-    }
- 
-    /* ile5 : centre-droite haut */
-    .ile5-1 {
-        top: 37%;
-        left: 52%;
-        width: clamp(68px, 12%, 114px);
-    }
- 
+
     /* AXEL */
     .axel1 {
         top: 7%;
         left: 51%;
-        width: clamp(130px, 33%, 252px);
-    }
-
-    /* ile6 : haut-centre */
-    .ile6-1 {
-        top: 17%;
-        left: 28%;
-        width: clamp(50px, 9.5%, 88px);
+        width: clamp(110px, 22%, 200px);
     }
 
     /* ALEXIS */
     .alexis1 {
         top: 4%;
         left: 2%;
-        width: clamp(120px, 29%, 232px);
+        width: clamp(100px, 20%, 185px);
     }
+}
+
+/* ===================================== */
+/* BOUTON S'ENREGISTRER                  */
+/* ===================================== */
+
+.btn-register1 {
+    background: white;
+    color: var(--pink1);
+    border: 2px solid var(--pink1);
+    margin-top: 6px;
+}
+
+.btn-register1:hover {
+    background: var(--pink1);
+    color: white;
+}
+
+/* ===================================== */
+/* MODALE INSCRIPTION                    */
+/* ===================================== */
+
+.modal-overlay1 {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+}
+
+.modal-overlay1.modal-open1 {
+    display: flex;
+}
+
+.modal-box1 {
+    position: relative;
+    background: var(--card-bg1);
+    border: 5px solid var(--pink1);
+    border-radius: var(--radius1);
+    box-shadow: var(--shadow1);
+    padding: 28px 32px 24px;
+    width: min(520px, 94vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalIn1 0.22s ease;
+}
+
+@keyframes modalIn1 {
+    from { transform: scale(0.88) translateY(-20px); opacity: 0; }
+    to   { transform: scale(1) translateY(0);        opacity: 1; }
+}
+
+.modal-close1 {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 26px;
+    color: var(--pink1);
+    cursor: pointer;
+    line-height: 1;
+    background: none;
+    border: none;
+    font-family: inherit;
+}
+
+.modal-close1:hover {
+    color: var(--pink-dark1);
+}
+
+.modal-title1 {
+    text-align: center;
+    color: var(--pink1);
+    font-size: 24px;
+    margin-bottom: 18px;
+}
+
+.modal-form1 {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modal-grid1 {
+    display: grid;
+    gap: 10px;
+}
+
+.field-full1 {
+    grid-column: 1 / -1;
+}
+
+.modal-services-title1 {
+    color: var(--pink1);
+    font-size: 17px;
+    margin: 16px 0 10px;
+}
+
+.modal-checkbox-grid1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    margin-bottom: 14px;
+}
+
+.modal-checkbox1 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--pink1);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.modal-checkbox1 input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--pink1);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.modal-textarea1 {
+    width: 100%;
+    min-height: 90px;
+    border-radius: 14px;
+    border: 2px solid rgba(230, 11, 98, 0.28);
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.92);
+    resize: vertical;
+    outline: none;
+    margin-bottom: 4px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-textarea1:focus {
+    border-color: var(--pink1);
+    box-shadow: 0 0 0 3px rgba(230, 11, 98, 0.12);
+}
+
+.modal-form1 .btn1 {
+    margin: 14px auto 0;
 }
 
 /* ===================================== */
