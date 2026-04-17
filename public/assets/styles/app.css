@@ -4485,7 +4485,22 @@ body, html {
     justify-content: center;
     position: relative;
 }
+.icon-maisonEM {
+    margin-left: 40px; /* Augmente ce chiffre pour le décaler plus vers la droite */
+    margin-top: 20px;  /* Espace par rapport au haut de l'écran */
+    display: inline-block; /* Permet à la div de ne prendre que la place de l'icône */
+}
 
+.icon-maisonEM svg {
+    width: 25px;  /* Ici tu réduis la taille */
+    height: 25px; /* Garde la même valeur pour ne pas déformer */
+    fill: #000000; /* Ta couleur si tu veux la changer */
+    transition: transform 0.2s;
+}
+
+.icon-maisonEM a:hover svg {
+    transform: scale(1.1);
+}
 /* ============================================================
   LE PANNEAU TRANSPARENT (Style Verre)
    ============================================================ */
