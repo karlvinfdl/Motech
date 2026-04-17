@@ -20,16 +20,16 @@
     <body>
         {% block body %}{% endblock %}
 
+        {% block cookie_consent %}{% endblock %}
+
         {# 1. Mise à jour de la liste des routes autorisées #}
         {% set routes_autorisees = ['app_equipe', 'app_landing', 'app_avis'] %}
         
-        {# Vérifie si la route actuelle (app.request.attributes.get('_route')) est dans la liste #}
         {% if app.request.attributes.get('_route') in routes_autorisees %}
             <footer class="site-footer">
                 <div class="footer-content">
                     <p>&copy; {{ "now"|date("Y") }} Votre Projet Symfony</p>
                     <nav class="footer-links">
-                        {# 2. Correction du nom de la route (assumé app_politique ici) #}
                         <a href="{{ path('app_politique') }}#mentions-legales">Mentions Légales</a>
                         <a href="{{ path('app_politique') }}#cgu">CGU</a>
                         <a href="{{ path('app_politique') }}#politique-confidentialite">Politique de Confidentialité</a>
@@ -39,7 +39,6 @@
             </footer>
         {% endif %}
 
-        {# Script pour gérer l'ouverture des modales via les ancres #}
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 let hash = window.location.hash; 
