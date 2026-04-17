@@ -9,11 +9,11 @@
     <nav class="icone-house5">
       <a href="{{ path('app_landing') }}">
         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="64" height="64" viewBox="0 0 32 32">
-            <polygon fill="#ffffff" points="27,16 27,28 5,28 5,16 7,16 7,14 9,14 9,12 11,12 11,10 13,10 13,8 15,8 15,6 17,6 17,8 19,8 19,10 21,10 21,12 23,12 23,14 25,14 25,16"></polygon>
-            <rect width="8" height="2" x="18" y="7" fill="#000000" transform="rotate(90 22 8)"></rect>
-            <rect width="5" height="5" x="18" y="19" fill="#000000"></rect>
-            <polygon fill="#000000" points="29,14 29,16 25,16 25,14 23,14 23,12 21,12 21,10 19,10 19,8 17,8 17,6 15,6 15,8 13,8 13,10 11,10 11,12 9,12 9,14 7,14 7,16 3,16 3,14 5,14 5,12 7,12 7,10 9,10 9,8 11,8 11,6 13,6 13,4 15,4 15,2 17,2 17,4 19,4 19,6 21,6 21,8 23,8 23,10 25,10 25,12 27,12 27,14"></polygon>
-            <rect width="9" height="5" x="7" y="21" fill="#000000" transform="rotate(90 11.5 23.5)"></rect>
+            <polygon fill="#ff4f9a" points="27,16 27,28 5,28 5,16 7,16 7,14 9,14 9,12 11,12 11,10 13,10 13,8 15,8 15,6 17,6 17,8 19,8 19,10 21,10 21,12 23,12 23,14 25,14 25,16"></polygon>
+            <rect width="8" height="2" x="18" y="7" fill="#ffd700" transform="rotate(90 22 8)"></rect>
+            <rect width="5" height="5" x="18" y="19" fill="#ffd700"></rect>
+            <polygon fill="#ffd700" points="29,14 29,16 25,16 25,14 23,14 23,12 21,12 21,10 19,10 19,8 17,8 17,6 15,6 15,8 13,8 13,10 11,10 11,12 9,12 9,14 7,14 7,16 3,16 3,14 5,14 5,12 7,12 7,10 9,10 9,8 11,8 11,6 13,6 13,4 15,4 15,2 17,2 17,4 19,4 19,6 21,6 21,8 23,8 23,10 25,10 25,12 27,12 27,14"></polygon>
+            <rect width="9" height="5" x="7" y="21" fill="#ffd700" transform="rotate(90 11.5 23.5)"></rect>
         </svg>
       </a>
     </nav>
@@ -51,37 +51,5 @@
         <a id="link-portfolio" target="_blank" class="btn-custom5 btn-white5">Portfolio</a>
     </nav>
 </main>
-</div>
-</div>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    // Fonction de sélection des membres et mise à jour du lien
-    const handleMemberSelection = () => {
-        const members = document.querySelectorAll(".js-member5");
-        const portfolioBtn = document.getElementById("link-portfolio");
-
-        members.forEach((m) => {
-            m.addEventListener("click", () => {
-                // 1. Mise à jour visuelle (taille et nom)
-                members.forEach((member) => member.classList.remove("leader5"));
-                m.classList.add("leader5");
-
-                // 2. Mise à jour du lien Portfolio
-                const newUrl = m.getAttribute("data-portfolio");
-
-                // On vérifie que le bouton existe et que l'URL n'est pas vide
-                if (portfolioBtn && newUrl && newUrl.trim() !== "") {
-                    portfolioBtn.href = newUrl;
-                    console.log(
-                        "Lien mis à jour pour : " + m.getAttribute("data-name"),
-                    );
-                }
-            });
-        });
-    };
-
-    handleMemberSelection();
-});
-</script>
 {% endblock %}

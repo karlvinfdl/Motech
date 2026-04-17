@@ -1,26 +1,62 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        
+        {% block stylesheets %}
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        {% endblock %}
 
-    <meta charset="UTF-8">
-    <title>{% block title %}Welcome!{% endblock %}</title>
-    {% block stylesheets %}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    {% endblock %}
-
-    {% block javascripts %}
-        {# Coaster game self-contained, no app.js needed #}
-    {% endblock %}
-
+        {% block javascripts %}
+            {# Coaster game self-contained, no app.js needed #}
+        {% endblock %}
     </head>
 
     <body>
         {% block body %}{% endblock %}
-    </body>
 
+        {# 1. Mise à jour de la liste des routes autorisées #}
+        {% set routes_autorisees = ['app_equipe', 'app_landing', 'app_avis'] %}
+        
+        {# Vérifie si la route actuelle (app.request.attributes.get('_route')) est dans la liste #}
+        {% if app.request.attributes.get('_route') in routes_autorisees %}
+            <footer class="site-footer">
+                <div class="footer-content">
+                    <p>&copy; {{ "now"|date("Y") }} Votre Projet Symfony</p>
+                    <nav class="footer-links">
+                        {# 2. Correction du nom de la route (assumé app_politique ici) #}
+                        <a href="{{ path('app_politique') }}#mentions-legales">Mentions Légales</a>
+                        <a href="{{ path('app_politique') }}#cgu">CGU</a>
+                        <a href="{{ path('app_politique') }}#politique-confidentialite">Politique de Confidentialité</a>
+                        <a href="#" onclick="tarteaucitron.userInterface.openPanel(); return false;">Gérer mes cookies</a>
+                    </nav>
+                </div>
+            </footer>
+        {% endif %}
+
+        {# Script pour gérer l'ouverture des modales via les ancres #}
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let hash = window.location.hash; 
+                if (hash) {
+                    setTimeout(() => {
+                        let targetElement = document.querySelector(hash); 
+                        if (targetElement) {
+                            if (typeof bootstrap !== 'undefined') {
+                                let modalInstance = new bootstrap.Modal(targetElement);
+                                modalInstance.show();
+                            } else {
+                                targetElement.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }
+                    }, 100);
+                }
+            });
+        </script>
+    </body>
 </html>
