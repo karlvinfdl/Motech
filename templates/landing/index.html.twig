@@ -99,7 +99,7 @@
     <h2 class="modal-title1">Créer un compte</h2>
 
     <form method="post" action="{{ path('app_landing') }}" class="modal-form1">
-      <input type="hidden" name="_token" value="{{ csrf_token('register_form') }}">
+      <input type="hidden" name="_token" value="{{ csrf_token('landing_form') }}">
       <input type="hidden" name="_action" value="register">
 
       <div class="modal-grid1">
@@ -180,4 +180,120 @@ document.addEventListener('keydown', function(e) {
 });
 </script>
 
+{% endblock %}
+
+{% block cookie_consent %}
+    {# ===== Bandeau Cookie Consent ===== #}
+    <div id="cookie-banner" class="ck-banner" role="dialog" aria-label="Consentement aux cookies" style="display:none">
+        <div class="ck-banner__inner">
+            <div class="ck-banner__header">
+                <span class="ck-banner__icon">🍪</span>
+                <h3 class="ck-banner__title">Ce site utilise des cookies</h3>
+            </div>
+            <p class="ck-banner__text">
+                Nous utilisons des cookies pour améliorer votre expérience de jeu, mémoriser vos préférences et analyser notre audience. Vous pouvez personnaliser vos choix.
+            </p>
+            <div class="ck-banner__actions">
+                <button id="ck-accept-all" class="ck-btn ck-btn--primary">Tout accepter</button>
+                <button id="ck-refuse-all" class="ck-btn ck-btn--secondary">Tout refuser</button>
+                <button id="ck-open-prefs" class="ck-btn ck-btn--ghost">Gérer mes préférences</button>
+            </div>
+        </div>
+    </div>
+
+    {# ===== Modale Préférences ===== #}
+    <div id="ck-modal" class="ck-modal" role="dialog" aria-modal="true" aria-label="Préférences cookies" style="display:none">
+        <div class="ck-modal__box">
+            <button id="ck-modal-close" class="ck-modal__close" aria-label="Fermer">✕</button>
+            <h2 class="ck-modal__title">🍪 Mes préférences cookies</h2>
+            <p class="ck-modal__intro">Choisissez les cookies que vous acceptez. Les cookies nécessaires ne peuvent pas être désactivés.</p>
+
+            <div class="ck-pref-list">
+                <div class="ck-pref-item">
+                    <div class="ck-pref-info">
+                        <span class="ck-pref-name">Nécessaires</span>
+                        <span class="ck-pref-desc">Indispensables au fonctionnement du site (session, sécurité CSRF).</span>
+                    </div>
+                    <label class="ck-toggle ck-toggle--disabled" aria-label="Toujours actif">
+                        <input type="checkbox" checked disabled>
+                        <span class="ck-toggle__slider"></span>
+                    </label>
+                </div>
+                <div class="ck-pref-item">
+                    <div class="ck-pref-info">
+                        <span class="ck-pref-name">Analytiques</span>
+                        <span class="ck-pref-desc">Mesure d'audience anonymisée pour améliorer nos jeux.</span>
+                    </div>
+                    <label class="ck-toggle" aria-label="Activer les cookies analytiques">
+                        <input type="checkbox" id="ck-analytics">
+                        <span class="ck-toggle__slider"></span>
+                    </label>
+                </div>
+                <div class="ck-pref-item">
+                    <div class="ck-pref-info">
+                        <span class="ck-pref-name">Préférences</span>
+                        <span class="ck-pref-desc">Mémorisation de vos choix de jeu et de votre profil.</span>
+                    </div>
+                    <label class="ck-toggle" aria-label="Activer les cookies de préférences">
+                        <input type="checkbox" id="ck-prefs-cookie">
+                        <span class="ck-toggle__slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="ck-modal__actions">
+                <button id="ck-save-prefs" class="ck-btn ck-btn--primary">Enregistrer mes choix</button>
+                <button id="ck-accept-all-modal" class="ck-btn ck-btn--secondary">Tout accepter</button>
+            </div>
+        </div>
+    </div>
+
+    {# ===== Bouton flottant réouvrir ===== #}
+    <button id="ck-float-btn" class="ck-float-btn" aria-label="Gérer les cookies" title="Gérer les cookies" style="display:none">🍪</button>
+
+    <script>
+    (function () {
+        var STORAGE_KEY = 'cookie_consent_v2';
+        var banner   = document.getElementById('cookie-banner');
+        var modal    = document.getElementById('ck-modal');
+        var floatBtn = document.getElementById('ck-float-btn');
+
+        function loadPrefs() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null; } catch(e) { return null; }
+        }
+        function savePrefs(prefs) { localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs)); }
+        function applyPrefs(prefs) {
+            if (prefs) {
+                document.getElementById('ck-analytics').checked    = !!prefs.analytics;
+                document.getElementById('ck-prefs-cookie').checked = !!prefs.preferences;
+            }
+        }
+        function showBanner() { banner.style.display = 'flex'; floatBtn.style.display = 'none'; }
+        function hideBanner() { banner.style.display = 'none'; floatBtn.style.display = 'flex'; }
+        function openModal()  { modal.style.display  = 'flex'; }
+        function closeModal() { modal.style.display  = 'none'; }
+
+        function acceptAll() { savePrefs({ analytics: true, preferences: true }); hideBanner(); closeModal(); }
+        function refuseAll() { savePrefs({ analytics: false, preferences: false }); hideBanner(); closeModal(); }
+        function saveSelected() {
+            savePrefs({
+                analytics:   document.getElementById('ck-analytics').checked,
+                preferences: document.getElementById('ck-prefs-cookie').checked
+            });
+            hideBanner(); closeModal();
+        }
+
+        var prefs = loadPrefs();
+        if (!prefs) { showBanner(); } else { floatBtn.style.display = 'flex'; applyPrefs(prefs); }
+
+        document.getElementById('ck-accept-all').addEventListener('click', acceptAll);
+        document.getElementById('ck-refuse-all').addEventListener('click', refuseAll);
+        document.getElementById('ck-open-prefs').addEventListener('click', openModal);
+        document.getElementById('ck-accept-all-modal').addEventListener('click', acceptAll);
+        document.getElementById('ck-save-prefs').addEventListener('click', saveSelected);
+        document.getElementById('ck-modal-close').addEventListener('click', closeModal);
+        floatBtn.addEventListener('click', function () { applyPrefs(loadPrefs()); openModal(); });
+        modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+    })();
+    </script>
 {% endblock %}
