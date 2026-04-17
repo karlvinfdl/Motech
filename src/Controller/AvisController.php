@@ -25,13 +25,12 @@ final class AvisController extends AbstractController
             }
 
             $session = $requestStack->getSession();
-            $email   = trim($request->request->get('email', ''));
             $prenom  = trim($request->request->get('prenom', ''));
             $message = trim($request->request->get('message', ''));
             $jeuPref = $request->request->get('jeu_prefere') ?: null;
             $note    = (int) $request->request->get('note', 0);
 
-            // Récupère l'utilisateur : session > email > nouveau
+            // Récupère l'utilisateur depuis la session ou en crée un nouveau
             $idUtilisateur = $session->get('id_utilisateur');
             $utilisateur   = null;
 
@@ -39,19 +38,17 @@ final class AvisController extends AbstractController
                 $utilisateur = $em->find(Utilisateur::class, $idUtilisateur);
             }
 
-            if (!$utilisateur && $email) {
-                $utilisateur = $em->getRepository(Utilisateur::class)->findOneBy(['email' => $email]);
-            }
-
             if (!$utilisateur) {
                 $utilisateur = new Utilisateur();
-                $utilisateur->setEmail($email);
+                $utilisateur->setEmail('avis_' . uniqid() . '@noemail.local');
                 $utilisateur->setNom('');
-                $utilisateur->setPrenom($prenom);
                 $em->persist($utilisateur);
-                $em->flush();
-                $session->set('id_utilisateur', $utilisateur->getId());
             }
+
+            $utilisateur->setPrenom($prenom);
+
+            $em->flush();
+            $session->set('id_utilisateur', $utilisateur->getId());
 
             $avis = new Avis();
             $avis->setMessage($message);
@@ -63,6 +60,8 @@ final class AvisController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Merci pour ton avis !');
+
+            // Redirige vers la page fin de jeu (et non vers /avis)
             return $this->redirectToRoute('app_avis');
         }
 
