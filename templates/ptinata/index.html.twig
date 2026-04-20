@@ -542,58 +542,44 @@ body.in-game #homeSettingsBtn {
     margin-bottom: 15px;
 }
 
-    /* 1. ON ARRACHE LA MODALE DU FLUX FLEXBOX DU BODY */
-    .ck-modal {
-        display: none; /* Le JS gère l'affichage en flex */
+    /* ON FORCE L'OVERLAY À SORTIR DU FLEX DU BODY */
+    #ck-modal.ck-modal {
+        display: none; /* Changé en 'flex' par le JS */
         position: fixed !important;
+        
+        /* Coordonnées forcées sur l'écran entier */
         top: 0 !important;
         left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
         width: 100vw !important;
         height: 100vh !important;
+        
+        /* On casse le lien avec le Flexbox du body */
+        flex: none !important;
         margin: 0 !important;
         padding: 0 !important;
         
-        /* INDISPENSABLE : On dit au navigateur d'ignorer le flex du body */
-        flex: none !important;
-        align-self: auto !important;
-        
-        /* On passe devant absolument tout (Wii, Notebook, Lakitu) */
+        /* Priorité maximale */
         z-index: 2147483647 !important;
         background: rgba(0, 0, 0, 0.85) !important;
-        
-        /* Centrage parfait */
-        align-items: center !important;
-        justify-content: center !important;
     }
 
-    /* 2. ON FORCE LE CONTENU À RESTER AU CENTRE ET À NE PAS ÊTRE ÉCRASÉ */
-    .ck-modal__box {
+    /* ON CENTRE LA BOÎTE BLANCHE */
+    #ck-modal .ck-modal__box {
         position: relative !important;
-        z-index: 2147483648 !important;
         margin: auto !important;
+        z-index: 2147483648 !important;
         display: block !important;
-        width: 90% !important;
         max-width: 520px !important;
-        flex: none !important; /* Empêche la déformation */
+        width: 90% !important;
     }
 
-    /* 3. FIX POUR LE BOUTON FLOTTANT (S'IL EST DÉCALÉ AUSSI) */
-    .ck-float-btn {
+    /* SI LE BOUTON COOKIE EST AUSSI DÉCALÉ */
+    #ck-float-btn.ck-float-btn {
         position: fixed !important;
         bottom: 20px !important;
         left: 20px !important;
-        z-index: 99999 !important;
+        z-index: 2147483646 !important;
         flex: none !important;
-    }
-
-    /* 4. ON DÉVERROUILLE LE CONTEXTE D'AFFICHAGE DU BODY */
-    body.page-règles, body.badge-page {
-        isolation: auto !important;
-        /* On s'assure que rien ne bloque le fixed */
-        perspective: none !important;
-        transform: none !important;
     }
 </style>
 

@@ -46,29 +46,3 @@
     </section>
 </div>
 {% endblock %}
-
-{% block javascripts %}
-    {# Le parent() permet de garder les scripts déjà présents dans base.html.twig (s'il y en a) #}
-    {{ parent() }}
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let hash = window.location.hash; 
-            
-            if (hash) {
-                setTimeout(() => {
-                    let targetElement = document.querySelector(hash); 
-                    
-                    if (targetElement) {
-                        if (typeof bootstrap !== 'undefined') {
-                            let modalInstance = new bootstrap.Modal(targetElement);
-                            modalInstance.show();
-                        } else {
-                            targetElement.scrollIntoView({ behavior: 'smooth' });
-                        }
-                    }
-                }, 100);
-            }
-        });
-    </script>
-{% endblock %}

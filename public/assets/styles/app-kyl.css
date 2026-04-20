@@ -2302,6 +2302,233 @@ body.badge-page > * {
 /* ========= COOKIE CONSENT ============ */
 /* ===================================== */
 
+/* ===================================== */
+/* COOKIE CONSENT                        */
+/* ===================================== */
+
+:root {
+    --ck-rose:       #ff4f9a;
+    --ck-rose-dark:  #c80a55;
+    --ck-gold:       #ffd700;
+    --ck-text:       #e0e0e0;
+    --ck-text-desc:  #aaa;
+    --ck-text-gold:  #1a0020;
+    --ck-bg-banner:  linear-gradient(135deg, rgba(30,10,40,0.97), rgba(60,10,50,0.97));
+    --ck-bg-modal:   linear-gradient(135deg, rgba(35,10,50,0.98), rgba(20,5,35,0.98));
+    --ck-overlay:    rgba(10,0,20,0.75);
+    --ck-card-bg:    rgba(255,255,255,0.05);
+    --ck-toggle-off: #444;
+}
+
+.ck-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9000;
+    background: var(--ck-bg-banner);
+    border-top: 2px solid var(--ck-rose);
+    display: none;
+    justify-content: center;
+    padding: 16px 24px;
+}
+
+.ck-banner__inner {
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+}
+
+.ck-banner__title {
+    color: var(--ck-gold);
+    font-size: 17px;
+    margin: 0;
+    font-family: inherit;
+}
+
+.ck-banner__text {
+    color: var(--ck-text);
+    font-size: 14px;
+    flex: 1 1 300px;
+    margin: 0;
+}
+
+.ck-banner__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Boutons */
+.ck-btn {
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.ck-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.ck-btn--primary {
+    background: var(--ck-rose);
+    color: white;
+}
+
+.ck-btn--primary:hover { background: var(--ck-rose-dark); }
+
+.ck-btn--secondary {
+    background: var(--ck-gold);
+    color: var(--ck-text-gold);
+}
+
+.ck-btn--ghost {
+    background: transparent;
+    color: var(--ck-text);
+    border: 1px solid var(--ck-rose);
+}
+
+/* Modale */
+.ck-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9100;
+    background: var(--ck-overlay);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.ck-modal__box {
+    background: var(--ck-bg-modal);
+    border: 2px solid var(--ck-rose);
+    border-radius: 20px;
+    padding: 28px 32px;
+    width: min(520px, 94vw);
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.ck-modal__close {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    background: none;
+    border: none;
+    color: var(--ck-rose);
+    font-size: 22px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.ck-modal__title {
+    color: var(--ck-gold);
+    font-size: 20px;
+    margin-bottom: 8px;
+    font-family: inherit;
+}
+
+.ck-modal__intro {
+    color: var(--ck-text-desc);
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+.ck-pref-list { display: flex; flex-direction: column; gap: 12px; }
+
+.ck-pref-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--ck-card-bg);
+    border: 1px solid rgba(255,79,154,0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+.ck-pref-info { display: flex; flex-direction: column; gap: 4px; }
+
+.ck-pref-name {
+    color: var(--ck-text);
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.ck-pref-desc {
+    color: var(--ck-text-desc);
+    font-size: 12px;
+}
+
+/* Toggle */
+.ck-toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.ck-toggle input { opacity: 0; width: 0; height: 0; }
+
+.ck-toggle__slider {
+    position: absolute;
+    inset: 0;
+    background: var(--ck-toggle-off);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.25s ease;
+}
+
+.ck-toggle__slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s ease;
+}
+
+.ck-toggle input:checked + .ck-toggle__slider { background: var(--ck-rose); }
+.ck-toggle input:checked + .ck-toggle__slider::before { transform: translateX(20px); }
+
+.ck-toggle--disabled .ck-toggle__slider { background: var(--ck-gold); cursor: not-allowed; }
+
+.ck-modal__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+/* Bouton flottant */
+.ck-float-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 8900;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, var(--ck-rose), var(--ck-rose-dark));
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255,79,154,0.4);
+    transition: transform 0.2s ease;
+}
+
+.ck-float-btn:hover { transform: scale(1.1); }
+
 /* -- Bandeau -- */
 .ck-banner {
     position: fixed;
@@ -2373,21 +2600,17 @@ body.badge-page > * {
 .ck-btn--ghost    { background: transparent; color: #ccc; border: 1px solid rgba(255,255,255,0.3); font-size: 0.78rem; }
 
 /* -- Modale préférences -- */
-/* Force la modale à ignorer les contraintes des parents */
 .ck-modal {
-    position: fixed !important;
-    inset: 0 !important; /* Top, Right, Bottom, Left à 0 */
-    width: 100vw !important;
-    height: 100vh !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    z-index: 2147483647 !important; /* Priorité absolue sur tout */
-    background: rgba(0, 0, 0, 0.8) !important;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(10, 0, 20, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
-
 
 .ck-modal__box {
     background: linear-gradient(160deg, rgba(35,10,50,0.98), rgba(20,5,35,0.98));
@@ -2398,10 +2621,6 @@ body.badge-page > * {
     max-width: 520px;
     padding: 28px 28px 24px;
     position: relative;
-    z-index: 99999 !important;
-    position: relative !important;
-    z-index: 2147483647 !important;
-    margin: auto !important;
 }
 
 .ck-modal__close {
@@ -2415,7 +2634,6 @@ body.badge-page > * {
     cursor: pointer;
     transition: color 0.2s;
     line-height: 1;
-    z-index: 99999 !important;
 }
 .ck-modal__close:hover { color: #ff4f9a; }
 
@@ -2425,7 +2643,6 @@ body.badge-page > * {
     font-size: 1.25rem;
     margin: 0 0 10px;
     text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    z-index: 99999 !important;
 }
 
 .ck-modal__intro {
@@ -2434,7 +2651,6 @@ body.badge-page > * {
     margin: 0 0 20px;
     line-height: 1.5;
     font-family: system-ui, sans-serif;
-    z-index: 99999 !important;
 }
 
 /* -- Liste des préférences -- */
@@ -2533,68 +2749,6 @@ body.badge-page > * {
     .ck-btn { width: 100%; text-align: center; }
     .ck-modal__box { padding: 20px 16px 18px; }
     .ck-modal__actions { flex-direction: column; }
-}
-
-/* --- Le Bandeau de Cookies --- */
-.ck-banner {
-    position: fixed !important;
-    bottom: 20px !important;    /* Fixé en bas */
-    left: 20px !important;      /* Fixé à gauche */
-    top: auto !important;       /* Annule un éventuel 'top' hérité */
-    transform: none !important; /* Annule le transform: translateX(-50%) précédent */
-    width: 90% !important;
-    max-width: 400px !important;
-    z-index: 99999 !important;  /* Passe au-dessus de tout */
-}
-
-/* --- Le Petit Bouton Flottant (si le bandeau est fermé) --- */
-.ck-float-btn {
-    position: fixed !important;
-    bottom: 20px !important;
-    left: 20px !important;
-    top: auto !important;
-    z-index: 10000 !important; /* Juste en dessous du bandeau */
-
-}
-
-
-/* 1. On réinitialise l'overlay pour qu'il ignore le flex du body */
-.ck-modal {
-    position: fixed !important;
-    inset: 0 !important; /* Équivalent à top:0, left:0, right:0, bottom:0 */
-    width: 100vw !important;
-    height: 100vh !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    
-    /* On le détache du flux flexbox */
-    flex: none !important;
-    align-self: auto !important;
-    
-    /* Priorité maximale pour passer devant les containers Wii/Notebook */
-    z-index: 2147483647 !important; 
-    
-    /* Centrage du contenu interne */
-    display: none; /* Ton JS passera ça en 'flex' lors de l'ouverture */
-    align-items: center !important;
-    justify-content: center !important;
-    background: rgba(0, 0, 0, 0.85) !important;
-}
-
-/* 2. On s'assure que la boîte de dialogue reste centrée */
-.ck-modal__box {
-    position: relative !important;
-    z-index: 2147483647 !important;
-    margin: auto !important;
-    max-width: 520px !important;
-    width: 90% !important;
-}
-
-/* 3. On neutralise les blocages de contexte des pages spécifiques */
-body.page-règles, body.badge-page {
-    /* Empêche les parents de limiter l'affichage de l'overlay */
-    isolation: auto !important;
-    overflow: visible !important;
 }
 /* ===================================== */
 /* ======= COOKIE CONSENT FIN ========= */
