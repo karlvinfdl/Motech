@@ -1,20 +1,2981 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PtinataController!{% endblock %}
+{% block title %}Pinata{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/styles/app-kyl.css') }}">
+{% endblock %}
 
 {% block body %}
+
+{# ======================================================================
+   SEGMENT A : ASSETS AUDIO GLOBAUX (partagés entre toutes les sections)
+   ==================================================================== #}
+<audio id="bgMusic"        src="{{ asset('assets/sound/Kyllian/Home_Music.mp3') }}"    loop></audio>
+<audio id="clickSound"     src="{{ asset('assets/sound/Kyllian/Demarrage.mp3') }}"></audio>
+<audio id="btnClickSound"  src="{{ asset('assets/sound/Kyllian/Game_Entry.mp3') }}"    preload="auto"></audio>
+<audio id="badgeSound"     src="{{ asset('assets/sound/Kyllian/Achievement.mp3') }}"   preload="auto"></audio>
+<audio id="RulMusic"        src="{{ asset('assets/sound/Kyllian/Rules_Music.mp3') }}"    loop></audio>
+<audio id="clickRules"     src="{{ asset('assets/sound/Kyllian/Open_Rules.mp3') }}"></audio>
+<audio id="closeRules"     src="{{ asset('assets/sound/Kyllian/Off_Rules.mp3') }}"></audio>
+<audio id="evilSound"      src="{{ asset('assets/sound/Kyllian/K.Booo.mp3') }}"></audio>
+<audio id="badgeMusic"     src="{{ asset('assets/sound/Kyllian/Badges.mp3') }}"         loop preload="auto"></audio>
+<audio id="scoreMusic"     src="{{ asset('assets/sound/Kyllian/S_Scores.mp3') }}"      preload="auto"></audio>
+<audio id="EndMusic"        src="{{ asset('assets/sound/Kyllian/Credits_Music.mp3') }}" loop></audio>
+
+{# ============================================================
+   SEGMENT B : AUDIO JEU (niveaux, tirs, items)
+   ============================================================ #}
+<audio id="lvlMusicOne"      src="{{ asset('assets/sound/Kyllian/Level_1.mp3') }}"      loop></audio>
+<audio id="lvlMusicTwo"      src="{{ asset('assets/sound/Kyllian/OOZone.mp3') }}"       loop></audio>
+<audio id="lvlMusicThree"    src="{{ asset('assets/sound/Kyllian/Level_2.mp3') }}"      loop></audio>
+<audio id="endLevelSound"    src="{{ asset('assets/sound/Kyllian/Lvl_End.mp3') }}"      preload="auto"></audio>
+<audio id="countDownSound"   src="{{ asset('assets/sound/Kyllian/Countdown.mp3') }}"    preload="auto"></audio>
+<audio id="resumeSound"      src="{{ asset('assets/sound/Kyllian/Resume.mp3') }}"></audio>
+<audio id="timerBeepSound"   src="{{ asset('assets/sound/Kyllian/Countdown-End.mp3') }}" preload="auto"></audio>
+<audio id="popSound"         src="{{ asset('assets/sound/Kyllian/Shooting.mp3') }}"      preload="auto"></audio>
+<audio id="popSoundTwo"      src="{{ asset('assets/sound/Kyllian/Shooting_2.mp3') }}"    preload="auto"></audio>
+<audio id="lakituSaveSound"  src="{{ asset('assets/sound/Kyllian/Lakitu.mp3') }}"        preload="auto"></audio>
+<audio id="lakituHitSound"   src="{{ asset('assets/sound/Kyllian/laki_bump.mp3') }}"     preload="auto"></audio>
+<audio id="boshiSound"       src="{{ asset('assets/sound/Kyllian/hoo.mp3') }}"></audio>
+<audio id="lakituEvilSound"  src="{{ asset('assets/sound/Kyllian/Boo.mp3') }}"           preload="auto"></audio>
+<audio id="evilPopSound"     src="{{ asset('assets/sound/Kyllian/Yami.mp3') }}"></audio>
+<audio id="ufoSound"         src="{{ asset('assets/sound/Kyllian/OVNI.mp3') }}"></audio>
+<audio id="dogBarkSound"     src="{{ asset('assets/sound/Kyllian/Tokyo.mp3') }}"        preload="auto"></audio>
+<audio id="bombSound"        src="{{ asset('assets/sound/Kyllian/Bomb.mp3') }}"         preload="auto"></audio>
+<audio id="kyuremSound"      src="{{ asset('assets/sound/Kyllian/Kyurem.mp3') }}"        preload="auto"></audio>
+<audio id="rocketSpawnSound" src="{{ asset('assets/sound/Kyllian/Arrival.mp3') }}"       preload="auto"></audio>
+<audio id="rocketHitSound"   src="{{ asset('assets/sound/Kyllian/Explosion.mp3') }}"     preload="auto"></audio>
+<audio id="starSound"        src="{{ asset('assets/sound/Kyllian/weeeee.mp3') }}"></audio>
+<audio id="guhaSound"        src="{{ asset('assets/sound/Kyllian/guha.mp3') }}"></audio>
+
+{# ============================================================
+   SEGMENT C : CONTENEUR DE NOTIFICATIONS DE BADGES (global, visible sur toutes les sections)
+   ============================================================ #}
+<div id="badgeNotificationContainer"></div>
+
+{# ============================================================
+   SEGMENT D : OVERLAY PARAMÈTRES (global, partagé par toutes les sections)
+   ============================================================ #}
+<div id="settingsOverlay" class="modal-overlay">
+    <div class="modal-content settings-box">
+        <h2 class="pause-title" style="color:#000; margin-bottom:20px;">RÉGLAGES</h2>
+        <div class="setting-item">
+            <label>Musique</label>
+            <input type="range" id="musicVolume" min="0" max="1" step="0.1" value="0.5">
+        </div>
+        <div class="setting-item">
+            <label>Bruitages</label>
+            <input type="range" id="sfxVolume" min="0" max="1" step="0.1" value="0.7">
+        </div>
+        <button id="closeSettingsBtn" class="btn-pause-menu" style="margin-top:20px;">OK</button>
+    </div>
+</div>
+
+{# ============================================================
+   SEGMENT E : BOUTON PARAMÈTRES FLOTTANT (global)
+   ============================================================ #}
+<button id="homeSettingsBtn" class="floating-settings">
+    <div class="gear-icon">
+        <div class="gear-inner"></div>
+    </div>
+</button>
+
+{# ===========================================================================================================================
+   PAGE 1 : ACCUEIL (#page-accueil)
+   Correspond à index.html d'origine
+   =========================================================================================================================== #}
+<div id="page-accueil" class="app-page active-page">
+
+    {# Overlay d'entrée (portes de nuages) #}
+    <div id="homeOverlay" class="home-overlay">
+        <div class="cloud-door top"></div>
+        <div class="cloud-door bottom"></div>
+        <div class="home-content">
+            <h1 class="welcome-title">ARE YOU READY ?</h1>
+            <div class="action-area">
+              <div class="btn-group"> 
+              <a href="{{ path('app_landing') }}">
+              <button id="homeBtn" onclick="new Audio('assets/sound/Kyllian/Return.mp3').play()">HOME</button></a>
+                <button id="enterBtn">START</button>
+               </div>
+                <p class="press-start">Appuyez sur Espace ou Entrée</p>
+            </div>
+        </div>
+    </div>
+
+    {# Menu principal #}
+    <main class="menu-container">
+    {# Bouton Maison avec lien Symfony #}
+    <a href="{{ path('app_landing') }}" class="home-link" onclick="stopAllMusic()"> 
+    <div class="home-icon"><img src="{{ asset('assets/images/Kyllian/home.png') }}" alt="Home"></div>
+    </a>
+        <div class="logo-area">
+            <img src="{{ asset('assets/images/Kyllian/Logo_Pinata.png') }}" alt="Piñata Logo" class="main-logo">
+        </div>
+        <nav class="nav-bar">
+            <div class="nav-line"></div>
+            <div class="buttons-wrapper">
+                {# Liens remplacés par onclick showPage() — navigation SPA #}
+                <button class="menu-btn" id="btnNavJouer">JOUER</button>
+                <button class="menu-btn" id="btnNavScores">SCORES</button>
+                <button class="menu-btn" id="btnNavBadges">BADGES</button>
+            </div>
+        </nav>
+    </main>
+
+</div>{# /page-accueil #}
+
+{# ===========================================================================================================================
+   PAGE 2 : RÈGLES (#page-regles)
+   Correspond à pages/règles.html d'origine
+   =========================================================================================================================== #}
+<div id="page-regles" class="app-page page-règles" style="display:none;">
+
+    {# Bouton Lakitu (navigation vers badges + badge Easter Egg) #}
+    <button id="lakituBadgeBtn" class="lakitu-nav-btn">
+        <img src="{{ asset('assets/images/Kyllian/Lakitu.Favicon.png') }}" id="lakituImg" alt="Lakitu">
+    </button>
+
+    <div class="wii-container">
+        <header class="wii-header">
+            <div class="game-thumbnail">
+                <img src="{{ asset('assets/images/Kyllian/TJ2.png') }}" alt="Icon">
+            </div>
+            <h1>Le stand du Tir à la cible – Mini-jeux interactifs</h1>
+        </header>
+
+        <main class="wii-content">
+            <div class="triple-column-wrapper">
+
+                <div class="info-block">
+                    <div class="block-image">
+                        <img src="{{ asset('assets/images/Kyllian/Miniature.png') }}" alt="Step 1">
+                    </div>
+                    <div class="block-text">
+                        Cliquer sur le plus de cibles possibles pour gagner le plus de points.
+                    </div>
+                </div>
+
+                <div class="info-block">
+                    <div class="block-image">
+                        <img src="{{ asset('assets/images/Kyllian/Thumbail2.png') }}" alt="Step 2">
+                    </div>
+                    <div class="block-text">
+                        Évitez de cliquer sur les cibles malus, elles vous font perdre des points
+                    </div>
+                </div>
+
+                <div class="info-block">
+                    <div class="block-image">
+                        <img src="{{ asset('assets/images/Kyllian/0074.png') }}" alt="Step 3">
+                    </div>
+                    <div class="block-text">
+                        Cliquez sur les cibles bonus pour gagner beaucoup de points rapidement
+                    </div>
+                </div>
+
+            </div>{# /triple-column-wrapper #}
+
+            <footer class="wii-footer">
+                <div class="players-info">
+                    <span class="player-icons">👤</span>
+                    <span class="player-text">1 player</span>
+                </div>
+                <div class="rule-message">Si vous voulez mettre pause durant la partie appuyer sur Espace</div>
+                <div class="ok-button" id="open-details">
+                    <span class="btn-label">Details Items</span>
+                </div>
+            </footer>
+
+            {# Modale Détails Items #}
+            <div id="details-modal" class="modal-overlay">
+                <div class="modal-content">
+                    <header class="modal-header">
+                        <h1>Détails des Objets</h1>
+                    </header>
+                    <div class="modal-body">
+                        <ul class="items-list">
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Licornes-Package.png') }}" class="img-licornes-groupe" alt="Licornes"></div>
+        <div class="item-desc"><strong>Cibles Normales (+25pts) :</strong> Cliquez pour gagner des points. Enchaînez pour les combos !</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Litimes.gif') }}" class="starvy-img" alt="Starvy"></div>
+        <div class="item-desc"><strong>Starvy (+10s &amp; 120pts) :</strong> Rajoute 10 secondes de temps supplémentaire et donne 120pts</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/OVNI.gif') }}" alt="OVNI"></div>
+        <div class="item-desc"><strong>OVNI (+180pts) :</strong> Cible rare ! Il rapporte beaucoup de plus de points qu'une cible normale</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Rocket.gif') }}" alt="Rocket"></div>
+        <div class="item-desc"><strong>Rocket (-450pts) :</strong> Danger imminent ! Percutez cet engin et vous perdrez une partie de votre score durement gagné.</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Licornes-3.png') }}" alt="Licorne-Maléfique"></div>
+        <div class="item-desc"><strong>Yami (-250pts) :</strong> Évitez-le ! Il vous fait perdre des points et il s'en délecte.</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Boshi.png') }}" alt="Boshi"></div>
+        <div class="item-desc"><strong>Boshi (+90) :</strong> Destrier caché de Lakitu n'apparait en tant que cible récurrente seulement qu'après avoir abattu sa monture nuage, fixe les pts gagné à 50 pendant 10 secondes sur n'importe quel cible (hors malus)</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Lakitu.png') }}" alt="Lakitu"></div>
+        <div class="item-desc"><strong>Lakitu (+320) :</strong> Distribue des Boshis et bonus à travers la map, cliquez 3 fois dessus pour découvrir la surprise qu'il cache...</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Bomb.gif') }}" alt="Bombe"></div>
+        <div class="item-desc"><strong>Bomby (-320pts) :</strong> Évitez-les ! Ils font perdre des points et brisent votre combo.</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Evil_Lakitu.png') }}" alt="Evil-Lakitu"></div>
+        <div class="item-desc"><strong>Evil Lakitu (-550pts) :</strong> Distribue des Bomby à travers la map, si vous le voyez évitez de lui cliquer dessus à vos dépends...</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Chien.gif') }}" alt="Chien"></div>
+        <div class="item-desc"><strong>Tokyo (+1000) :</strong> Ultra rare ! Rapporte énormément de points et un boost de combo.</div>
+    </li>
+    <li>
+        <div class="item-icon"><img src="{{ asset('assets/images/Kyllian/Kyurem.gif') }}" alt="Chien-Maléfique"></div>
+        <div class="item-desc"><strong>Kyurem (-900) :</strong> Nemesis de Tokyo faisant perdre énormément de points et vous plonge dans l'obscurité pendant 3s.</div>
+    </li>
+</ul>
+                    </div>
+                    <button id="close-btn" class="ok-button">
+                        <span class="btn-label">FERMER</span>
+                    </button>
+                </div>
+            </div>{# /details-modal #}
+
+            <div class="text-start" id="btnStart">Appuyer sur Entrée ou Espace pour Continuer</div>
+
+        </main>{# /wii-content #}
+    </div>{# /wii-container #}
+
+</div>{# /page-regles #}
+
+{# ===========================================================================================================================
+   PAGE 3 : BADGES (#page-badges)
+   Correspond à pages/badges.html d'origine
+   =========================================================================================================================== #}
+<div id="page-badges" class="app-page badge-page" style="display:none;">
+
+    <div class="badge-main-container">
+        <div class="notebook">
+            <div class="notebook-header">
+                <button class="back-btn" id="badgesBackBtn">RETOUR</button>
+                <div class="game-tabs">
+                    <span class="tab active">CoP</span>
+                    <span class="tab">SiV</span>
+                    <span class="tab">GoD</span>
+                    <span class="tab">ItA</span>
+                </div>
+            </div>
+            <div class="notebook-content">
+                <div class="badge-grid" id="badgeGrid"></div>
+                <div class="page-numbers">
+                    <div class="page-btn active">1</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-column-container">
+            <div class="details-card" id="detailsCard">
+                <div class="card-inner">
+                    <div class="card-photo">
+                        <img src="{{ asset('assets/images/Kyllian/Unknown.png') }}" id="detailImg" alt="Badge">
+                    </div>
+                    <div class="card-name" id="detailName">???</div>
+                    <div class="card-description">
+                        <p id="detailDesc">Clique sur un badge pour voir ses détails.</p>
+                    </div>
+                </div>
+            </div>
+            {# Bouton "JOUER AU JEU" → showPage('page-regles') #}
+            <button class="btn-rect-rules" id="badgesGoPlayBtn">JOUER AU JEU</button>
+        </div>
+    </div>
+
+</div>{# /page-badges #}
+
+{# ===========================================================================================================================
+   PAGE 4 : JEU (#page-jeu)
+   Correspond à pages/jeu.html d'origine
+   =========================================================================================================================== #}
+
+{# ---- CORRECTION BUG 2 ----
+   welcomeOverlay placé ICI, HORS de #page-jeu, pour ne pas être masqué
+   par le display:none du parent. Caché par défaut, affiché par showPage('page-jeu').
+   -------------------------------------------------------------------- #}
+<div id="welcomeOverlay" class="welcome-overlay" style="display:none;">
+    <div class="welcome-content">
+        <img src="{{ asset('assets/images/Kyllian/Logo_Pinata.png') }}" alt="Licorne Shooter" class="welcome-logo">
+        <div class="input-container">
+            <input type="text" id="playerNameInput" placeholder="TON PSEUDO" maxlength="12">
+            <button id="startGameBtn">JOUER</button>
+        </div>
+    </div>
+</div>
+
+<div id="page-jeu" class="app-page" style="display:none;">
+
+    {# Conteneur de niveau (cibles) #}
+    <div id="levelContainer"></div>
+
+    {# Message de décompte (avant lancement) #}
+    <div id="startMessage" class="start-message">Prêt(e) ?</div>
+
+    {# HUD : Score & Timer #}
+    <header class="game-infos">
+        <div class="score">
+            <img src="{{ asset('assets/images/Kyllian/licorne_1.png') }}">
+            <p id="scoreValue">0</p>
+        </div>
+        <div class="timer" id="timerValue">1:00</div>
+    </header>
+
+    <div class="current-level">Level 1</div>
+
+    {# Bouton pause #}
+    <div class="pause">
+        <button class="btn-pause" id="pauseBtn">⏸</button>
+    </div>
+
+    {# Overlay de fin de niveau #}
+    <div id="endOverlay" class="end-overlay">
+        <h1 class="end-title">FINI !!!!</h1>
+        <div class="end-content">
+            <div class="end-score-box">
+                Score : <span id="finalScore">0</span>
+            </div>
+            <p class="end-comment" id="endComment">Pas ouf...</p>
+        </div>
+        <div class="click-to-continue">Appuyer sur Entree ou Espace pour continuer</div>
+    </div>
+
+    {# Overlay Pause #}
+    <div id="pauseOverlay" class="pause-overlay">
+        <div class="pause-content">
+            <h2 class="pause-title">PAUSE</h2>
+            <div class="pause-buttons">
+                <button id="resumeBtn"   class="btn-pause-menu">REPRENDRE</button>
+                <button id="settingsBtn" class="btn-pause-menu">RÉGLAGES</button>
+                <button id="quitBtn"     class="btn-pause-menu btn-quit">QUITTER</button>
+            </div>
+        </div>
+    </div>
+
+    {# Overlay confirmation quitter #}
+    <div id="confirmOverlay" class="custom-overlay" style="display:none;">
+        <div class="confirm-box">
+            <p>QUITTER ?</p>
+            <div class="confirm-buttons">
+                <button id="confirmYes">OUI</button>
+                <button id="confirmNo">ANNULER</button>
+            </div>
+        </div>
+    </div>
+
+    {# Message de reprise (countdown après pause) #}
+    <div id="restartCountdown" class="restart-countdown"></div>
+
+</div>{# /page-jeu #}
+
+{# ===========================================================================================================================
+   PAGE 5 : SCORES (#page-scores)
+   Correspond à pages/scores.html d'origine
+   =========================================================================================================================== #}
+<div id="page-scores" class="app-page score-board" style="display:none;">
+
+    <h1 class="title">SCORES TOTAUX :</h1>
+    <div class="score-list" id="scoreList"></div>
+    <div class="tap-to-continue" id="btnContinue">
+        <span class="flashing-text">APPUYER SUR ESPACE OU ENTRER POUR CONTINUER</span>
+    </div>
+
+</div>{# /page-scores #}
+
+{# ===========================================================================================================================
+   PAGE 6 : FIN / REMERCIEMENTS (#page-fin)
+   Correspond à pages/remerciments.html d'origine
+   =========================================================================================================================== #}
+<div id="page-fin" class="app-page ending-game" style="display:none;">
+
+    <div class="credits-layout">
+        <h1>Merci d'avoir joué !!</h1>
+
+        <div class="score-final">
+            <div class="rank-final"  id="finalRank">?</div>
+            <div class="final-score-text" id="finalScoreDisplay">Chargement...</div>
+        </div>
+
+        <div class="credits-box">
+            <img src="{{ asset('assets/images/Kyllian/Lakitu.png') }}" class="credits-img" id="mainCreditsImg" alt="Lakitu">
+            <div class="credits-text" id="dynamicCreditsText"></div>
+            <img src="" class="credits-img" id="evilCreditsImg" alt="Evil Lakitu" style="display:none;">
+        </div>
+
+        <div class="buttons">
+            <button class="btn" id="btnRetry">Recommencer</button>
+            <button class="btn" id="btnHome">Retour à l'accueil</button>
+        </div>
+    </div>
+
+</div>{# /page-fin #}
+
+
+{# ===========================================================================================================================
+   SEGMENT F : STYLES INLINE — Gestion SPA (Single Page Application)
+   Ces styles s'ajoutent à ceux du fichier style.css existant
+   =========================================================================================================================== #}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+/* --- Gestion des pages (SPA) --- */
+.app-page {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+}
+
+.app-page.active-page {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* La page jeu doit être position:fixed pour bloquer le scroll */
+#page-jeu.active-page {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+}
+
+/* La page scores nécessite un display:block pour son layout */
+#page-scores.active-page {
+    display: block !important;
+}
+
+/* La page fin */
+#page-fin.active-page {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+/* La page badges */
+#page-badges.active-page {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+/* La page règles */
+#page-regles.active-page {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Override body pour les pages qui ont leur propre body class dans l'original */
+/* Ces classes sont appliquées dynamiquement par JS sur #page-jeu */
+body.world_1 #page-jeu,
+body.world_2 #page-jeu,
+body.world_3 #page-jeu {
+    background-attachment: fixed;
+}
+
+/* Paramètres (modal global) — s'assure qu'il passe devant tout */
+#settingsOverlay {
+    z-index: 70000 !important;
+}
+
+/* Bouton floating settings — visible sur toutes les pages sauf le jeu actif */
+#homeSettingsBtn {
+    z-index: 70000;
+}
+
+/* Masquer le bouton paramètres flottant pendant le jeu (le menu pause gère ça) */
+body.in-game #homeSettingsBtn {
+    display: none !important;
+}
+
+
+/* Bouton jouer au jeu dans la page badges */
+#badgesGoPlayBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 350px;
+    height: 60px;
+    background-color: #f5c2cf;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-family: 'Arial Black', sans-serif;
+    border: 3px solid #000000;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 #f5c2cf;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+#badgesGoPlayBtn:hover {
+    background-color: #ff0000;
+    color: #000;
+    border-color: #ffffff;
+    box-shadow: 0 6px 0 #cc0000;
+    transform: translateY(-3px);
+}
+
+/* Paramètres dans la page règles */
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+    /* ON FORCE L'OVERLAY À SORTIR DU FLEX DU BODY */
+    #ck-modal.ck-modal {
+        display: none; /* Changé en 'flex' par le JS */
+        position: fixed !important;
+        
+        /* Coordonnées forcées sur l'écran entier */
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        
+        /* On casse le lien avec le Flexbox du body */
+        flex: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        
+        /* Priorité maximale */
+        z-index: 2147483647 !important;
+        background: rgba(0, 0, 0, 0.85) !important;
+    }
+
+    /* ON CENTRE LA BOÎTE BLANCHE */
+    #ck-modal .ck-modal__box {
+        position: relative !important;
+        margin: auto !important;
+        z-index: 2147483648 !important;
+        display: block !important;
+        max-width: 520px !important;
+        width: 90% !important;
+    }
+
+    /* SI LE BOUTON COOKIE EST AUSSI DÉCALÉ */
+    #ck-float-btn.ck-float-btn {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        z-index: 2147483646 !important;
+        flex: none !important;
+    }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello Ptinata! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/karlv/OneDrive/Desktop/Motech_licorne/Licorne/src/Controller/PtinataController.php</code></li>
-        <li>Your template at <code>C:/Users/karlv/OneDrive/Desktop/Motech_licorne/Licorne/templates/ptinata/index.html.twig</code></li>
-    </ul>
-</div>
+{# ===========================================================================================================================
+   SEGMENT G : JAVASCRIPT COMPLET — PARTIE 1 : DONNÉES GLOBALES & NAVIGATION SPA
+   =========================================================================================================================== #}
+<script>
+// ============================================================
+// BLOC JS 1 : DONNÉES GLOBALES (Badges, Assets Twig)
+// ============================================================
+
+// Chemins des assets (générés par Twig pour compatibilité Symfony)
+const ASSETS = {
+    images: {
+        unknown:        '{{ asset("assets/images/Kyllian/Unknown.png") }}',
+        logoFavicon:    '{{ asset("assets/images/Kyllian/Lakitu.Favicon.png") }}',
+        evilLakituPng:  '{{ asset("assets/images/Kyllian/EL.png") }}',
+        gear2:          '{{ asset("assets/images/Kyllian/gear2.png") }}',
+        gear3:          '{{ asset("assets/images/Kyllian/gear3.png") }}',
+        gear1:          '{{ asset("assets/images/Kyllian/gear1.png") }}',
+        evil2:          '{{ asset("assets/images/Kyllian/Evil2.png") }}',
+        star3:          '{{ asset("assets/images/Kyllian/star3.png") }}',
+        star2:          '{{ asset("assets/images/Kyllian/star2.png") }}',
+        star1:          '{{ asset("assets/images/Kyllian/star1.png") }}',
+        regular3:       '{{ asset("assets/images/Kyllian/regular3.png") }}',
+        regular2:       '{{ asset("assets/images/Kyllian/regular2.png") }}',
+        regular1:       '{{ asset("assets/images/Kyllian/regular1.png") }}',
+        yami3:          '{{ asset("assets/images/Kyllian/yami3.png") }}',
+        yami2:          '{{ asset("assets/images/Kyllian/yami2.png") }}',
+        yami1:          '{{ asset("assets/images/Kyllian/yami1.png") }}',
+        bomby3:         '{{ asset("assets/images/Kyllian/Bomby3.png") }}',
+        bomby2:         '{{ asset("assets/images/Kyllian/Bomby2.png") }}',
+        bomby1:         '{{ asset("assets/images/Kyllian/Bomby1.png") }}',
+        clock3:         '{{ asset("assets/images/Kyllian/clock3.png") }}',
+        clock2:         '{{ asset("assets/images/Kyllian/clock2.png") }}',
+        clock1:         '{{ asset("assets/images/Kyllian/clock1.png") }}',
+        ovni3:          '{{ asset("assets/images/Kyllian/ovni3.png") }}',
+        ovni2:          '{{ asset("assets/images/Kyllian/ovni2.png") }}',
+        ovni1:          '{{ asset("assets/images/Kyllian/ovni1.png") }}',
+        laki3:          '{{ asset("assets/images/Kyllian/Laki3.png") }}',
+        laki2:          '{{ asset("assets/images/Kyllian/Laki2.png") }}',
+        laki1:          '{{ asset("assets/images/Kyllian/Laki1.png") }}',
+        evil3:          '{{ asset("assets/images/Kyllian/Evil3.png") }}',
+        evil1:          '{{ asset("assets/images/Kyllian/Evil1.png") }}',
+        boshi3:         '{{ asset("assets/images/Kyllian/Boshi3.png") }}',
+        boshi2:         '{{ asset("assets/images/Kyllian/Boshi2.png") }}',
+        boshi1:         '{{ asset("assets/images/Kyllian/Boshi1.png") }}',
+        tokyo3:         '{{ asset("assets/images/Kyllian/Tokyo3.png") }}',
+        tokyo2:         '{{ asset("assets/images/Kyllian/Tokyo2.png") }}',
+        tokyo1:         '{{ asset("assets/images/Kyllian/Tokyo1.png") }}',
+        fusee3:         '{{ asset("assets/images/Kyllian/fusée3.png") }}',
+        fusee2:         '{{ asset("assets/images/Kyllian/fusée2.png") }}',
+        fusee1:         '{{ asset("assets/images/Kyllian/fusée1.png") }}',
+        trophy3:        '{{ asset("assets/images/Kyllian/trophy3.png") }}',
+        trophy2:        '{{ asset("assets/images/Kyllian/trophy2.png") }}',
+        trophy1:        '{{ asset("assets/images/Kyllian/trophy1.png") }}',
+        faceless3:      '{{ asset("assets/images/Kyllian/faceless3.png") }}',
+        faceless2:      '{{ asset("assets/images/Kyllian/faceless2.png") }}',
+        faceless1:      '{{ asset("assets/images/Kyllian/faceless1.png") }}',
+        cursor3:        '{{ asset("assets/images/Kyllian/cursor3.png") }}',
+        cursor2:        '{{ asset("assets/images/Kyllian/cursor2.png") }}',
+        cursor1:        '{{ asset("assets/images/Kyllian/cursor1.png") }}',
+        cloudy3:        '{{ asset("assets/images/Kyllian/cloudy3.png") }}',
+        cloudy2:        '{{ asset("assets/images/Kyllian/cloudy2.png") }}',
+        cloudy1:        '{{ asset("assets/images/Kyllian/cloudy1.png") }}',
+        logoPinata:     '{{ asset("assets/images/Kyllian/Logo_Pinata.png") }}',
+        rank1Cloud:     '{{ asset("assets/images/Kyllian/Rank1Cloud.png") }}',
+        rank2Cloud:     '{{ asset("assets/images/Kyllian/Rank2Cloud.png") }}',
+        rank3Cloud:     '{{ asset("assets/images/Kyllian/Rank3Cloud.png") }}',
+        rank1EvilCloud: '{{ asset("assets/images/Kyllian/Rank1EvilCloud.png") }}',
+        rank2EvilCloud: '{{ asset("assets/images/Kyllian/Rank2EvilCloud.png") }}',
+        rank3EvilCloud: '{{ asset("assets/images/Kyllian/Rank3EvilCloud.png") }}',
+        licorne1:       '{{ asset("assets/images/Kyllian/Licornes-1.png") }}',
+        licorne2:       '{{ asset("assets/images/Kyllian/Licornes-2.png") }}',
+        licorne4:       '{{ asset("assets/images/Kyllian/Licornes-4.png") }}',
+        licorne5:       '{{ asset("assets/images/Kyllian/Licornes-5.png") }}',
+        licorne3evil:   '{{ asset("assets/images/Kyllian/Licornes-3.png") }}',
+        boshiPng:       '{{ asset("assets/images/Kyllian/Boshi.png") }}',
+        chienGif:       '{{ asset("assets/images/Kyllian/Chien.gif") }}',
+        kyuremGif:      '{{ asset("assets/images/Kyllian/Kyurem.gif") }}',
+        ovniGif:        '{{ asset("assets/images/Kyllian/OVNI.gif") }}',
+        rocketGif:      '{{ asset("assets/images/Kyllian/Rocket.gif") }}',
+        bombGif:        '{{ asset("assets/images/Kyllian/Bomb.gif") }}',
+        litimesGif:     '{{ asset("assets/images/Kyllian/Litimes.gif") }}',
+        lakituGif:      '{{ asset("assets/images/Kyllian/Lakitu.gif") }}',
+        evilLakituGif:  '{{ asset("assets/images/Kyllian/Evil_Lakitu.gif") }}',
+    },
+    sounds: {
+        openRules:  '{{ asset("assets/sound/Kyllian/Open_Rules.mp3") }}',
+        blocked:    '{{ asset("assets/sound/Kyllian/Blocked.mp3") }}',
+        tabsSound:  '{{ asset("assets/sound/Kyllian/TabsSound.mp3") }}',
+        gameEntry:  '{{ asset("assets/sound/Kyllian/Game_Entry.mp3") }}',
+        returnSnd:  '{{ asset("assets/sound/Kyllian/Return.mp3") }}',
+    }
+};
+
+// ============================================================
+// DONNÉES DES BADGES (complètes — 50 badges + full_collection)
+// ============================================================
+const badgeData = [
+    // === CoP ===
+    { id: 'first_kill',      category: 'CoP', name: "Premier Sang",             desc: "Vous avez éliminé votre première cible.",                                         img: ASSETS.images.star3    },
+    { id: 'hit_all_classics',category: 'CoP', name: "Chasseur Complet",         desc: "Toucher les 4 types de cibles classiques dans une partie.",                      img: ASSETS.images.regular3 },
+    { id: 'yami_hunter',     category: 'CoP', name: "Yami !",                   desc: "A débusqué un Yami caché.",                                                       img: ASSETS.images.yami3    },
+    { id: 'hit_bomb',        category: 'CoP', name: "Boum !",                   desc: "Toucher une bombe par erreur.",                                                   img: ASSETS.images.bomby3   },
+    { id: 'hit_litimes',     category: 'CoP', name: "Ouf j'ai encore du temps", desc: "Toucher un Litimes (Bonus de temps).",                                            img: ASSETS.images.clock3   },
+    { id: 'ufo_slayer',      category: 'CoP', name: "Menace Extraterrestre",    desc: "Détruire l'OVNI secret.",                                                         img: ASSETS.images.ovni3    },
+    { id: 'lakitu_slayer',   category: 'CoP', name: "Chasseur de Lakitu",       desc: "Éliminer Lakitu dans une partie.",                                                img: ASSETS.images.laki3    },
+    { id: 'hit_evil_lakitu', category: 'CoP', name: "Justice",                  desc: "Éliminer un Evil Lakitu.",                                                        img: ASSETS.images.evil3    },
+    { id: 'hit_boshi',       category: 'CoP', name: "Grand Timide",             desc: "Toucher Boshi.",                                                                  img: ASSETS.images.boshi3   },
+    { id: 'dog_lover',       category: 'CoP', name: "Ami des Animaux",          desc: "Cliquer sur le chien secret.",                                                    img: ASSETS.images.tokyo3   },
+    { id: 'world_1_clear',   category: 'CoP', name: "Explorateur des Plaines",  desc: "Terminer avec succès le Monde 1.",                                                img: ASSETS.images.fusee3   },
+    { id: 'settings_pro',    category: 'CoP', name: "Curieux",                  desc: "Ouvrir le menu des paramètres avant de lancer une partie.",                      img: ASSETS.images.gear3    },
+    { id: 'rank_3',          category: 'CoP', name: "Médaille de Bronze",       desc: "Terminer à la 3ème place du classement.",                                         img: ASSETS.images.trophy3  },
+    { id: 'score_1500',      category: 'CoP', name: "Apprenti Tireur",          desc: "Dépasser un score de 1 500 points.",                                              img: ASSETS.images.faceless3},
+    { id: 'trigger_happy',   category: 'CoP', name: "Gâchette Facile",          desc: "Cliquer plus de 100 fois dans une seule partie.",                                 img: ASSETS.images.cursor3  },
+    { id: 'click_start',     category: 'CoP', name: "Traditionnel",             desc: "Lancer l'expérience en cliquant sur le bouton Start.",                            img: ASSETS.images.cloudy3  },
+    // === SiV ===
+    { id: 'peaceful',        category: 'SiV', name: "Pacifiste",                desc: "Ne rien toucher pendant les 10 premières secondes d'une partie.",                 img: ASSETS.images.regular2 },
+    { id: 'score_6500',      category: 'SiV', name: "Score d'Argent",           desc: "Atteindre un score de 6500 points.",                                              img: ASSETS.images.faceless2},
+    { id: 'ghost_touch',     category: 'SiV', name: "Chasseur de Fantômes",     desc: "Cliquer sur une cible en mode Fantôme (Ghost-mode).",                             img: ASSETS.images.cloudy2  },
+    { id: 'pause_master',    category: 'SiV', name: "Maître du Temps",          desc: "Avoir utilisé la pause pour reprendre son souffle.",                              img: ASSETS.images.clock2   },
+    { id: 'rank_2',          category: 'SiV', name: "Médaille d'Argent",        desc: "Terminer à la 2ème place du classement.",                                         img: ASSETS.images.trophy2  },
+    { id: 'world_2_clear',   category: 'SiV', name: "Voyageur des Cieux",       desc: "Terminer avec succès le Monde 2.",                                                img: ASSETS.images.fusee2   },
+    { id: 'super_combo',     category: 'SiV', name: "Fureur de Vaincre",        desc: "Maintenir un Super Combo pendant plus de 30 secondes.",                           img: ASSETS.images.star2    },
+    { id: 'combo_10',        category: 'SiV', name: "Série de 10",              desc: "Atteindre un combo de 10 sans rater.",                                            img: ASSETS.images.cursor2  },
+    { id: 'yami_eye',        category: 'SiV', name: "Oeil de Yami",             desc: "Éliminer 20 Yami dans la même session.",                                          img: ASSETS.images.yami2    },
+    { id: 'bomb_dodger',     category: 'SiV', name: "Esquiveur",                desc: "Finir une partie avec plus de 300 bombes ignorées.",                              img: ASSETS.images.bomby2   },
+    { id: 'ufo_finder',      category: 'SiV', name: "Observateur d'OVNI",       desc: "Toucher l'OVNI 20 fois au total.",                                                img: ASSETS.images.ovni2    },
+    { id: 'laki_expert',     category: 'SiV', name: "Chasseur de Lakitu",       desc: "Toucher Lakitu 7 fois au total.",                                                 img: ASSETS.images.laki2    },
+    { id: 'boshi_hunter',    category: 'SiV', name: "Chasseur de Boshi",        desc: "Toucher Boshi 50 fois au total.",                                                 img: ASSETS.images.boshi2   },
+    { id: 'tokyo_visitor',   category: 'SiV', name: "Visiteur de Tokyo",        desc: "Cliquer sur le chien secret 7 fois.",                                             img: ASSETS.images.tokyo2   },
+    { id: 'fast_check',      category: 'SiV', name: "L'Oeil du Savant",         desc: "Avoir consulté les détails des items dans le guide des règles.",                  img: ASSETS.images.gear2    },
+    { id: 'lakitu_clicker',  category: 'SiV', name: "Rencontre Maléfique",      desc: "Avoir osé déranger Lakitu dans les règles.",                                      img: ASSETS.images.evil2    },
+    // === GoD ===
+    { id: 'score_10000',     category: 'GoD', name: "Score d'Or",               desc: "Atteindre un score de 10 000 points.",                                            img: ASSETS.images.faceless1},
+    { id: 'rank_1',          category: 'GoD', name: "Médaille d'Or",            desc: "Terminer à la 1ère place du classement.",                                         img: ASSETS.images.trophy1  },
+    { id: 'world_3_clear',   category: 'GoD', name: "Héros de l'Ombre",         desc: "Terminer avec succès le Monde 3.",                                                img: ASSETS.images.fusee1   },
+    { id: 'time_saver',      category: 'GoD', name: "Juste à Temps",            desc: "Récupérer un bonus de temps quand il reste moins de 3 secondes.",                 img: ASSETS.images.star1    },
+    { id: 'game_marathon',   category: 'GoD', name: "Marathonien",              desc: "Jouer plus de 10 parties au total.",                                              img: ASSETS.images.gear1    },
+    { id: 'ultimate_clear',  category: 'GoD', name: "Zéro Absolu",              desc: "Terminer une partie avec exactement 0 point.",                                    img: ASSETS.images.cursor1  },
+    { id: 'quad_kill',       category: 'GoD', name: "Frénésie de Clics",        desc: "Toucher 15 cibles en moins de 8 secondes.",                                       img: ASSETS.images.regular1 },
+    { id: 'inverse_mode',    category: 'GoD', name: "Allié des Nuages",         desc: "A rallié Lakitu en complétant son mode fantôme.",                                 img: ASSETS.images.laki1    },
+    { id: 'cloud_slayer',    category: 'GoD', name: "Exorciste Suprême",        desc: "Éliminer 25 Evil Lakitu au total.",                                               img: ASSETS.images.cloudy1  },
+    { id: 'god_slayer',      category: 'GoD', name: "Tueur de Dieu",            desc: "Vaincre l'Evil Lakitu Fantôme et obtenir l'immunité.",                            img: ASSETS.images.evil1    },
+    { id: 'shadow_god',      category: 'GoD', name: "Seigneur des Ombres",      desc: "Cliquer sur 200 malus durant une seule partie.",                                  img: ASSETS.images.yami1    },
+    { id: 'rocket_legend',   category: 'GoD', name: "Démineur de l'Ombre",      desc: "Toucher 10 rockets volontairement en une partie.",                                img: ASSETS.images.bomby1   },
+    { id: 'time_master_3m',  category: 'GoD', name: "Maître du Temps",          desc: "Faire durer la partie pendant plus de 3 minutes.",                                img: ASSETS.images.clock1   },
+    { id: 'ufo_god',         category: 'GoD', name: "As de l'Espace",           desc: "Détruire l'OVNI 55 fois au total.",                                               img: ASSETS.images.ovni1    },
+    { id: 'boshi_god',       category: 'GoD', name: "Dieu Boshi",               desc: "Toucher Boshi 100 fois au total.",                                                img: ASSETS.images.boshi1   },
+    { id: 'dog_god',         category: 'GoD', name: "Dieu Canin",               desc: "Cliquer sur les chiens secrets 20 fois.",                                         img: ASSETS.images.tokyo1   },
+    // === ItA ===
+    { id: 'full_collection', category: 'ItA', name: "Maître des Licornes",      desc: "Débloquer tous les autres badges du jeu.",                                        img: ASSETS.images.logoPinata}
+];
+
+// ============================================================
+// BLOC JS 2 : NAVIGATION SPA (showPage)
+// ============================================================
+
+// Gestionnaire d'état de la musique courante
+let currentMusic = null;
+
+/**
+ * Arrête proprement toutes les musiques de fond
+ */
+function stopAllMusic() {
+    const musicIds = ['bgMusic', 'RulMusic', 'badgeMusic', 'scoreMusic', 'EndMusic',
+                      'lvlMusicOne', 'lvlMusicTwo', 'lvlMusicThree'];
+    musicIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.pause();
+            el.currentTime = 0;
+        }
+    });
+}
+
+/**
+ * Affiche une page et cache toutes les autres
+ * Gère aussi les classes CSS de body pour les backgrounds
+ * @param {string} pageId - L'ID de la div de la page à afficher
+ */
+function showPage(pageId) {
+    // Cache toutes les pages
+    document.querySelectorAll('.app-page').forEach(p => {
+        p.style.display = 'none';
+        p.classList.remove('active-page');
+    });
+
+    // Nettoie les classes de body liées aux mondes/pages
+    document.body.classList.remove(
+        'page-accueil_3', 'page-règles', 'badge-page', 'score-board',
+        'ending-game', 'world_1', 'world_2', 'world_3', 'in-game'
+    );
+
+    const page = document.getElementById(pageId);
+    if (!page) return;
+
+    // ---- CORRECTION BUG 2 (suite) ----
+    // Cache le welcomeOverlay sur toutes les pages sauf page-jeu (géré dans le case)
+    const wOvHide = document.getElementById('welcomeOverlay');
+    if (wOvHide && pageId !== 'page-jeu') wOvHide.style.display = 'none';
+
+    page.style.display = '';
+    page.classList.add('active-page');
+
+    // Applique la classe body correspondante + logique d'entrée de page
+    switch (pageId) {
+        case 'page-accueil':
+            document.body.classList.add('page-accueil_3');
+            document.getElementById('homeSettingsBtn').style.display = '';
+            initAccueil();
+            break;
+
+        case 'page-regles':
+            document.body.classList.add('page-règles');
+            document.getElementById('homeSettingsBtn').style.display = '';
+            initRegles();
+            break;
+
+        case 'page-badges':
+            document.body.classList.add('badge-page');
+            document.getElementById('homeSettingsBtn').style.display = '';
+            initBadges();
+            break;
+
+        case 'page-jeu':
+            document.body.classList.add('world_1', 'in-game');
+            document.getElementById('homeSettingsBtn').style.display = 'none';
+            // ---- CORRECTION BUG 3 ----
+            // Affiche le welcomeOverlay avec display:flex explicite (il est hors de #page-jeu)
+            const wOv = document.getElementById('welcomeOverlay');
+            if (wOv) wOv.style.display = 'flex';
+            initJeu();
+            break;
+
+        case 'page-scores':
+            document.body.classList.add('score-board');
+            document.getElementById('homeSettingsBtn').style.display = '';
+            initScores();
+            break;
+
+        case 'page-fin':
+            document.body.classList.add('ending-game');
+            document.getElementById('homeSettingsBtn').style.display = '';
+            initFin();
+            break;
+    }
+}
+
+// ============================================================
+// BLOC JS 3 : SYSTÈME GLOBAL DE BADGES (unlockBadge)
+// Utilisé par toutes les pages
+// ============================================================
+
+function unlockBadge(badgeId) {
+    let unlocked = JSON.parse(localStorage.getItem('unlockedBadges')) || [];
+    let newBadges = JSON.parse(localStorage.getItem('newBadges')) || [];
+
+    if (unlocked.includes(badgeId)) return;
+
+    unlocked.push(badgeId);
+    newBadges.push(badgeId);
+    localStorage.setItem('unlockedBadges', JSON.stringify(unlocked));
+    localStorage.setItem('newBadges', JSON.stringify(newBadges));
+
+    const badge = badgeData.find(b => b.id === badgeId);
+    if (!badge) return;
+
+    // Son du badge
+    const sound = document.getElementById('badgeSound');
+    if (sound) {
+        sound.currentTime = 0;
+        sound.volume = parseFloat(localStorage.getItem('sfxVol') || 0.7);
+        sound.play().catch(e => console.log('Badge audio bloqué:', e));
+    }
+
+    // Notification visuelle style PS5
+    const container = document.getElementById('badgeNotificationContainer');
+    if (container) {
+        const notif = document.createElement('div');
+        notif.className = 'badge-notification';
+        notif.innerHTML = `
+            <div class="badge-icon-notify"><img src="${badge.img}" alt="Icon"></div>
+            <div class="badge-info-notify">
+                <p class="title-notif">Badge Débloqué !</p>
+                <p class="name-notif">${badge.name}</p>
+            </div>`;
+
+        let duration = 2000;
+        if (container.querySelectorAll('.badge-notification').length > 2) duration = 1500;
+
+        container.appendChild(notif);
+        setTimeout(() => notif.classList.add('show'), 100);
+        setTimeout(() => {
+            notif.classList.remove('show');
+            setTimeout(() => notif.remove(), 500);
+        }, duration);
+    }
+
+    // Vérification collection complète (Maître des Licornes)
+    if (badgeId !== 'full_collection') {
+        const allOtherBadges = badgeData.filter(b => b.id !== 'full_collection');
+        const hasAllOthers = allOtherBadges.every(b => unlocked.includes(b.id));
+        if (hasAllOthers) {
+            setTimeout(() => unlockBadge('full_collection'), 2500);
+        }
+    }
+
+    // Mise à jour des pastilles d'onglets si la page badges est active
+    if (document.getElementById('page-badges').classList.contains('active-page')) {
+        updateTabNotifications();
+    }
+}
+
+// ============================================================
+// BLOC JS 4 : PARAMÈTRES GLOBAUX (Settings overlay)
+// ============================================================
+
+const settingsOverlay = document.getElementById('settingsOverlay');
+const homeSettingsBtn = document.getElementById('homeSettingsBtn');
+const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+const musicSlider     = document.getElementById('musicVolume');
+const sfxSlider       = document.getElementById('sfxVolume');
+
+// Chargement initial des volumes
+window.addEventListener('DOMContentLoaded', () => {
+    const savedMusic = localStorage.getItem('musicVol') || 0.5;
+    const savedSfx   = localStorage.getItem('sfxVol')   || 0.7;
+    musicSlider.value = savedMusic;
+    sfxSlider.value   = savedSfx;
+});
+
+// Bouton paramètres flottant
+homeSettingsBtn.onclick = () => {
+    settingsOverlay.style.display = 'flex';
+    unlockBadge('settings_pro');
+};
+
+// Fermeture paramètres
+closeSettingsBtn.onclick = () => {
+    localStorage.setItem('musicVol', musicSlider.value);
+    localStorage.setItem('sfxVol',   sfxSlider.value);
+    // Applique le volume à la musique courante
+    const allMusics = ['bgMusic','RulMusic','badgeMusic','scoreMusic','EndMusic',
+                       'lvlMusicOne','lvlMusicTwo','lvlMusicThree'];
+    allMusics.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.volume = parseFloat(musicSlider.value);
+    });
+    settingsOverlay.style.display = 'none';
+};
+
+// Slider musique (temps réel)
+musicSlider.oninput = () => {
+    const vol = parseFloat(musicSlider.value);
+    localStorage.setItem('musicVol', vol);
+    const allMusics = ['bgMusic','RulMusic','badgeMusic','scoreMusic','EndMusic',
+                       'lvlMusicOne','lvlMusicTwo','lvlMusicThree'];
+    allMusics.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !el.paused) el.volume = vol;
+    });
+};
+
+// Slider SFX
+sfxSlider.oninput = () => {
+    localStorage.setItem('sfxVol', sfxSlider.value);
+};
+
+// Initialisation stats localStorage
+const statsKeys = ['totalYami','totalBombsIgnored','totalUfoCount','totalCloudsHit','totalBoshisCount','totalDogsCount'];
+statsKeys.forEach(s => { if (!localStorage.getItem(s)) localStorage.setItem(s, 0); });
+
+</script>
+
+{# ===========================================================================================================================
+   SEGMENT H : JAVASCRIPT — PARTIE 2 : LOGIQUE PAGE ACCUEIL
+   =========================================================================================================================== #}
+<script>
+// ============================================================
+// BLOC JS 5 : PAGE ACCUEIL (initAccueil)
+// ============================================================
+
+let accueilStarted = false;
+
+function initAccueil() {
+    // Reset de l'état de démarrage si on revient sur cette page
+    accueilStarted = false;
+
+    const homeOverlay = document.getElementById('homeOverlay');
+    const enterBtn    = document.getElementById('enterBtn');
+
+    // Remet l'overlay en état initial si on revient (recommencer)
+    if (homeOverlay) {
+        homeOverlay.classList.remove('opened');
+        homeOverlay.style.display = '';
+    }
+
+    // Applique le volume sauvegardé à la musique de fond
+    const bgMusic = document.getElementById('bgMusic');
+    if (bgMusic) bgMusic.volume = parseFloat(localStorage.getItem('musicVol') || 0.5);
+
+    // Bouton START (clic = badge Traditionnel)
+    if (enterBtn) {
+        enterBtn.onclick = () => startExperience(true);
+    }
+
+    // Boutons de navigation du menu
+    const btnJouer  = document.getElementById('btnNavJouer');
+    const btnScores = document.getElementById('btnNavScores');
+    const btnBadges = document.getElementById('btnNavBadges');
+
+    if (btnJouer) {
+        btnJouer.onclick = function() {
+            navigateFromAccueil(this, 'page-regles');
+        };
+    }
+    if (btnScores) {
+        btnScores.onclick = function() {
+            navigateFromAccueil(this, 'page-scores');
+        };
+    }
+    if (btnBadges) {
+        btnBadges.onclick = function() {
+            navigateFromAccueil(this, 'page-badges');
+        };
+    }
+
+    // Écoute clavier (Espace / Entrée)
+    // On utilise un listener nommé pour pouvoir le retirer si nécessaire
+    document.addEventListener('keydown', handleAccueilKeydown);
+}
+
+function handleAccueilKeydown(e) {
+    const currentPage = document.querySelector('.app-page.active-page');
+    if (!currentPage || currentPage.id !== 'page-accueil') {
+        document.removeEventListener('keydown', handleAccueilKeydown);
+        return;
+    }
+    if (e.code === 'Space' || e.code === 'Enter') {
+        startExperience(false);
+    }
+}
+
+/**
+ * Démarre l'expérience (animation des portes + musique)
+ * @param {boolean} isClick - true si clic bouton, false si clavier
+ */
+function startExperience(isClick = false) {
+    if (accueilStarted) return;
+
+    if (isClick === true) unlockBadge('click_start');
+
+    accueilStarted = true;
+
+    const homeOverlay = document.getElementById('homeOverlay');
+    const bgMusic     = document.getElementById('bgMusic');
+    const clickSound  = document.getElementById('clickSound');
+
+    homeOverlay.classList.add('opened');
+
+    if (clickSound) {
+        clickSound.volume = parseFloat(localStorage.getItem('sfxVol') || 0.7);
+        clickSound.play();
+    }
+
+    setTimeout(() => { homeOverlay.style.display = 'none'; }, 1200);
+
+    if (bgMusic) {
+        bgMusic.volume = 0;
+        bgMusic.play().then(() => {
+            const targetVol = parseFloat(musicSlider.value);
+            const fade = setInterval(() => {
+                if (bgMusic.volume < targetVol) {
+                    bgMusic.volume = Math.min(targetVol, bgMusic.volume + 0.05);
+                } else {
+                    clearInterval(fade);
+                }
+            }, 100);
+        }).catch(e => console.log("Audio en attente d'interaction"));
+    }
+}
+
+/**
+ * Navigation depuis l'accueil avec animation LOAD... et fade musique
+ */
+function navigateFromAccueil(btn, targetPage) {
+    if (!btn || btn.dataset.leaving) return;
+    btn.dataset.leaving = '1';
+    btn.innerText = 'LOAD...';
+    btn.style.opacity = '0.8';
+    btn.style.pointerEvents = 'none';
+
+    const btnClickSound = document.getElementById('btnClickSound');
+    if (btnClickSound) {
+        btnClickSound.volume = parseFloat(localStorage.getItem('sfxVol') || 0.7);
+        btnClickSound.currentTime = 0;
+        btnClickSound.play();
+    }
+
+    const bgMusic = document.getElementById('bgMusic');
+    if (bgMusic) {
+        const fadeOut = setInterval(() => {
+            if (bgMusic.volume > 0.1) {
+                bgMusic.volume -= 0.1;
+            } else {
+                bgMusic.pause();
+                clearInterval(fadeOut);
+            }
+        }, 40);
+    }
+
+    setTimeout(() => {
+        // Remet le bouton en état normal (pour le retour)
+        btn.innerText = btn.id === 'btnNavJouer' ? 'JOUER' : btn.id === 'btnNavScores' ? 'SCORES' : 'BADGES';
+        btn.style.opacity = '';
+        btn.style.pointerEvents = '';
+        delete btn.dataset.leaving;
+        document.removeEventListener('keydown', handleAccueilKeydown);
+        showPage(targetPage);
+    }, 1900);
+}
+</script>
+
+{# ===========================================================================================================================
+   SEGMENT I : JAVASCRIPT — PARTIE 3 : LOGIQUE PAGE RÈGLES
+   =========================================================================================================================== #}
+<script>
+// ============================================================
+// BLOC JS 6 : PAGE RÈGLES (initRegles)
+// ============================================================
+
+function initRegles() {
+    stopAllMusic();
+
+    const rulMusic       = document.getElementById('RulMusic');
+    const clickRulesSound = document.getElementById('clickRules');
+    const closeRulesSound = document.getElementById('closeRules');
+    const openBtn        = document.getElementById('open-details');
+    const modal          = document.getElementById('details-modal');
+    const closeBtn       = document.getElementById('close-btn');
+    const btnStart       = document.getElementById('btnStart');
+    const lakituBtn      = document.getElementById('lakituBadgeBtn');
+    const lakituImg      = document.getElementById('lakituImg');
+    const evilSnd        = document.getElementById('evilSound');
+
+    const getSavedMusicVol = () => parseFloat(localStorage.getItem('musicVol') || 0.5);
+    const getSavedSfxVol   = () => parseFloat(localStorage.getItem('sfxVol')   || 0.7);
+
+    // Reset icône Lakitu
+    if (lakituImg) lakituImg.src = ASSETS.images.logoFavicon;
+    if (lakituBtn) lakituBtn.classList.remove('evil');
+
+    // --- Musique avec fade in ---
+    const startRulMusic = () => {
+        if (rulMusic && rulMusic.paused) {
+            const targetVol = getSavedMusicVol();
+            rulMusic.volume = 0;
+            rulMusic.play().then(() => {
+                const fadeIn = setInterval(() => {
+                    if (rulMusic.volume < targetVol) {
+                        rulMusic.volume = Math.min(targetVol, rulMusic.volume + 0.05);
+                    } else {
+                        clearInterval(fadeIn);
+                    }
+                }, 100);
+                document.removeEventListener('click', startRulMusic);
+            }).catch(e => console.log('Règles audio bloqué'));
+        }
+    };
+
+    startRulMusic();
+    document.addEventListener('click', startRulMusic);
+
+    // --- Bouton Lakitu (Easter Egg → badges) ---
+    if (lakituBtn) {
+        lakituBtn.onclick = () => {
+            unlockBadge('lakitu_clicker');
+
+            if (rulMusic) { rulMusic.pause(); rulMusic.currentTime = 0; }
+
+            const targetSound = evilSnd || clickRulesSound;
+            if (targetSound) {
+                targetSound.volume = getSavedSfxVol();
+                targetSound.currentTime = 0;
+                targetSound.play();
+            }
+
+            if (lakituImg) lakituImg.src = ASSETS.images.evilLakituPng;
+            if (lakituBtn) lakituBtn.classList.add('evil');
+
+            document.removeEventListener('click', startRulMusic);
+            document.removeEventListener('keydown', handleReglesKeydown);
+
+            setTimeout(() => {
+                showPage('page-badges');
+            }, 3000);
+        };
+    }
+
+    // --- Modale Détails Items ---
+    if (openBtn) {
+        openBtn.onclick = (e) => {
+            unlockBadge('fast_check');
+            if (clickRulesSound) {
+                clickRulesSound.volume = getSavedSfxVol();
+                clickRulesSound.currentTime = 0;
+                clickRulesSound.play();
+            }
+            modal.classList.add('active');
+        };
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (closeRulesSound) {
+                closeRulesSound.volume = getSavedSfxVol();
+                closeRulesSound.currentTime = 0;
+                closeRulesSound.play();
+            }
+            modal.classList.remove('active');
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                if (closeRulesSound) {
+                    closeRulesSound.volume = getSavedSfxVol();
+                    closeRulesSound.currentTime = 0;
+                    closeRulesSound.play();
+                }
+                modal.classList.remove('active');
+            }
+        });
+    }
+
+    // --- Bouton continuer (vers jeu) ---
+    const leavePage = () => {
+        if (btnStart && btnStart.classList.contains('leaving')) return;
+        if (settingsOverlay.style.display === 'flex') return;
+        if (modal && modal.classList.contains('active')) return;
+
+        if (btnStart) btnStart.classList.add('leaving');
+        document.removeEventListener('click', startRulMusic);
+        document.removeEventListener('keydown', handleReglesKeydown);
+
+        if (rulMusic) {
+            const fadeOut = setInterval(() => {
+                if (rulMusic.volume > 0.1) {
+                    rulMusic.volume -= 0.1;
+                } else {
+                    clearInterval(fadeOut);
+                    rulMusic.pause();
+                    if (btnStart) btnStart.classList.remove('leaving');
+                    showPage('page-jeu');
+                }
+            }, 50);
+        } else {
+            showPage('page-jeu');
+        }
+    };
+
+    if (btnStart) btnStart.onclick = leavePage;
+
+    document.addEventListener('keydown', handleReglesKeydown);
+
+    function handleReglesKeydown(e) {
+        const currentPage = document.querySelector('.app-page.active-page');
+        if (!currentPage || currentPage.id !== 'page-regles') {
+            document.removeEventListener('keydown', handleReglesKeydown);
+            return;
+        }
+        const isModalOpen    = modal && modal.classList.contains('active');
+        const isSettingsOpen = settingsOverlay.style.display === 'flex';
+        if ((e.key === 'Enter' || e.key === ' ') && !isModalOpen && !isSettingsOpen) {
+            leavePage();
+        }
+    }
+}
+</script>
+
+{# ===========================================================================================================================
+   SEGMENT J : JAVASCRIPT — PARTIE 4 : LOGIQUE PAGE BADGES
+   =========================================================================================================================== #}
+<script>
+// ============================================================
+// BLOC JS 7 : PAGE BADGES (initBadges)
+// ============================================================
+
+function initBadges() {
+    stopAllMusic();
+
+    const badgeMusicEl = document.getElementById('badgeMusic');
+    const savedVol = parseFloat(localStorage.getItem('musicVol') || 0.5);
+
+    if (badgeMusicEl) {
+        badgeMusicEl.volume = savedVol;
+        badgeMusicEl.play().catch(() => {
+            document.addEventListener('click', () => {
+                if (badgeMusicEl.paused) badgeMusicEl.play();
+            }, { once: true });
+        });
+    }
+
+    const grid = document.getElementById('badgeGrid');
+    const tabs = document.querySelectorAll('.tab');
+
+    // --- Render grille de badges ---
+    function renderBadges(categoryFilter) {
+        if (!grid) return;
+        grid.innerHTML = '';
+        const unlockedBadges = JSON.parse(localStorage.getItem('unlockedBadges')) || [];
+        const newBadges      = JSON.parse(localStorage.getItem('newBadges'))       || [];
+        const sfxVol         = parseFloat(localStorage.getItem('sfxVol') || 0.7);
+
+        const filtered = badgeData.filter(b => b.category === categoryFilter);
+
+        filtered.forEach(badge => {
+            const isUnlocked = unlockedBadges.includes(badge.id);
+            const isNew      = newBadges.includes(badge.id);
+
+            const item = document.createElement('div');
+            item.className = `badge-item ${isUnlocked ? 'unlocked' : 'locked'} ${isUnlocked && isNew ? 'new-badge' : ''}`;
+
+            item.innerHTML = isUnlocked
+                ? `<img src="${badge.img}" alt="${badge.name}">`
+                : `<div class="lock-icon">?</div>`;
+
+            item.onclick = () => {
+                const sndPath = isUnlocked ? ASSETS.sounds.openRules : ASSETS.sounds.blocked;
+                const snd = new Audio(sndPath);
+                snd.volume = sfxVol;
+                snd.play();
+
+                if (isUnlocked) {
+                    showBadgeDetails(badge);
+                    if (item.classList.contains('new-badge')) {
+                        item.classList.remove('new-badge');
+                        const currentNew = JSON.parse(localStorage.getItem('newBadges')) || [];
+                        const updatedNew = currentNew.filter(id => id !== badge.id);
+                        localStorage.setItem('newBadges', JSON.stringify(updatedNew));
+                        updateTabNotifications();
+                    }
+                } else {
+                    showBadgeDetails({ name: '???', desc: 'Contenu verrouillé. Continuez à jouer !', img: ASSETS.images.unknown });
+                }
+            };
+
+            grid.appendChild(item);
+        });
+    }
+
+    // --- Gestion des onglets ---
+    tabs.forEach(tab => {
+        tab.onclick = () => {
+            const sfxVol = parseFloat(localStorage.getItem('sfxVol') || 0.7);
+            const tabSnd = new Audio(ASSETS.sounds.tabsSound);
+            tabSnd.volume = sfxVol;
+            tabSnd.play();
+
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            tab.classList.remove('tab-notify');
+            renderBadges(tab.textContent);
+        };
+    });
+
+    // Initialisation avec l'onglet CoP
+    renderBadges('CoP');
+    updateTabNotifications();
+
+    // --- Bouton RETOUR (vers accueil) ---
+    const backBtn = document.getElementById('badgesBackBtn');
+    if (backBtn) {
+        backBtn.onclick = () => {
+            const sfxVol = parseFloat(localStorage.getItem('sfxVol') || 0.7);
+            const snd = new Audio(ASSETS.sounds.returnSnd);
+            snd.volume = sfxVol;
+            snd.play();
+            backBtn.innerText = 'HOME...';
+            backBtn.style.opacity = '0.6';
+
+            if (badgeMusicEl) {
+                const fadeOut = setInterval(() => {
+                    if (badgeMusicEl.volume > 0.1) {
+                        badgeMusicEl.volume -= 0.1;
+                    } else {
+                        badgeMusicEl.pause();
+                        clearInterval(fadeOut);
+                        backBtn.innerText = 'RETOUR';
+                        backBtn.style.opacity = '';
+                        showPage('page-accueil');
+                    }
+                }, 50);
+            } else {
+                setTimeout(() => {
+                    backBtn.innerText = 'RETOUR';
+                    backBtn.style.opacity = '';
+                    showPage('page-accueil');
+                }, 2000);
+            }
+        };
+    }
+
+    // --- Bouton JOUER AU JEU ---
+    const goPlayBtn = document.getElementById('badgesGoPlayBtn');
+    if (goPlayBtn) {
+        goPlayBtn.onclick = (e) => {
+            const sfxVol = parseFloat(localStorage.getItem('sfxVol') || 0.7);
+            const snd = new Audio(ASSETS.sounds.gameEntry);
+            snd.volume = sfxVol;
+            snd.play();
+            goPlayBtn.innerText = 'CHARGEMENT...';
+            goPlayBtn.style.opacity = '0.6';
+
+            if (badgeMusicEl) {
+                const fadeOut = setInterval(() => {
+                    if (badgeMusicEl.volume > 0.1) {
+                        badgeMusicEl.volume -= 0.1;
+                    } else {
+                        badgeMusicEl.pause();
+                        clearInterval(fadeOut);
+                        goPlayBtn.innerText = 'JOUER AU JEU';
+                        goPlayBtn.style.opacity = '';
+                        showPage('page-regles');
+                    }
+                }, 200);
+            } else {
+                setTimeout(() => {
+                    goPlayBtn.innerText = 'JOUER AU JEU';
+                    goPlayBtn.style.opacity = '';
+                    showPage('page-regles');
+                }, 200);
+            }
+        };
+    }
+}
+
+/**
+ * Affiche les détails d'un badge dans la carte latérale
+ */
+function showBadgeDetails(badge) {
+    const detailImg  = document.getElementById('detailImg');
+    const detailName = document.getElementById('detailName');
+    const detailDesc = document.getElementById('detailDesc');
+
+    if (!detailImg) return;
+
+    const photoContainer = detailImg.parentElement;
+
+    detailImg.src       = badge.img;
+    detailName.textContent = badge.name;
+    detailDesc.textContent = badge.desc;
+
+    if (badge.img === ASSETS.images.unknown) {
+        photoContainer.style.backgroundColor = '#ffffff';
+        photoContainer.classList.remove('unlocked-photo-bg');
+    } else {
+        photoContainer.style.backgroundColor = '';
+        photoContainer.classList.add('unlocked-photo-bg');
+    }
+}
+
+/**
+ * Met à jour les pastilles rouges sur les onglets
+ */
+function updateTabNotifications() {
+    const newBadges = JSON.parse(localStorage.getItem('newBadges')) || [];
+    const tabs = document.querySelectorAll('#page-badges .tab');
+
+    tabs.forEach(tab => {
+        const category = tab.textContent;
+        const hasNew = newBadges.some(badgeId => {
+            const badge = badgeData.find(b => b.id === badgeId);
+            return badge && badge.category === category;
+        });
+        if (hasNew) tab.classList.add('tab-notify');
+        else        tab.classList.remove('tab-notify');
+    });
+}
+</script>
+
+{# ===========================================================================================================================
+   SEGMENT K : JAVASCRIPT — PARTIE 5 : LOGIQUE PAGE SCORES
+   =========================================================================================================================== #}
+<script>
+// ============================================================
+// BLOC JS 8 : PAGE SCORES (initScores)
+// ============================================================
+
+function initScores() {
+    stopAllMusic();
+
+    const scoreMusic   = document.getElementById('scoreMusic');
+    const scoreList    = document.getElementById('scoreList');
+    const btnContinue  = document.getElementById('btnContinue');
+
+    // Musique
+    if (scoreMusic) {
+        const savedVol = parseFloat(localStorage.getItem('musicVol') || 0.5);
+        scoreMusic.volume = savedVol;
+        scoreMusic.play().catch(e => console.log('Score music bloquée'));
+    }
+
+    // Données leaderboard
+    let leaderboard   = JSON.parse(localStorage.getItem('unicornLeaderboard')) || [];
+    const lastScore   = localStorage.getItem('lastFinalScore');
+    const lastName    = localStorage.getItem('lastPlayerName');
+
+    // Mise à jour leaderboard si nouvelle entrée
+    if (lastName && lastScore) {
+        const alreadyExists = leaderboard.some(entry =>
+            entry.name === lastName && entry.score === parseInt(lastScore)
+        );
+        if (!alreadyExists) {
+            leaderboard.push({ name: lastName, score: parseInt(lastScore) });
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 15);
+            localStorage.setItem('unicornLeaderboard', JSON.stringify(leaderboard));
+        }
+    }
+
+    // Affichage du classement
+    if (scoreList) {
+        scoreList.innerHTML = '';
+        leaderboard.forEach((entry, index) => {
+            const isSameName  = entry.name.trim().toUpperCase() === (lastName || '').trim().toUpperCase();
+            const isSameScore = Number(entry.score) === Number(lastScore);
+            const isCurrentPlayer = isSameName && isSameScore;
+
+            const itemClass = isCurrentPlayer ? 'score-item current-player' : 'score-item';
+            scoreList.innerHTML += `
+                <div class="${itemClass}">
+                    <div class="rank">${index + 1}</div>
+                    <div class="score-bar">
+                        <span class="name">${entry.name} ${isCurrentPlayer ? '(MOI)' : ''}</span>
+                        <span class="value">: ${entry.score}</span>
+                    </div>
+                </div>`;
+        });
+    }
+
+    // Notification badge en attente (rank badges)
+    const pendingBadgeId = localStorage.getItem('pendingBadge');
+    if (pendingBadgeId) {
+        const badgesInfo = {
+            'rank_1': { name: "Médaille d'Or",     img: ASSETS.images.trophy1 },
+            'rank_2': { name: "Médaille d'Argent", img: ASSETS.images.trophy2 },
+            'rank_3': { name: "Médaille de Bronze",img: ASSETS.images.trophy3 }
+        };
+        const badge = badgesInfo[pendingBadgeId];
+        if (badge) {
+            const container  = document.getElementById('badgeNotificationContainer');
+            const sound      = document.getElementById('badgeSound');
+            if (container) {
+                const notif = document.createElement('div');
+                notif.className = 'badge-notification';
+                notif.innerHTML = `
+                    <div class="badge-icon-notify"><img src="${badge.img}" alt="Icon"></div>
+                    <div class="badge-info-notify">
+                        <p class="title-notif">Badge Débloqué !</p>
+                        <p class="name-notif">${badge.name}</p>
+                    </div>`;
+                container.appendChild(notif);
+                if (sound) {
+                    sound.volume = parseFloat(localStorage.getItem('sfxVol') || 0.7);
+                    sound.play().catch(e => {});
+                }
+                setTimeout(() => notif.classList.add('show'), 500);
+                setTimeout(() => {
+                    notif.classList.remove('show');
+                    setTimeout(() => notif.remove(), 600);
+                }, 5000);
+            }
+        }
+        localStorage.removeItem('pendingBadge');
+    }
+
+    // Bouton continuer → page fin
+    const goToFin = () => {
+        if (scoreMusic) {
+            const fadeOut = setInterval(() => {
+                if (scoreMusic.volume > 0.1) {
+                    scoreMusic.volume -= 0.1;
+                } else {
+                    scoreMusic.pause();
+                    clearInterval(fadeOut);
+                    document.removeEventListener('keydown', handleScoresKeydown);
+                    showPage('page-fin');
+                }
+            }, 40);
+        } else {
+            document.removeEventListener('keydown', handleScoresKeydown);
+            showPage('page-fin');
+        }
+    };
+
+    if (btnContinue) btnContinue.onclick = goToFin;
+
+    function handleScoresKeydown(e) {
+        const currentPage = document.querySelector('.app-page.active-page');
+        if (!currentPage || currentPage.id !== 'page-scores') {
+            document.removeEventListener('keydown', handleScoresKeydown);
+            return;
+        }
+        if (e.code === 'Enter' || e.code === 'Space') {
+            e.preventDefault();
+            goToFin();
+        }
+    }
+
+    document.addEventListener('keydown', handleScoresKeydown);
+}
+</script>
+
+{# ===========================================================================================================================
+   SEGMENT L : JAVASCRIPT — PARTIE 6 : LOGIQUE PAGE FIN
+   =========================================================================================================================== #}
+<script>
+// ============================================================
+// BLOC JS 9 : PAGE FIN / REMERCIEMENTS (initFin)
+// Inclut confetti CDN (chargé conditionnellement)
+// ============================================================
+
+// Chargement du script confetti (une seule fois)
+if (!window.confettiLoaded) {
+    const confettiScript = document.createElement('script');
+    confettiScript.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js';
+    confettiScript.onload = () => { window.confettiLoaded = true; };
+    document.head.appendChild(confettiScript);
+}
+
+function initFin() {
+    stopAllMusic();
+
+    const endMusic           = document.getElementById('EndMusic');
+    const finalRankEl        = document.getElementById('finalRank');
+    const scoreBanner        = document.querySelector('#page-fin .score-final');
+    const finalScoreDisplay  = document.getElementById('finalScoreDisplay');
+    const creditsBox         = document.querySelector('#page-fin .credits-box');
+    const creditsText        = document.getElementById('dynamicCreditsText');
+    const mainImg            = document.getElementById('mainCreditsImg');
+    const evilImg            = document.getElementById('evilCreditsImg');
+    const btnRetry           = document.getElementById('btnRetry');
+    const btnHome            = document.getElementById('btnHome');
+
+    const lastScore   = parseInt(localStorage.getItem('lastFinalScore')) || 0;
+    const playerName  = localStorage.getItem('lastPlayerName') || 'Joueur';
+    const leaderboard = JSON.parse(localStorage.getItem('unicornLeaderboard')) || [];
+
+    const rank = leaderboard.findIndex(e =>
+        e.name === playerName && Number(e.score) === lastScore
+    ) + 1;
+
+    // Musique de fin
+    const playEndMusic = () => {
+        if (endMusic && endMusic.paused) {
+            const savedVol = parseFloat(localStorage.getItem('musicVol') || 0.5);
+            endMusic.volume = savedVol;
+            endMusic.play()
+                .then(() => document.removeEventListener('click', playEndMusic))
+                .catch(e => console.log('End music bloquée'));
+        }
+    };
+    playEndMusic();
+    document.addEventListener('click', playEndMusic);
+
+    // Affichage score et rang
+    if (finalScoreDisplay) finalScoreDisplay.textContent = `${playerName} : ${lastScore}`;
+    if (finalRankEl)        finalRankEl.textContent = rank > 0 ? rank : '-';
+
+    // Remise à zéro des images (si on recommence)
+    if (mainImg) mainImg.src = ASSETS.images.logoPinata.replace('Logo_Pinata', 'Lakitu');
+    if (evilImg) { evilImg.src = ''; evilImg.style.display = 'none'; }
+
+    // Logique podium (Top 3)
+    let confettiColors = ['#f5c2cf', '#000000'];
+
+    if (rank >= 1 && rank <= 3) {
+        let color = '', mainSrc = '', evilSrc = '';
+
+        if (rank === 1) {
+            color = '#FFD700';
+            confettiColors = ['#FFD700', '#FFF9E3', '#000000'];
+            mainSrc = ASSETS.images.rank1Cloud;
+            evilSrc = ASSETS.images.rank1EvilCloud;
+        } else if (rank === 2) {
+            color = '#C0C0C0';
+            confettiColors = ['#C0C0C0', '#FFFFFF', '#000000'];
+            mainSrc = ASSETS.images.rank2Cloud;
+            evilSrc = ASSETS.images.rank2EvilCloud;
+        } else if (rank === 3) {
+            color = '#CD7F32';
+            confettiColors = ['#CD7F32', '#F5E6D7', '#000000'];
+            mainSrc = ASSETS.images.rank3Cloud;
+            evilSrc = ASSETS.images.rank3EvilCloud;
+        }
+
+        if (mainImg) mainImg.src = mainSrc;
+        if (evilImg) {
+            evilImg.src = evilSrc;
+            evilImg.style.display = 'block';
+            evilImg.style.marginRight = '20px';
+            evilImg.style.marginLeft = '0';
+        }
+
+        if (scoreBanner) {
+            scoreBanner.style.backgroundColor = 'black';
+            scoreBanner.style.border = `3px solid ${color}`;
+            scoreBanner.style.color = 'white';
+        }
+        if (finalRankEl) {
+            finalRankEl.style.backgroundColor = color;
+            finalRankEl.style.color = 'black';
+            finalRankEl.style.fontWeight = 'bold';
+        }
+        if (creditsBox) {
+            creditsBox.style.backgroundColor = 'black';
+            creditsBox.style.border = `4px solid ${color}`;
+            creditsBox.style.color = 'white';
+            creditsBox.style.justifyContent = 'space-between';
+        }
+        [btnRetry, btnHome].forEach(btn => {
+            if (btn) {
+                btn.style.backgroundColor = color;
+                btn.style.color = 'black';
+                btn.style.fontWeight = 'bold';
+            }
+        });
+    } else {
+        // Reset styles pour les rangs hors podium
+        if (scoreBanner) { scoreBanner.style.backgroundColor = ''; scoreBanner.style.border = ''; scoreBanner.style.color = ''; }
+        if (finalRankEl) { finalRankEl.style.backgroundColor = '#f5c2cf'; finalRankEl.style.color = ''; finalRankEl.style.fontWeight = ''; }
+        if (creditsBox)  { creditsBox.style.backgroundColor = ''; creditsBox.style.border = ''; creditsBox.style.color = ''; creditsBox.style.justifyContent = ''; }
+        [btnRetry, btnHome].forEach(btn => { if (btn) { btn.style.backgroundColor = ''; btn.style.color = ''; btn.style.fontWeight = ''; } });
+    }
+
+    if (creditsText) {
+        creditsText.innerHTML = `
+            <p><strong>Bravo ${playerName} !</strong></p>
+            <p>Tu termines à la ${rank}${rank === 1 ? 'er' : 'e'} place avec ${lastScore} points.</p>
+        `;
+    }
+
+    // Confettis
+    const fireConfetti = () => {
+        if (typeof confetti !== 'function') return;
+        const fire = (particleCount, angle, x) => {
+            confetti({ particleCount, angle, spread: 55, origin: { x, y: 0.6 }, colors: confettiColors });
+        };
+        fire(100, 60, 0.1);
+        fire(100, 120, 0.9);
+        if (rank === 1) {
+            setTimeout(() => { fire(150, 60, 0.1); fire(150, 120, 0.9); }, 400);
+        }
+    };
+
+    // Lance les confettis dès que le script est chargé
+    if (window.confettiLoaded) {
+        fireConfetti();
+    } else {
+        setTimeout(fireConfetti, 1000);
+    }
+
+    // Fade out musique + navigation
+    const fadeAndGo = (targetPage) => {
+        document.removeEventListener('click', playEndMusic);
+        if (endMusic) {
+            const fade = setInterval(() => {
+                if (endMusic.volume > 0.1) {
+                    endMusic.volume -= 0.1;
+                } else {
+                    clearInterval(fade);
+                    endMusic.pause();
+                    showPage(targetPage);
+                }
+            }, 50);
+        } else {
+            showPage(targetPage);
+        }
+    };
+
+    if (btnRetry) btnRetry.onclick = () => fadeAndGo('page-jeu');
+    if (btnHome)  btnHome.onclick  = () => fadeAndGo('page-accueil');
+}
+</script>
+
+{# ===========================================================================================================================
+   SEGMENT M : JAVASCRIPT — PARTIE 7 : MOTEUR DE JEU COMPLET (UnicornShooter + Target)
+   =========================================================================================================================== #}
+<script>
+// ============================================================
+// BLOC JS 10 : MOTEUR DE JEU — initJeu() + Classes UnicornShooter & Target
+// Transposition intégrale depuis jeu.html (aucune ligne supprimée)
+// ============================================================
+
+// Référence globale au jeu (pour pouvoir le détruire/recréer)
+let gameInstance = null;
+
+function initJeu() {
+    stopAllMusic();
+
+    // Reset complet de la zone de jeu entre les parties
+    const levelContainer = document.getElementById('levelContainer');
+    if (levelContainer) levelContainer.innerHTML = '';
+
+    // ---- CORRECTION BUG 3 ----
+    // welcomeOverlay est maintenant HORS de #page-jeu, géré par showPage().
+    // On remet seulement les overlays internes à la page jeu.
+    const endOverlay     = document.getElementById('endOverlay');
+    const pauseOverlay   = document.getElementById('pauseOverlay');
+    const startMsgEl     = document.getElementById('startMessage');
+    const restartEl      = document.getElementById('restartCountdown');
+
+    if (endOverlay)   endOverlay.style.display   = 'none';
+    if (pauseOverlay) pauseOverlay.style.display = 'none';
+    if (startMsgEl)   startMsgEl.style.display   = 'none';
+    if (restartEl)    restartEl.style.display     = 'none';
+
+    // Reset HUD
+    const scoreVal = document.getElementById('scoreValue');
+    const timerVal = document.getElementById('timerValue');
+    if (scoreVal) scoreVal.textContent = '0';
+    if (timerVal) timerVal.textContent = '1:00';
+
+    // Reset nom d'input
+    const nameInput = document.getElementById('playerNameInput');
+    if (nameInput) nameInput.value = '';
+
+    // Remise du body en world_1
+    document.body.classList.remove('world_2', 'world_3');
+    document.body.classList.add('world_1');
+
+    // Reset du message de niveau
+    const currentLevelEl = document.querySelector('.current-level');
+    if (currentLevelEl) currentLevelEl.textContent = 'Level 1';
+
+    // ---- CORRECTION BUG 4 ----
+    // Détruit l'ancienne instance proprement avant d'en créer une nouvelle
+    if (gameInstance) {
+        gameInstance.isPlaying = false;
+        clearInterval(gameInstance.timerInterval);
+        clearTimeout(gameInstance.spawnTimeout);
+        if (gameInstance._keyboardHandler) {
+            document.removeEventListener('keydown', gameInstance._keyboardHandler);
+        }
+        gameInstance = null;
+    }
+
+    // Lancement du moteur
+    gameInstance = new UnicornShooter();
+}
+
+// ============================================================
+// CLASSE UnicornShooter
+// ============================================================
+class UnicornShooter {
+    constructor() {
+        // --- Variables d'état ---
+        this.score = 0;
+        this.totalScore = 0;
+        this.timeLeft = 60;
+        this.startTime = null;
+        this.isPlaying = false;
+        this.isPaused = false;
+        this.currentLevel = 1;
+        this.difficultyMultiplier = 0.70;
+        this.spawnRate = 700;
+        this.pseudo = 'JOUEUR';
+        this.targets = [];
+        this.timerInterval = null;
+        this.spawnTimeout = null;
+        this.comboCount = 0;
+        this.lastHitTime = 0;
+        this.comboFreezeUntil = 0;
+        this.totalClicks = 0;
+        this.isInvulnerable = false;
+        this.godModeTimeout = null;
+        this.isInverseMode = false;
+        this.inverseModeTimeout = null;
+        this.isSuperComboActive = false;
+        this.superComboTimer = null;
+        this.boshiUnlocked = false;
+        this.isLowTimeActive = false;
+
+        // --- Éléments HTML ---
+        this.gameArea        = document.getElementById('levelContainer');
+        this.scoreElement    = document.getElementById('scoreValue');
+        this.timerElement    = document.getElementById('timerValue');
+        this.startMsg        = document.getElementById('startMessage');
+        this.welcomeOverlay  = document.getElementById('welcomeOverlay');
+        this.endOverlay      = document.getElementById('endOverlay');
+        this.nameInput       = document.getElementById('playerNameInput');
+        this.startBtn        = document.getElementById('startGameBtn');
+        this.pauseOverlay    = document.getElementById('pauseOverlay');
+        this.resumeBtn       = document.getElementById('resumeBtn');
+        this.settingsBtnGame = document.getElementById('settingsBtn');
+        this.quitBtn         = document.getElementById('quitBtn');
+        this.settingsOverlayEl = document.getElementById('settingsOverlay');
+        this.musicSliderEl   = document.getElementById('musicVolume');
+        this.sfxSliderEl     = document.getElementById('sfxVolume');
+        this.closeSettingsBtnEl = document.getElementById('closeSettingsBtn');
+
+        // --- Sons ---
+        this.popSounds      = [document.getElementById('popSound'), document.getElementById('popSoundTwo')];
+        this.countDownSound = document.getElementById('countDownSound');
+        this.resumeSound    = document.getElementById('resumeSound');
+        this.endLevelSound  = document.getElementById('endLevelSound');
+        this.bombSound      = document.getElementById('bombSound');
+        this.dogSound       = document.getElementById('dogBarkSound');
+        this.ufoSound       = document.getElementById('ufoSound');
+        this.evilSound      = document.getElementById('evilPopSound');
+        this.lakituSaveSound  = document.getElementById('lakituSaveSound');
+        this.lakituEvilSound  = document.getElementById('lakituEvilSound');
+        this.lakituHitSound   = document.getElementById('lakituHitSound');
+        this.starSound        = document.getElementById('starSound');
+        this.guhaSound        = document.getElementById('guhaSound');
+        this.boshiSound       = document.getElementById('boshiSound');
+        this.timerBeepSound   = document.getElementById('timerBeepSound');
+        this.kyuremSound      = document.getElementById('kyuremSound');
+        this.rocketSpawnSound = document.getElementById('rocketSpawnSound');
+        this.rocketHitSound   = document.getElementById('rocketHitSound');
+
+        // --- Images des cibles normales ---
+        // ---- CORRECTION BUG 1 ---- ASSETS.images.Kyllian.xxx n'existe pas → ASSETS.images.xxx
+        this.targetImages = [
+            ASSETS.images.licorne1,
+            ASSETS.images.licorne2,
+            ASSETS.images.licorne4,
+            ASSETS.images.licorne5
+        ];
+
+        this.updateMusicElement();
+        this.applyVolumes();
+        this.setupWelcome();
+        this.setupPause();
+        this.setupKeyboard();
+        this.setupSettingsGame();
+    }
+
+    // -------------------------------------------------------
+    showTemporaryTimer(durationMs, color) {
+        const oldTimer = document.getElementById('temp-game-timer');
+        if (oldTimer) oldTimer.remove();
+
+        const timerEl = document.createElement('div');
+        timerEl.id = 'temp-game-timer';
+        timerEl.style.cssText = `
+            position:fixed; top:20px; left:50%; transform:translateX(-50%);
+            font-size:40px; font-weight:bold; color:${color};
+            text-shadow:0 0 15px ${color}; z-index:10002; pointer-events:none;`;
+        document.body.appendChild(timerEl);
+
+        let timeLeft = durationMs / 1000;
+        timerEl.innerText = timeLeft + 's';
+        const interval = setInterval(() => {
+            timeLeft--;
+            timerEl.innerText = timeLeft + 's';
+            if (timeLeft <= 0) { clearInterval(interval); timerEl.remove(); }
+        }, 1000);
+    }
+
+    // -------------------------------------------------------
+    activateSuperCombo() {
+        this.isSuperComboActive = true;
+        unlockBadge('super_combo');
+        if (this.superComboTimer) clearTimeout(this.superComboTimer);
+        if (this.scoreElement) this.scoreElement.style.color = '#b300ff';
+        this.superComboTimer = setTimeout(() => {
+            this.isSuperComboActive = false;
+            if (this.scoreElement) this.scoreElement.style.color = '';
+        }, 5000);
+    }
+
+    // -------------------------------------------------------
+    applyVolumes() {
+        const mVol = parseFloat(localStorage.getItem('musicVol') || 0.5);
+        const sVol = parseFloat(localStorage.getItem('sfxVol')   || 0.7);
+
+        if (this.bgMusic) this.bgMusic.volume = mVol;
+
+        const allSfx = [
+            ...this.popSounds, this.countDownSound, this.resumeSound, this.endLevelSound,
+            this.bombSound, this.dogSound, this.ufoSound, this.evilSound,
+            this.lakituSaveSound, this.lakituEvilSound, this.lakituHitSound,
+            this.starSound, this.timerBeepSound, this.guhaSound, this.boshiSound,
+            this.rocketSpawnSound, this.rocketHitSound, this.kyuremSound
+        ];
+        allSfx.forEach(s => { if (s) s.volume = sVol; });
+    }
+
+    // -------------------------------------------------------
+    // ---- CORRECTION BUG 5 ----
+    // setupSettingsGame : ne réécrase PAS closeSettingsBtn global
+    // pour ne pas casser la fermeture des paramètres sur les autres pages
+    setupSettingsGame() {
+        if (this.settingsBtnGame) {
+            this.settingsBtnGame.onclick = () => {
+                if (this.settingsOverlayEl) {
+                    this.settingsOverlayEl.style.zIndex = '90000';
+                    this.settingsOverlayEl.style.display = 'flex';
+                }
+                unlockBadge('settings_pro');
+            };
+        }
+        if (this.closeSettingsBtnEl) {
+            this.closeSettingsBtnEl.onclick = () => {
+                localStorage.setItem('musicVol', this.musicSliderEl.value);
+                localStorage.setItem('sfxVol',   this.sfxSliderEl.value);
+                this.applyVolumes();
+                if (this.settingsOverlayEl) this.settingsOverlayEl.style.display = 'none';
+            };
+        }
+    }
+
+    // -------------------------------------------------------
+    updateMusicElement() {
+        const ids = ['lvlMusicOne', 'lvlMusicTwo', 'lvlMusicThree'];
+        this.bgMusic = document.getElementById(ids[this.currentLevel - 1]);
+    }
+
+    // -------------------------------------------------------
+    setupWelcome() {
+        if (this.startBtn) {
+            this.startBtn.onclick = () => {
+                const val = this.nameInput ? this.nameInput.value.trim() : '';
+                if (val !== '') {
+                    this.pseudo = val.toUpperCase();
+                    if (this.welcomeOverlay) this.welcomeOverlay.style.display = 'none';
+
+                    let totalGames = parseInt(localStorage.getItem('totalGamesPlayed') || 0) + 1;
+                    localStorage.setItem('totalGamesPlayed', totalGames);
+
+                    this.initLevel();
+                } else {
+                    alert('Entre un pseudo !');
+                }
+            };
+        }
+    }
+
+    // -------------------------------------------------------
+    setupPause() {
+        const pauseBtn = document.getElementById('pauseBtn');
+        if (pauseBtn) {
+            pauseBtn.onclick = () => {
+                if (!this.isPlaying) return;
+                if (this.isPaused) this.resumeWithCountdown();
+                else this.togglePauseMenu(true);
+            };
+        }
+        if (this.resumeBtn)  this.resumeBtn.onclick  = () => this.resumeWithCountdown();
+        if (this.quitBtn) {
+            this.quitBtn.onclick = () => {
+                if (confirm('Quitter ?')) {
+                    this.isPlaying = false;
+                    clearInterval(this.timerInterval);
+                    clearTimeout(this.spawnTimeout);
+                    this.stopTimeAlert();
+                    if (this.bgMusic) { this.bgMusic.pause(); this.bgMusic.currentTime = 0; }
+                    // Nettoie les cibles et overlays
+                    if (this.gameArea) this.gameArea.innerHTML = '';
+                    if (this.pauseOverlay) this.pauseOverlay.style.display = 'none';
+                    showPage('page-accueil');
+                }
+            };
+        }
+    }
+
+    // -------------------------------------------------------
+    resumeWithCountdown() {
+        if (!this.isPaused) return;
+        if (this.pauseOverlay) this.pauseOverlay.style.display = 'none';
+
+        const restartEl = document.getElementById('restartCountdown');
+        if (restartEl) {
+            restartEl.className = 'restart-countdown';
+            restartEl.style.display = 'block';
+            restartEl.textContent = 'Bien prêt(e) ??';
+        }
+
+        if (this.resumeSound) { this.resumeSound.currentTime = 0; this.resumeSound.play(); }
+
+        setTimeout(() => { if (restartEl) restartEl.textContent = 'Go !!'; }, 1000);
+        setTimeout(() => {
+            if (restartEl) restartEl.style.display = 'none';
+            this.togglePauseMenu(false);
+        }, 1500);
+    }
+
+    // -------------------------------------------------------
+    setupKeyboard() {
+        this._keyboardHandler = (e) => {
+            // Vérifie qu'on est bien sur la page jeu
+            const currentPage = document.querySelector('.app-page.active-page');
+            if (!currentPage || currentPage.id !== 'page-jeu') {
+                document.removeEventListener('keydown', this._keyboardHandler);
+                return;
+            }
+
+            if (this.endOverlay && this.endOverlay.style.display === 'flex') {
+                if (e.code === 'Space' || e.code === 'Enter') {
+                    e.preventDefault();
+                    if (this.currentLevel < 3) this.nextLevel();
+                    else this.finishGame();
+                }
+                return;
+            }
+
+            if (!this.isPlaying) return;
+            if (e.code === 'Space' || e.code === 'Escape') {
+                e.preventDefault();
+                if (this.isPaused) this.resumeWithCountdown();
+                else this.togglePauseMenu(true);
+            }
+        };
+        document.addEventListener('keydown', this._keyboardHandler);
+    }
+
+    // -------------------------------------------------------
+    togglePauseMenu(pauseActive) {
+        const pauseBtn = document.getElementById('pauseBtn');
+        this.isPaused = pauseActive;
+
+        if (this.isPaused) {
+            unlockBadge('pause_master');
+            if (this.pauseOverlay) {
+                this.pauseOverlay.style.zIndex = '2000';
+                this.pauseOverlay.style.display = 'flex';
+            }
+            if (pauseBtn) pauseBtn.textContent = '▶';
+            if (this.gameArea) {
+                this.gameArea.style.pointerEvents = 'none';
+                this.gameArea.style.filter = 'blur(4px)';
+            }
+            if (this.bgMusic) this.bgMusic.pause();
+            if (this.timerBeepSound) this.timerBeepSound.pause();
+            clearInterval(this.timerInterval);
+            clearTimeout(this.spawnTimeout);
+        } else {
+            if (pauseBtn) pauseBtn.textContent = '⏸';
+            if (this.gameArea) {
+                this.gameArea.style.pointerEvents = 'auto';
+                this.gameArea.style.filter = 'none';
+            }
+            if (this.bgMusic) this.bgMusic.play();
+            if (this.isLowTimeActive && this.timerBeepSound) this.timerBeepSound.play();
+            this.startTimer();
+            this.spawnLoop();
+        }
+    }
+
+    // -------------------------------------------------------
+    initLevel() {
+        if (this.startMsg) {
+            this.startMsg.className = 'start-message';
+            this.startMsg.style.display = 'block';
+            this.startMsg.textContent = `Prêt ${this.pseudo} ?`;
+        }
+        if (this.countDownSound) { this.countDownSound.currentTime = 0; this.countDownSound.play(); }
+
+        setTimeout(() => { if (this.startMsg) this.startMsg.textContent = 'Attention...'; }, 1000);
+        setTimeout(() => {
+            if (this.startMsg) this.startMsg.textContent = "C'est parti !";
+            if (this.bgMusic) { this.bgMusic.currentTime = 0; this.bgMusic.play(); }
+            this.startTime = Date.now();
+        }, 2000);
+        setTimeout(() => {
+            if (this.startMsg) this.startMsg.style.display = 'none';
+            this.isPlaying = true;
+            this.isPaused = false;
+            this.startTimer();
+            this.spawnLoop();
+            this.update();
+
+            // Badge Pacifiste : aucune action dans les 10 premières secondes
+            setTimeout(() => {
+                if (this.isPlaying && this.score === 0) unlockBadge('peaceful');
+            }, 10000);
+        }, 3000);
+    }
+
+    // -------------------------------------------------------
+    checkTimeAlert() {
+        if (this.timeLeft <= 12 && this.timeLeft > 0) {
+            if (!this.isLowTimeActive) {
+                this.isLowTimeActive = true;
+                if (this.timerElement) this.timerElement.classList.add('low-time-alert');
+                if (this.timerBeepSound) {
+                    this.timerBeepSound.currentTime = 0;
+                    this.timerBeepSound.loop = true;
+                    this.timerBeepSound.play().catch(e => {});
+                }
+            }
+        } else {
+            if (this.isLowTimeActive) this.stopTimeAlert();
+        }
+    }
+
+    // -------------------------------------------------------
+    stopTimeAlert() {
+        this.isLowTimeActive = false;
+        if (this.timerElement) this.timerElement.classList.remove('low-time-alert');
+        if (this.timerBeepSound) { this.timerBeepSound.pause(); this.timerBeepSound.currentTime = 0; }
+    }
+
+    // -------------------------------------------------------
+    startTimer() {
+        if (this.timerInterval) clearInterval(this.timerInterval);
+        this.timerInterval = setInterval(() => {
+            if (this.isPlaying && !this.isPaused) {
+                this.timeLeft--;
+                this.updateUI();
+                this.checkTimeAlert();
+
+                if (this.startTime) {
+                    const elapsed = (Date.now() - this.startTime) / 1000;
+                    if (elapsed >= 180) unlockBadge('time_master_3m');
+                }
+
+                if (this.timeLeft <= 0) this.endGame();
+            }
+        }, 1000);
+    }
+
+    // -------------------------------------------------------
+    updateUI() {
+        const mins = Math.floor(this.timeLeft / 60);
+        const secs = this.timeLeft % 60;
+        if (this.timerElement) this.timerElement.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        if (this.scoreElement) this.scoreElement.textContent = this.score;
+    }
+
+    // -------------------------------------------------------
+    spawnLoop() {
+        if (this.isPlaying && !this.isPaused) {
+            let img;
+            const rand = Math.random();
+
+            // ---- CORRECTION BUG 1 ---- ASSETS.images.Kyllian.xxx → ASSETS.images.xxx
+            if (rand < 0.008) {
+                img = ASSETS.images.kyuremGif;
+            } else if (rand < 0.02) {
+                img = ASSETS.images.chienGif;
+            } else if (rand < 0.07) {
+                img = ASSETS.images.litimesGif;
+            } else if (rand < 0.10) {
+                img = ASSETS.images.rocketGif;
+            } else if (rand < 0.13) {
+                img = ASSETS.images.ovniGif;
+            } else if (this.currentLevel >= 2 && rand < 0.16) {
+                img = ASSETS.images.lakituGif;
+            } else if (this.currentLevel >= 2 && rand < 0.18) {
+                img = ASSETS.images.evilLakituGif;
+            } else if (rand < (0.25 + this.currentLevel * 0.03)) {
+                img = Math.random() > 0.5 ? ASSETS.images.bombGif : ASSETS.images.licorne3evil;
+            } else {
+                if (this.boshiUnlocked && Math.random() < 0.15) {
+                    img = ASSETS.images.boshiPng;
+                } else {
+                    img = this.targetImages[Math.floor(Math.random() * this.targetImages.length)];
+                }
+            }
+            this.targets.push(new Target(img, this));
+        }
+
+        const levelFactor = 1 + (this.currentLevel - 1) * 0.2;
+        const nextSpawn   = (this.spawnRate / levelFactor) + Math.random() * 800;
+        this.spawnTimeout = setTimeout(() => this.spawnLoop(), nextSpawn);
+    }
+
+    // -------------------------------------------------------
+    update() {
+        if (this.isPlaying && !this.isPaused) {
+            this.targets.forEach((target, index) => {
+                target.move();
+                if (target.y > window.innerHeight + 100 || target.y < -200 ||
+                    target.x > window.innerWidth + 300  || target.x < -300) {
+
+                    if (target.y > window.innerHeight + 100 && target.isBomb) {
+                        let totalIgnored = parseInt(localStorage.getItem('totalBombsIgnored') || 0) + 1;
+                        localStorage.setItem('totalBombsIgnored', totalIgnored);
+                        if (totalIgnored >= 30) unlockBadge('bomb_dodger');
+                    }
+                    target.remove();
+                    this.targets.splice(index, 1);
+                }
+            });
+        }
+        requestAnimationFrame(() => this.update());
+    }
+
+    // -------------------------------------------------------
+    fadeOutAndStopMusic() {
+        if (!this.bgMusic) return;
+        const currentAudio = this.bgMusic;
+        const fadeOut = setInterval(() => {
+            if (currentAudio.volume > 0.05) currentAudio.volume -= 0.05;
+            else { currentAudio.pause(); currentAudio.currentTime = 0; clearInterval(fadeOut); }
+        }, 100);
+    }
+
+    // -------------------------------------------------------
+    endGame() {
+        this.isPlaying = false;
+        clearInterval(this.timerInterval);
+        clearTimeout(this.spawnTimeout);
+        this.stopTimeAlert();
+        document.removeEventListener('keydown', this._keyboardHandler);
+
+        // Badges de fin de niveau / score
+        if (this.currentLevel === 1) unlockBadge('world_1_clear');
+        if (this.currentLevel === 2) unlockBadge('world_2_clear');
+        if (this.currentLevel === 3) unlockBadge('world_3_clear');
+        if (this.score >= 1500)  unlockBadge('score_1500');
+        if (this.score >= 6500)  unlockBadge('score_6500');
+        if (this.score >= 10000) unlockBadge('score_10000');
+        if (this.score === 0)    unlockBadge('ultimate_clear');
+
+        if (this.endLevelSound) { this.endLevelSound.currentTime = 0; this.endLevelSound.play(); }
+        this.fadeOutAndStopMusic();
+        this.totalScore += this.score;
+
+        const finalScoreEl = document.getElementById('finalScore');
+        if (finalScoreEl) finalScoreEl.textContent = this.score;
+
+        if (this.endOverlay) this.endOverlay.style.display = 'flex';
+
+        const commentEl = document.getElementById('endComment');
+        if (commentEl) {
+            if      (this.score === 0)         commentEl.textContent = 'Tu as dormi ???';
+            else if (this.score < 1200)        commentEl.textContent = 'Pas ouf, tout ça...';
+            else if (this.score < 3000)        commentEl.textContent = 'Mouais pas trop mal...';
+            else if (this.score < 6500)        commentEl.textContent = "Je dirai pas que t'es meilleur mais tu progresses...";
+            else if (this.score < 9999)        commentEl.textContent = "Mais c'est que tu commences à devenir bon dis moi !";
+            else                               commentEl.textContent = "Nan t'es bon, t'es bon GG !!";
+        }
+
+        const continueBtn = document.querySelector('.click-to-continue');
+        if (continueBtn) {
+            continueBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (this.currentLevel < 3) this.nextLevel();
+                else this.finishGame();
+            };
+        }
+
+        // Ré-enregistre le keyboard handler pour la fin de niveau
+        document.addEventListener('keydown', this._keyboardHandler);
+    }
+
+    // -------------------------------------------------------
+    nextLevel() {
+        this.currentLevel++;
+        document.removeEventListener('keydown', this._keyboardHandler);
+
+        this.updateMusicElement();
+        this.applyVolumes();
+        this.boshiUnlocked = false;
+
+        // Met à jour les classes body pour le fond du niveau
+        document.body.classList.remove('world_1', 'world_2', 'world_3');
+        document.body.classList.add(`world_${this.currentLevel}`);
+
+        const currentLevelEl = document.querySelector('.current-level');
+        if (currentLevelEl) currentLevelEl.textContent = `Level ${this.currentLevel}`;
+
+        if (this.endOverlay) this.endOverlay.style.display = 'none';
+
+        this.score = 0;
+        this.timeLeft = 60;
+        this.updateUI();
+        if (this.gameArea) this.gameArea.innerHTML = '';
+        this.targets = [];
+
+        this.setupKeyboard();
+        this.initLevel();
+    }
+
+    // -------------------------------------------------------
+    finishGame() {
+        document.removeEventListener('keydown', this._keyboardHandler);
+
+        let leaderboard = JSON.parse(localStorage.getItem('unicornLeaderboard')) || [];
+        const newEntry  = { name: this.pseudo, score: this.totalScore };
+        leaderboard.push(newEntry);
+        leaderboard.sort((a, b) => b.score - a.score);
+
+        const playerRank = leaderboard.findIndex(e =>
+            e.name === this.pseudo && e.score === this.totalScore
+        ) + 1;
+
+        if (playerRank === 1) unlockBadge('rank_1');
+        if (playerRank === 2) unlockBadge('rank_2');
+        if (playerRank === 3) unlockBadge('rank_3');
+
+        leaderboard = leaderboard.slice(0, 15);
+        localStorage.setItem('unicornLeaderboard', JSON.stringify(leaderboard));
+        localStorage.setItem('lastFinalScore',  this.totalScore);
+        localStorage.setItem('lastPlayerName',  this.pseudo);
+
+        // Nettoie la page jeu
+        if (this.gameArea) this.gameArea.innerHTML = '';
+
+        showPage('page-scores');
+    }
+}
+
+// ============================================================
+// CLASSE Target (Cibles du jeu)
+// ============================================================
+class Target {
+    constructor(imgSrc, game, isDropped = false) {
+        this.game    = game;
+        this.element = document.createElement('img');
+        this.element.src       = imgSrc;
+        this.element.className = 'targets';
+
+        // Détection du type de cible via le chemin d'image
+        this.isBomb        = imgSrc.includes('Bomb.gif');
+        this.isDog         = imgSrc.includes('Chien.gif');
+        this.isKyurem      = imgSrc.includes('Kyurem.gif');
+        this.isUFO         = imgSrc.includes('OVNI.gif');
+        this.isRocket      = imgSrc.includes('Rocket.gif');
+        this.isEvilLicorne = imgSrc.includes('Licornes-3.png');
+        this.isLakitu      = imgSrc.includes('Lakitu.gif')      && !imgSrc.includes('Evil');
+        this.isEvilLakitu  = imgSrc.includes('Evil_Lakitu.gif');
+        this.isStarUnicorn = imgSrc.includes('Litimes.gif');
+        this.isBoshi       = imgSrc.includes('Boshi.png');
+
+        // Classes CSS spécifiques
+        if (this.isBomb)        this.element.classList.add('bomb-target');
+        if (this.isDog)         this.element.classList.add('dog-target');
+        if (this.isKyurem)      this.element.classList.add('kyurem-target');
+        if (this.isUFO)         this.element.classList.add('ufo-target');
+        if (this.isRocket)      this.element.classList.add('rocket-target');
+        if (this.isEvilLicorne) this.element.classList.add('evil-target');
+        if (this.isLakitu)      this.element.classList.add('lakitu-target');
+        if (this.isEvilLakitu)  this.element.classList.add('evil-lakitu-target');
+        if (this.isStarUnicorn) this.element.classList.add('star-target');
+        if (this.isBoshi)       this.element.classList.add('boshi-target');
+
+        if (this.isLakitu || this.isEvilLakitu) {
+            this.element.style.width  = '90px';
+            this.element.style.height = 'auto';
+        }
+        if (this.isBoshi) {
+            this.element.style.height = 'auto';
+        }
+
+        this.dropTimer = 0;
+        this.hp = (this.isLakitu && !this.isEvilLakitu) ? 3 : 1;
+
+        // Gestionnaire de clic
+        this.element.onmousedown = (e) => {
+            e.preventDefault();
+            if (!this.game.isPaused && this.game.isPlaying) {
+                this.game.isPeaceful = false;
+
+                if (this.element.classList.contains('ghost-mode')) {
+                    this.explode();
+                    return;
+                }
+
+                this.hp--;
+
+                if (this.isLakitu && !this.isEvilLakitu && this.hp > 0) {
+                    this.showFloatingText(`${3 - this.hp}/3`, e.clientX, e.clientY, false, '#00FF00');
+                }
+
+                if (this.hp <= 0) {
+                    this.explode();
+                } else {
+                    if (this.isLakitu && !this.isEvilLakitu) {
+                        if (this.game.lakituHitSound) { this.game.lakituHitSound.currentTime = 0; this.game.lakituHitSound.play(); }
+                        this.element.style.filter = 'brightness(2) contrast(2)';
+                        this.element.classList.add('hit-shake');
+                        setTimeout(() => { this.element.style.filter = ''; this.element.classList.remove('hit-shake'); }, 150);
+                    }
+                }
+            }
+        };
+
+        // --- Physique / Trajectoire ---
+        const mult         = this.game.difficultyMultiplier;
+        const levelSlowdown = 1 + (this.game.currentLevel - 1) * 0.15;
+
+        if (this.isStarUnicorn) {
+            if (this.game.starSound) { this.game.starSound.currentTime = 0; this.game.starSound.play(); }
+            this.side = Math.random() > 0.5 ? 'left' : 'right';
+            this.x    = this.side === 'left' ? -150 : window.innerWidth + 150;
+            this.y    = Math.random() * (window.innerHeight * 0.4);
+            const speed = 10.0;
+            this.vx    = this.side === 'left' ? (speed * mult) : -(speed * mult);
+            this.vy    = 0;
+            this.gravity      = 0;
+            this.rotationSpeed = 10;
+        }
+        else if (isDropped) {
+            this.gravity      = 0.015 * mult;
+            this.vx           = (Math.random() - 0.5) * 0.8 * mult;
+            this.vy           = 0.25 * mult;
+            this.x            = 0;
+            this.y            = 0;
+            this.rotationSpeed = (Math.random() - 0.5) * 1;
+        }
+        else if (this.isUFO || this.isLakitu || this.isEvilLakitu || this.isRocket) {
+            if (this.isRocket && this.game.rocketSpawnSound) {
+                this.game.rocketSpawnSound.currentTime = 0;
+                this.game.rocketSpawnSound.play();
+            }
+            this.side = Math.random() > 0.5 ? 'left' : 'right';
+            this.x    = this.side === 'left' ? -150 : window.innerWidth + 150;
+            this.y    = Math.random() * (window.innerHeight * 0.3);
+
+            const horizontalSpeed = this.isRocket ? 7 : 2.5;
+            this.vx    = this.side === 'left' ? (horizontalSpeed * mult) : -(horizontalSpeed * mult);
+            this.vy    = 0;
+            this.gravity      = 0;
+            this.rotationSpeed = 0;
+
+            if (this.isRocket) {
+                this.element.className = this.side === 'left' ? 'targets rocket-right' : 'targets rocket-left';
+            }
+        }
+        else {
+            this.x    = Math.random() * (window.innerWidth - 270);
+            this.y    = window.innerHeight;
+            this.gravity      = 0.012 * mult * levelSlowdown;
+            this.vy           = -(4.0 + Math.random() * 1.5) * mult;
+            this.vx           = (Math.random() - 0.5) * 1.2 * mult;
+            this.rotationSpeed = (Math.random() - 0.5) * 2;
+        }
+
+        this.rotation = 0;
+        this.game.gameArea.appendChild(this.element);
+    }
+
+    // -------------------------------------------------------
+    move() {
+        this.vy += this.gravity;
+        this.x  += this.vx;
+        this.y  += this.vy;
+
+        this.element.style.left = `${this.x}px`;
+        this.element.style.top  = `${this.y}px`;
+
+        if (this.isRocket) return;
+
+        if (this.rotationSpeed !== 0) {
+            this.rotation += this.rotationSpeed;
+            this.element.style.transform = `rotate(${this.rotation}deg)`;
+        }
+
+        if (this.isLakitu || this.isEvilLakitu) {
+            this.dropTimer++;
+            if (this.dropTimer > 250) { this.dropItem(); this.dropTimer = 0; }
+        }
+    }
+
+    // -------------------------------------------------------
+    dropItem() {
+        const img = this.isLakitu ? ASSETS.images.boshiPng : ASSETS.images.bombGif;
+        const d   = new Target(img, this.game, true);
+        d.x = this.x + 40;
+        d.y = this.y + 40;
+        this.game.targets.push(d);
+    }
+
+    // -------------------------------------------------------
+    explode() {
+        this.game.totalClicks++;
+        if (this.game.totalClicks >= 100) unlockBadge('trigger_happy');
+
+        let gamesPlayed = parseInt(localStorage.getItem('totalGamesPlayed') || 0);
+        if (gamesPlayed >= 10) unlockBadge('game_marathon');
+
+        if (!this.game.killWindow) this.game.killWindow = [];
+        const now = Date.now();
+        this.game.killWindow.push(now);
+        this.game.killWindow = this.game.killWindow.filter(t => now - t < 8000);
+        if (this.game.killWindow.length >= 15) unlockBadge('quad_kill');
+
+        const rect    = this.element.getBoundingClientRect();
+        const centerX = rect.left + rect.width  / 2;
+        const centerY = rect.top  + rect.height / 2;
+        const isGodMode = this.game.isInvulnerable;
+
+        // ---- MODE FANTÔME ----
+        if (this.element.classList.contains('ghost-mode')) {
+            this.ghostClicks = (this.ghostClicks || 0) + 1;
+
+            if (this.game.startTime) {
+                const playDuration = (Date.now() - this.game.startTime) / 1000;
+                if (playDuration >= 180) unlockBadge('time_master_3m');
+            }
+
+            if (this.game.lakituHitSound) { this.game.lakituHitSound.currentTime = 0; this.game.lakituHitSound.play(); }
+
+            // Lakitu fantôme (gentil)
+            if (this.isLakitu && !this.isEvilLakitu) {
+                this.game.score += 100;
+                this.showFloatingText('+100', rect.left, rect.top - 30, false, '#00FF00');
+
+                const classicFlash = document.createElement('div');
+                classicFlash.className = 'classic-flash-overlay';
+                document.body.appendChild(classicFlash);
+                setTimeout(() => classicFlash.remove(), 800);
+
+                this.showFloatingText(`${this.ghostClicks}/8`, centerX, centerY, false, '#ffffff');
+
+                if (this.ghostClicks === 8) {
+                    this.dropTimer = -999999;
+                    unlockBadge('SiV');
+                    unlockBadge('inverse_mode');
+
+                    this.game.timeLeft += 8;
+                    this.game.isInverseMode = true;
+                    document.body.style.boxShadow = 'inset 0 0 100px rgba(0, 255, 0, 0.5)';
+                    this.showFloatingText('+8s & MODE INVERSE CUMULÉ !', rect.left, rect.top, false, '#00FF00');
+
+                    if (this.game.inverseModeTimeout) clearTimeout(this.game.inverseModeTimeout);
+                    this.game.inverseModeTimeout = setTimeout(() => {
+                        this.game.isInverseMode = false;
+                        document.body.style.boxShadow = '';
+                        this.game.inverseModeTimeout = null;
+                    }, 8000);
+
+                    this.game.targets.forEach(t => { if (t.isBoshi || t.isDog || t.isStarUnicorn) t.remove(); });
+                    this.remove();
+                }
+            }
+            // Evil Lakitu fantôme
+            else if (this.isEvilLakitu) {
+                if (isGodMode) {
+                    this.game.score += 100;
+                    this.showFloatingText('+100', rect.left, rect.top - 30, false, '#00FF00');
+                    if (this.game.godModeTimeout) clearTimeout(this.game.godModeTimeout);
+                    this.game.godModeTimeout = setTimeout(() => {
+                        this.game.isInvulnerable = false;
+                        if (this.game.scoreElement) this.game.scoreElement.style.textShadow = '';
+                        document.body.style.boxShadow = '';
+                    }, 15000);
+                } else {
+                    this.game.score = Math.max(0, this.game.score - 100);
+                    this.showFloatingText('-100', rect.left, rect.top - 30, true, '#ff0000');
+                    const darkFlash = document.createElement('div');
+                    darkFlash.className = 'evil-flash-overlay';
+                    document.body.appendChild(darkFlash);
+                    setTimeout(() => darkFlash.remove(), 800);
+                }
+
+                this.showFloatingText(`${this.ghostClicks}/??`, centerX, centerY, false, '#ffffff');
+
+                if (this.ghostClicks === 10) {
+                    this.dropTimer = -999999;
+                    if (this.game.lakituEvilSound) { this.game.lakituEvilSound.currentTime = 0; this.game.lakituEvilSound.play(); }
+
+                    let cloudCount = parseInt(localStorage.getItem('totalCloudsHit') || 0) + 1;
+                    localStorage.setItem('totalCloudsHit', cloudCount);
+                    if (cloudCount >= 25) unlockBadge('cloud_slayer');
+
+                    this.game.score += 2500;
+                    this.game.timeLeft += 15;
+                    document.body.style.boxShadow = 'inset 0 0 100px rgba(255, 0, 0, 0.7)';
+                    this.game.isInvulnerable = true;
+                    if (this.game.scoreElement) this.game.scoreElement.style.textShadow = '0 0 20px #ff0000';
+                    this.showFloatingText('+2500 PTS & IMMUNITÉ (15s)!', centerX, centerY, false, '#ff0000');
+
+                    if (this.game.godModeTimeout) clearTimeout(this.game.godModeTimeout);
+                    this.game.godModeTimeout = setTimeout(() => {
+                        this.game.isInvulnerable = false;
+                        if (this.game.scoreElement) this.game.scoreElement.style.textShadow = '';
+                        document.body.style.boxShadow = '';
+                    }, 15000);
+
+                    unlockBadge('god_slayer');
+                    unlockBadge('ghost_touch');
+                    this.game.targets.forEach(t => t.convertToMalus());
+                    this.remove();
+                }
+            }
+            return;
+        }
+
+        // ---- COMPTEUR MALUS (badge Seigneur des Ombres) ----
+        if (this.isKyurem || this.isBomb || this.isEvilLicorne || this.isRocket || this.isEvilLakitu) {
+            this.game.sessionMalusHits = (this.game.sessionMalusHits || 0) + 1;
+            if (this.game.sessionMalusHits >= 200) unlockBadge('shadow_god');
+        }
+
+        // ---- KYUREM ----
+        if (this.isKyurem) {
+            if (this.game.kyuremSound) { this.game.kyuremSound.currentTime = 0; this.game.kyuremSound.play(); }
+
+            let dogCount = parseInt(localStorage.getItem('totalDogsCount') || 0) + 1;
+            localStorage.setItem('totalDogsCount', dogCount);
+            if (dogCount >= 7)  unlockBadge('tokyo_visitor');
+            if (dogCount >= 20) unlockBadge('dog_god');
+
+            if (isGodMode || this.game.isInverseMode) {
+                this.game.score += 900;
+                this.showFloatingText('+1500 PTS!', centerX, centerY, false, '#00FF00');
+            } else {
+                this.game.score = Math.max(0, this.game.score - 900);
+                this.game.comboCount = 0;
+                this.showFloatingText('-1500 DARKNESS!', centerX, centerY, true, '#ff0000');
+                const dark = document.createElement('div');
+                dark.className = 'darkness-overlay';
+                document.body.appendChild(dark);
+                setTimeout(() => { dark.style.opacity = '0'; setTimeout(() => dark.remove(), 1000); }, 2000);
+            }
+            this.createParticles(centerX, centerY, 'black');
+            this.remove();
+            return;
+        }
+
+        // ---- BOMBE ----
+        else if (this.isBomb) {
+            if (isGodMode || this.game.isInverseMode) {
+                this.game.score += 320;
+                this.showFloatingText('+320 PTS!', centerX, centerY, false, '#00FF00');
+                this.createParticles(centerX, centerY, 'gold');
+            } else {
+                if (this.game.bombSound) { this.game.bombSound.currentTime = 0; this.game.bombSound.play(); }
+                document.body.classList.add('screen-shake');
+                setTimeout(() => document.body.classList.remove('screen-shake'), 500);
+                this.game.score = Math.max(0, this.game.score - 320);
+                this.game.comboCount = 0;
+                this.showFloatingText('BOMBY -320!!', centerX, centerY, true);
+                this.createParticles(centerX, centerY, 'black');
+                unlockBadge('hit_bomb');
+            }
+            this.remove();
+        }
+
+        // ---- YAMI (Licorne Maléfique) ----
+        else if (this.isEvilLicorne) {
+            if (isGodMode || this.game.isInverseMode) {
+                this.game.score += 250;
+                this.showFloatingText('+250 PTS!', centerX, centerY, false, '#00FF00');
+                this.createParticles(centerX, centerY, 'gold');
+            } else {
+                if (this.game.evilSound) { this.game.evilSound.currentTime = 0; this.game.evilSound.play(); }
+                this.game.score = Math.max(0, this.game.score - 250);
+                this.game.comboCount = 0;
+                this.showFloatingText('CHEH -250!', centerX, centerY, true);
+                this.createParticles(centerX, centerY, 'evil');
+
+                let count = parseInt(localStorage.getItem('totalYami') || 0) + 1;
+                localStorage.setItem('totalYami', count);
+                if (count >= 20) unlockBadge('yami_eye');
+                unlockBadge('yami_hunter');
+            }
+            this.remove();
+        }
+
+        // ---- LITIMES (Bonus temps) ----
+        else if (this.isStarUnicorn) {
+            if (this.game.guhaSound) { this.game.guhaSound.currentTime = 0; this.game.guhaSound.play(); }
+            if (this.game.timeLeft < 3) unlockBadge('time_saver');
+
+            this.game.timeLeft += 10;
+            this.game.score    += 120;
+            this.showFloatingText('TIME BONUS +10s!', centerX, centerY, false, '#FFD700');
+            this.createParticles(centerX, centerY, '#FFD700');
+            this.game.checkTimeAlert();
+            unlockBadge('hit_litimes');
+            this.remove();
+        }
+
+        // ---- BOSHI ----
+        else if (this.isBoshi) {
+            if (this.game.boshiSound) { this.game.boshiSound.currentTime = 0; this.game.boshiSound.play(); }
+            this.game.score += 90;
+            this.game.activateSuperCombo();
+            this.showFloatingText('SUPER BOSHI!', centerX, centerY, false, '#0077ff');
+            this.createParticles(centerX, centerY, '#0077ff');
+
+            unlockBadge('hit_boshi');
+            let count = parseInt(localStorage.getItem('totalBoshisCount') || 0) + 1;
+            localStorage.setItem('totalBoshisCount', count);
+            if (count >= 50)  unlockBadge('boshi_hunter');
+            if (count >= 100) unlockBadge('boshi_god');
+            this.remove();
+        }
+
+        // ---- LAKITU (Gentil) ----
+        else if (this.isLakitu) {
+            if (this.game.lakituSaveSound) { this.game.lakituSaveSound.currentTime = 0; this.game.lakituSaveSound.play(); }
+            this.game.score += 480;
+            this.game.boshiUnlocked = true;
+            this.showFloatingText('LAKITU LOOT!', centerX, centerY, false, '#00FF00');
+            this.createParticles(centerX, centerY, '#FFFFFF');
+            this.spawnLoot(ASSETS.images.boshiPng,     centerX, centerY);
+            this.spawnLoot(ASSETS.images.boshiPng,     centerX, centerY);
+            this.spawnLoot(this.game.targetImages[0],   centerX, centerY);
+            this.spawnLoot(this.game.targetImages[1],   centerX, centerY);
+            this.spawnLoot(ASSETS.images.chienGif,     centerX, centerY);
+            this.game.targets.forEach(t => { if (t.isBomb) t.convertToBonus(); });
+
+            let count = parseInt(localStorage.getItem('totalCloudsHit') || 0) + 1;
+            localStorage.setItem('totalCloudsHit', count);
+            if (count >= 7) unlockBadge('laki_expert');
+            unlockBadge('lakitu_slayer');
+
+            this.element.classList.add('is-exploding');
+            this.hp = Infinity;
+            setTimeout(() => {
+                this.element.classList.remove('is-exploding');
+                this.element.style.pointerEvents = 'auto';
+                this.hp = 1;
+                this.element.classList.add('ghost-mode');
+            }, 600);
+            setTimeout(() => this.remove(), 30000);
+        }
+
+        // ---- EVIL LAKITU ----
+        else if (this.isEvilLakitu) {
+            if (this.game.lakituEvilSound) { this.game.lakituEvilSound.currentTime = 0; this.game.lakituEvilSound.play(); }
+            this.game.score = Math.max(0, this.game.score - 550);
+            this.showFloatingText('CHAOS & BOMBS!', centerX, centerY, true, '#FF0000');
+            this.createParticles(centerX, centerY, 'evil');
+            unlockBadge('hit_evil_lakitu');
+            this.spawnLoot(ASSETS.images.kyuremGif, centerX, centerY);
+            this.game.targets.forEach(t => t.convertToMalus());
+            for (let i = 0; i < 3; i++) this.game.targets.push(new Target(ASSETS.images.licorne3evil, this.game));
+
+            this.element.classList.add('is-exploding');
+            this.hp = Infinity;
+            setTimeout(() => {
+                this.element.classList.remove('is-exploding');
+                this.element.style.pointerEvents = 'auto';
+                this.hp = 1;
+                this.element.classList.add('ghost-mode');
+            }, 600);
+            setTimeout(() => this.remove(), 30000);
+        }
+
+        // ---- CHIEN (Tokyo) ----
+        else if (this.isDog) {
+            if (this.game.dogSound) { this.game.dogSound.currentTime = 0; this.game.dogSound.play(); }
+            this.game.score += 1000;
+            this.showFloatingText('EASTER EGG +1000!', centerX, centerY, false, '#00FF00');
+            this.createParticles(centerX, centerY, '#00FF00');
+
+            unlockBadge('dog_lover');
+            let dogCount = parseInt(localStorage.getItem('totalDogsCount') || 0) + 1;
+            localStorage.setItem('totalDogsCount', dogCount);
+            if (dogCount >= 7)  unlockBadge('tokyo_visitor');
+            if (dogCount >= 20) unlockBadge('dog_god');
+            this.remove();
+        }
+
+        // ---- OVNI ----
+        else if (this.isUFO) {
+            if (this.game.ufoSound) { this.game.ufoSound.currentTime = 0; this.game.ufoSound.play(); }
+            this.game.score += 180;
+            this.showFloatingText('UFO +180!', centerX, centerY, false, '#00FFFF');
+            this.createParticles(centerX, centerY, 'ufo');
+
+            unlockBadge('ufo_slayer');
+            let count = parseInt(localStorage.getItem('totalUfoCount') || 0) + 1;
+            localStorage.setItem('totalUfoCount', count);
+            if (count >= 20) unlockBadge('ufo_finder');
+            if (count >= 55) unlockBadge('ufo_god');
+            this.remove();
+        }
+
+        // ---- ROCKET ----
+        else if (this.isRocket) {
+            if (this.game.rocketHitSound) { this.game.rocketHitSound.currentTime = 0; this.game.rocketHitSound.play(); }
+            this.game.sessionRockets = (this.game.sessionRockets || 0) + 1;
+            if (this.game.sessionRockets >= 10) unlockBadge('rocket_legend');
+
+            if (isGodMode || this.game.isInverseMode) {
+                this.game.score += 450;
+                this.showFloatingText('+450 PTS!', centerX, centerY, false, '#00FF00');
+                this.createParticles(centerX, centerY, '#00FF00');
+            } else {
+                this.game.score = Math.max(0, this.game.score - 450);
+                this.game.comboCount = 0;
+                this.showFloatingText('ROCKET CRASH -450!', centerX, centerY, true, '#FF4500');
+                document.body.classList.add('screen-shake');
+                setTimeout(() => document.body.classList.remove('screen-shake'), 300);
+                this.createParticles(centerX, centerY, '#FF4500');
+            }
+            this.remove();
+        }
+
+        // ---- CIBLES NORMALES ----
+        else {
+            unlockBadge('first_kill');
+            if (!this.game.tappedTypes) this.game.tappedTypes = new Set();
+            this.game.tappedTypes.add(this.element.src);
+            if (this.game.tappedTypes.size >= 4) unlockBadge('hit_all_classics');
+
+            const now2 = Date.now();
+            if (now2 < this.game.comboFreezeUntil || now2 - this.game.lastHitTime < 800) {
+                this.game.comboCount++;
+                if (this.game.comboCount >= 10) unlockBadge('combo_10');
+            } else {
+                this.game.comboCount = 1;
+            }
+            this.game.lastHitTime = now2;
+
+            const s = this.game.popSounds[Math.floor(Math.random() * this.game.popSounds.length)];
+            if (s) { s.currentTime = 0; s.play(); }
+
+            const pts = this.game.isSuperComboActive ? 50 : (25 * this.game.comboCount);
+            this.game.score += pts;
+            this.showFloatingText(`+${pts}`, centerX, centerY, false);
+            this.createParticles(centerX, centerY, '#ff00ff');
+            this.remove();
+        }
+    }
+
+    // -------------------------------------------------------
+    spawnLoot(img, x, y) {
+        const loot = new Target(img, this.game, true);
+        loot.x  = x;
+        loot.y  = y;
+        loot.vx = (Math.random() - 0.5) * 3;
+        loot.vy = -1.5 - Math.random() * 1.5;
+        this.game.targets.push(loot);
+    }
+
+    // -------------------------------------------------------
+    convertToBonus() {
+        if (this.isBomb) {
+            this.isBomb = false;
+            this.element.src       = this.game.targetImages[0];
+            this.element.className = 'targets';
+            this.element.style.width = '';
+        }
+    }
+
+    // -------------------------------------------------------
+    convertToMalus() {
+        if (!this.isBomb && !this.isLakitu && !this.isEvilLakitu &&
+            !this.isUFO  && !this.isDog    && !this.isKyurem) {
+            this.isBomb          = true;
+            this.element.src     = ASSETS.images.bombGif;
+            this.element.className = 'targets bomb-target';
+        }
+    }
+
+    // -------------------------------------------------------
+    showFloatingText(t, x, y, m, c = null) {
+        const d = document.createElement('div');
+        d.className = m ? 'combo-text malus' : 'combo-text';
+        d.textContent = t;
+        if (c) d.style.color = c;
+        d.style.left = `${x - 30}px`;
+        d.style.top  = `${y}px`;
+        document.body.appendChild(d);
+        setTimeout(() => d.remove(), 800);
+    }
+
+    // -------------------------------------------------------
+    createParticles(x, y, t) {
+        const c = (t === 'ufo' || t === 'evil') ? 25 : 12;
+        for (let i = 0; i < c; i++) {
+            const p = document.createElement('div');
+            p.className = 'pixel';
+            p.style.backgroundColor = (t === 'ufo') ? '#00FFFF' : (t === 'evil' ? '#FF0000' : t);
+            p.style.left = `${x}px`;
+            p.style.top  = `${y}px`;
+            const a    = (Math.PI * 2 / c) * i;
+            const dist = 60 + Math.random() * 40;
+            p.style.setProperty('--dx', Math.cos(a) * dist + 'px');
+            p.style.setProperty('--dy', Math.sin(a) * dist + 'px');
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 600);
+        }
+    }
+
+    // -------------------------------------------------------
+    remove() {
+        if (this.element.parentNode) this.element.remove();
+    }
+}
+
+
+// ============================================================
+// BLOC JS 11 : INITIALISATION DE L'APPLICATION
+// Lance la page d'accueil au chargement du DOM
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+    showPage('page-accueil');
+});
+
+</script>
+
 {% endblock %}
