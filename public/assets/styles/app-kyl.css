@@ -1,0 +1,2601 @@
+/* ===================================== */
+/* ===== CSS KYLLIAN ================== */
+/* ===================================== */
+
+/* =========================================================================================================================
+   SEGEMENT 0 : PAGE D'ENTRÉE (OVERLAY ET PORTES DE NUAGES)
+   ========================================================================================================================= */
+
+/* ===============================================================
+   SOUS SECTION 0.1 : OVERLAY PRINCIPAL
+   =============================================================== */
+.home-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    background: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(10px);
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* ===============================================================
+   SOUS SECTION 0.2 : PORTES DE NUAGES
+   =============================================================== */
+.cloud-door {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background-color: #6d6d6d;
+    background-image: url('../images/Kyllian/Entry_Cloud.gif');
+    background-size: 250px;
+    z-index: -1;
+    transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.cloud-door.top { 
+    top: 0; 
+    border-bottom: 1px solid #eee; 
+}
+
+.cloud-door.bottom { 
+    bottom: 0; 
+    border-top: 1px solid #eee; 
+}
+
+/* ===============================================================
+   SOUS SECTION 0.3 : ANIMATIONS OVERLAY
+   =============================================================== */
+.home-overlay.opened .cloud-door.top {
+    transform: translateY(-100%);
+}
+
+.home-overlay.opened .cloud-door.bottom {
+    transform: translateY(100%);
+}
+
+.home-overlay.opened .home-content {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: 0.5s ease;
+}
+
+/* ===============================================================
+   SOUS SECTION 0.4 : CONTENU (TEXTE & BOUTONS)
+   =============================================================== */
+.welcome-title {
+    font-size: 8rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: 900;
+    border: 4px solid #f5c2cf;
+    letter-spacing: -2px;
+    margin-bottom: 150px;
+    animation: simpleFloat 4s ease-in-out infinite;
+    background-color: #000;
+    border-radius: 40px;
+    padding: 40px;
+    margin-top: -80px;
+    color: #f6f6f6;
+}
+
+.action-area {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+
+
+#enterBtn {
+    padding: 25px 60px;
+    font-size: 2.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #000;
+    color: #ffffff;
+    border: 4px solid #f5c2cf;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    margin-top: -70px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#enterBtn:hover {
+    transform: translateY(-3px);
+    background: #f5c2cf;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+#homeBtn {
+    padding: 25px 60px;
+    font-size: 2.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #000;
+    color: #ffffff;
+    border: 4px solid #f5c2cf;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    margin-top: -70px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-decoration: none;
+}
+
+#homeBtn:hover {
+    transform: translateY(-3px);
+    background: #f5c2cf;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+
+.press-start {
+    font-size: 1.4rem;
+    color: #fffcfc;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: blink 1.5s infinite;
+}
+
+/* ===============================================================
+   SOUS SECTION 0.5 : ANIMATIONS GLOBALES
+   =============================================================== */
+@keyframes simpleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.2; }
+}
+
+/* =========================================================================================================================
+   SEGEMENT 1 : PAGE D'ACCUEIL
+   ========================================================================================================================= */
+
+/* ===============================================================
+   SOUS SECTION 1.1 : BASE & FOND
+   =============================================================== */
+body.page-accueil_3 { 
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Arial Black', sans-serif;
+    overflow-x: hidden;
+}
+
+body.page-accueil_3::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('../images/Kyllian/Nuage_AkaG.gif') repeat;
+    background-size: 220px;
+    opacity: 0.3;
+    animation: cloudsMove 60s linear infinite;
+    z-index: -1;
+}
+
+@keyframes cloudsMove {
+    from { background-position: -2000px 0; }
+    to { background-position: 0 0; }
+}
+
+/* ===============================================================
+   SOUS SECTION 1.2 : STRUCTURE PRINCIPALE
+   =============================================================== */
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+/* ===============================================================
+   SOUS SECTION 1.3 : LOGO
+   =============================================================== */
+.logo-area {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.main-logo {
+    width: 800px;
+    max-width: 90vw;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 5px 0 rgba(0,0,0,0.2));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+/* ===============================================================
+   SOUS SECTION 1.4 : NAVIGATION
+   =============================================================== */
+.nav-bar {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -40px;
+}
+
+.nav-line {
+    position: absolute;
+    width: 100%;
+    height: 120px;
+    background: #000;
+    z-index: 1;
+}
+
+.buttons-wrapper {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    gap: 160px;
+}
+
+/* ===============================================================
+   SOUS SECTION 1.5 : BOUTONS MENU
+   =============================================================== */
+.menu-btn {
+    width: 220px;
+    height: 220px;
+    background: #cccccc;
+    border: 15px solid #000;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+    font-weight: 900;
+    font-size: 2rem;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    font-family: 'Arial Black', sans-serif;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.menu-btn:hover {
+    transform: scale(1.1);
+    background: #f5c2cf;
+    border-color: #333;
+}
+
+.home-page-3 a {
+    text-decoration: none;
+}
+
+
+.home-link {
+    position: fixed !important;
+    top: 20px;
+    left: 15px;     /* Distance de la gauche */
+    z-index: 999;   /* Pour passer devant le reste */
+}
+
+.home-icon img {
+    width: 55px;    /* Taille réduite */
+    height: auto;
+    transition: transform 0.2s;
+}
+
+.home-icon:hover {
+    transform: scale(1.1); /* Petit effet au survol */
+}
+
+/* ===============================================================
+   SOUS SECTION 1.6 : BOUTON PARAMÈTRES
+   =============================================================== */
+.floating-settings {
+    position: fixed !important;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid #43d5e6;
+    border-radius: 50%;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.floating-settings:hover {
+    transform: scale(1.1);
+    background: #fff;
+    box-shadow: 0 0 15px rgba(67, 213, 230, 0.5);
+}
+
+.gear-icon {
+    width: 30px;
+    height: 30px;
+    background: #444;
+    position: relative;
+    border-radius: 5px;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.gear-icon::before, .gear-icon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    border-radius: 5px;
+}
+
+.gear-icon::before { transform: rotate(30deg); }
+.gear-icon::after { transform: rotate(60deg); }
+
+.gear-inner {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 12px; height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.floating-settings:hover .gear-icon {
+    transform: rotate(180deg);
+    background: #43d5e6;
+}
+
+#settingsOverlay {
+    z-index: 9000;   
+}
+
+
+/* =======================================
+ Parametres pour la page règles (Overlay)
+=========================================== */
+
+/* Force l'overlay à passer devant le notebook et la grille de badges */
+#settingsOverlay.modal-overlay {
+    display: none; /* Reste caché par défaut */
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* Fond sombre semi-transparent */
+    z-index: 89999 !important; /* Un chiffre très haut pour être au-dessus du notebook */
+    justify-content: center;
+    align-items: center;
+}
+
+/* S'assure que la boîte de réglages elle-même est bien visible */
+.settings-box {
+    position: relative;
+    z-index: 89999 !important;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* =========================================================================================================================
+   SEGEMENT 2 : PAGE RÈGLES
+   ========================================================================================================================= */
+
+/* ===============================================================
+   SOUS SECTION 2.0 : BOUTON LAKITU
+   =============================================================== */
+.lakitu-nav-btn {
+    position: fixed !important;
+    top: 20px;
+    left: 20px;
+    width: 50px; 
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.lakitu-nav-btn:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.lakitu-nav-btn img {
+    width: 80%;
+    height: auto;
+}
+
+
+
+.lakitu-nav-btn.evil {
+    border-color: #ff0000;
+    background: rgba(255, 0, 0, 0.3);
+    transform: scale(1.2);
+}
+
+
+/* ===============================================================
+   SOUS SECTION 2.1 : BASE & FOND
+   =============================================================== */
+body.page-règles {
+  position: relative;
+  background-color: rgb(225, 225, 225);
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+body.page-règles::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../images/Kyllian/Lakituu.gif");
+  background-repeat: repeat;
+  background-size: 220px;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+/* Contenu au-dessus du fond */
+body.page-règles > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===============================================================
+   SOUS SECTION 2.2 : VARIABLES CSS
+   =============================================================== */
+:root {
+  --wii-blue-light: #a5a7ab;
+  --wii-blue-dark: #000000;
+  --wii-border: #7258b5;
+  --wii-bg-glass: rgba(255, 255, 255, 0.2);
+}
+
+/* ===============================================================
+   SOUS SECTION 2.3 : CONTAINER PRINCIPAL (STYLE WII)
+   =============================================================== */
+.wii-container {
+  width: 1340px;
+  min-height: 520px;
+  align-items: center;
+  background: linear-gradient(to bottom, var(--wii-blue-light), var(--wii-blue-dark));
+  border: 4px solid white;
+  border-radius: 40px;
+  padding: 30px;
+  box-shadow: 0 20px 50px rgba(170, 169, 169, 0.3);
+  display: flex;
+  position: relative;
+  z-index: 1;
+  flex-direction: column;
+  gap: 20px;
+  bottom: 30px;
+}
+
+/* Effet lignes */
+.wii-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 3px);
+  pointer-events: none;
+}
+
+/* ===============================================================
+   SOUS SECTION 2.4 : HEADER
+   =============================================================== */
+.wii-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.game-thumbnail {
+  width: 150px;
+  height: 80px;
+  background: rgb(255, 255, 255);
+  border-radius: 15px;
+  border: 3px solid #b5c4f5;
+  overflow: hidden;
+}
+
+.game-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wii-header h1 {
+  font-size: 2.2rem;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* ===============================================================
+   SOUS SECTION 2.5 : CONTENU CENTRAL
+   =============================================================== */
+.wii-content {
+  background: var(--wii-bg-glass);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 30px;
+  padding: 20px;
+}
+
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.illustration-box {
+  flex: 1;
+  background: white;
+  border-radius: 20px;
+  min-height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.description-box {
+  flex: 1.5;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+/* ===============================================================
+   SOUS SECTION 2.6 : BLOCS D'INFORMATIONS (3 COLONNES)
+   =============================================================== */
+.triple-column-wrapper {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.info-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.block-image {
+  background: white;
+  border-radius: 15px;
+  height: 215px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.5);
+}
+
+.block-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.block-text {
+  font-size: 1.1rem;
+  line-height: 1.3;
+  color: white;
+  text-align: center;
+  padding: 5px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .triple-column-wrapper {
+    flex-direction: column;
+  }
+  .wii-container {
+    width: 90%;
+  }
+}
+
+/* ===============================================================
+   SOUS SECTION 2.7 : FOOTER & BOUTON
+   =============================================================== */
+.wii-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px solid rgba(255,255,255,0.3);
+  padding-top: 15px;
+}
+
+.ok-button {
+  background: white;
+  color: #333;
+  padding: 5px 20px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  box-shadow: 0 4px 0px #bbb;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.ok-button:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.ok-button:active {
+  transform: scale(0.95);
+}
+
+.btn-circle {
+  background: #eee;
+  border: 2px solid #999;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+/* ===============================================================
+   SOUS SECTION 2.8 : TEXTES
+   =============================================================== */
+.rule-message {
+    color: white;
+    font-weight: bolder;
+    font-size: 18px;
+}
+
+.player-text {
+    color: white;
+}
+
+/* ===============================================================
+   SOUS SECTION 2.9 : MODALE (OVERLAY)
+   =============================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  backdrop-filter: blur(5px);
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+/* ===============================================================
+   SOUS SECTION 2.10 : CONTENU MODALE
+   =============================================================== */
+.modal-content {
+  background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+  width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 30px;
+  border-radius: 40px;
+  border: 6px solid #858585;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  animation: popIn 0.3s ease-out;
+  position: relative;
+}
+
+/* Scrollbar */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  margin: 20px;
+}
+
+/* Animation */
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header h1 {
+   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+   font-weight: bolder;
+}
+
+/* ===============================================================
+   SOUS SECTION 2.11 : LISTE D'ITEMS
+   =============================================================== */
+.items-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+    width: 100%; 
+}
+
+.items-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* Icônes */
+.item-icon {
+    width: 110px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.starvy-img {
+    width: 440px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+/* Images spécifiques */
+.img-licornes-groupe {
+    width: 65px;
+    height: auto;
+    transform: scale(1.4);
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+}
+
+.item-icon img:not(.img-licornes-groupe) {
+    max-width: 80%;
+    height: auto;
+}
+
+.item-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Texte item */
+.item-desc {
+    font-size: 0.9rem;
+    color: #000000;
+    line-height: 1.2;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.item-desc strong {
+    display: block;
+    color: #f8a2b7;
+    font-weight: 900;
+    font-size: large;
+    margin-bottom: 3px;
+}
+
+/* ===============================================================
+   SOUS SECTION 2.12 : TEXTE CONTINUER
+   =============================================================== */
+.text-start {  
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+  position: fixed; 
+  bottom: 40px;
+  left: 0;
+  font-size: 25px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  animation: blink 1.5s infinite;
+  z-index: 5;
+}
+
+/* Animation (réutilisée) */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* =========================================================================================================================
+   SEGEMENT 3 : PAGE JEU (GAMEPLAY, CIBLES ET SYSTÈME)
+   ========================================================================================================================= */
+
+/* ===============================================================
+   SOUS SECTION 3.1 : RESET & CONFIGURATION DE BASE
+   =============================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Meilleure gestion des tailles */
+}
+
+body.world_1, body.world_2, body.world_3 {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Empêche le scroll si une cible sort de l'écran */
+    position: fixed;  /* Verrouille l'écran pour éviter le décalage sur mobile/clic */
+    user-select: none; /* Empêche la sélection de texte/images pendant qu'on clique */
+    font-family: Arial, sans-serif;
+}
+
+/* ===============================================================
+   SOUS SECTION 3.2 : GESTION DES MONDES (VISUELS & BACKGROUNDS)
+   =============================================================== */
+
+/* Fonds des mondes en 1er plan */
+body.world_1 { 
+    background: url('../assets/images/bg_level_1.png') center/cover #ededed ;
+    background-size: cover;
+    background-attachment: fixed;
+    transition: transform 0.1s ease-out; /* Pour un retour au calme fluide */
+}
+
+body.world_2 { 
+    background: url('../assets/images/bg_level_2.png') center/cover #506396; 
+    background-size: cover;
+    background-attachment: fixed;
+    transition: transform 0.1s ease-out; /* Pour un retour au calme fluide */
+}
+
+body.world_3 { 
+    background: url('../assets/images/bg_level_3.png') center/cover #535353;
+    background-size: cover;
+    background-attachment: fixed;
+    transition: transform 0.1s ease-out; /* Pour un retour au calme fluide */ 
+}
+
+/* Nuages animés et effets atmosphériques (Before de body) */
+body.world_1::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/Kyllian/Nuage_AkaG.gif") repeat;
+    background-size: 300px;
+    opacity: 0.25;
+    pointer-events: none;
+    animation: cloudsMove 60s linear infinite;
+}
+
+body.world_2::before  {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/Kyllian/Entry_Cloud.gif") repeat;
+    background-size: 300px;
+    opacity: 0.25;
+    pointer-events: none;
+    animation: cloudsMove 60s linear infinite;
+}
+
+body.world_3::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/Kyllian/Evil_Good_Lakitu.gif") repeat;
+    background-size: 300px;
+    opacity: 0.25;
+    pointer-events: none;
+    animation: cloudsMove 60s linear infinite;
+}
+
+/* ===============================================================
+   SOUS SECTION 3.3 : INTERFACE UTILISATEUR EN JEU (HUD)
+   =============================================================== */
+
+.game-infos {
+    position: absolute;
+    top: 20px;
+    inset-inline: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.score {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.score img { width: 45px; }
+
+.timer {
+    background: black;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.current-level {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-weight: 900;
+    font-size: 35px;
+}
+
+.btn-pause {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 42px;
+    padding: 16px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* --- Notification de Badge (Style PS5) --- */
+.badge-notification {
+    position: fixed;
+    top: 20px;
+    right: -350px; /* Caché au départ */
+    width: 320px;
+    background: rgba(255, 255, 255, 0.95);
+    border-left: 8px solid #f5c2cf; /* Ta couleur thème */
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 999999 !important;
+    transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: Arial, sans-serif;
+}
+
+.badge-notification.show {
+    right: 20px; /* Glisse vers l'intérieur */
+    z-index: 999999 !important;
+}
+
+.badge-icon-notify {
+    width: 50px;
+    height: 50px;
+    background: #000;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+     z-index: 999999 !important;
+}
+
+.badge-icon-notify img {
+    width: 30px;
+     z-index: 999999 !important;
+}
+
+.badge-info-notify {
+    display: flex;
+    flex-direction: column;
+     z-index: 999999 !important;
+}
+
+.badge-info-notify .title-notif {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #777;
+    font-weight: bold;
+    margin: 0;
+    z-index: 999999 !important;
+}
+
+.badge-info-notify .name-notif {
+    font-size: 16px;
+    color: #000;
+    font-weight: 900;
+    margin: 2px 0;
+    z-index: 999999 !important;
+}
+
+/* ===============================================================
+   SOUS SECTION 3.4 : SYSTÈME DE CIBLES & GAMEPLAY
+   =============================================================== */
+
+#levelContainer { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+
+.targets {
+    position: absolute;
+    width: 270px;
+    image-rendering: pixelated;
+    pointer-events: auto;
+    cursor: crosshair;
+    z-index: 20;
+}
+
+.evil-target {
+    width: 100px;
+    filter: drop-shadow(0 0 10px red); /* Lueur rouge */
+    animation: pulse-red 0.5s infinite alternate;
+    z-index: 25;
+}
+
+/* Harmonisation des deux nuages */
+.lakitu-target, 
+.evil-lakitu-target {
+    width: 140px !important;
+    height: auto;
+    filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.3));
+    z-index: 40;
+}
+
+.lakitu-target {
+    filter: drop-shadow(0px 0px 10px rgb(255, 254, 254));
+    animation: pulse-white 0.5s infinite alternate;
+}
+
+.evil-lakitu-target {
+    filter: drop-shadow(0px 0px 10px red);
+    animation: pulse-red 0.5s infinite alternate;
+}
+
+/* Effet fantôme */
+.targets.ghost-mode {
+    opacity: 0.35 !important; /* Très transparent */
+    filter: brightness(1.2) grayscale(0.6) blur(1px);
+    transition: opacity 1s ease-in;
+    z-index: 5;
+}
+
+/* Classe temporaire pour cacher l'image pendant l'explosion */
+.is-exploding {
+    visibility: hidden;
+}
+
+/* Bombes et Explosions */
+.bomb-target {
+    filter: drop-shadow(0 0 5px red);
+    animation: pulse-red 0.5s infinite alternate;
+    width: 120px;
+    width: 150px;
+    height: 150px;
+    z-index: 31;
+}
+
+/* Spéciaux (UFO, Star, Boshi) */
+.ufo-target {
+    width: 150px;
+    height: auto;
+    filter: drop-shadow(0 0 15px cyan);
+    z-index: 30; 
+}
+
+/* Version qui va vers la GAUCHE (par défaut) */
+.rocket-left {
+    width: 120px;
+    height: auto !important;
+    z-index: 32;
+    filter: drop-shadow(0 0 5px red);
+    animation: rocketShakeLeft 0.1s infinite;
+}
+
+/* Version qui va vers la DROITE (Inversée) */
+.rocket-right {
+    width: 120px;
+    height: auto !important;
+    z-index: 32;
+    filter: drop-shadow(0 0 5px red);
+    animation: rocketShakeRight 0.1s infinite;
+}
+
+
+.star-target {
+    width: 110px;
+    filter: drop-shadow(0 0 15px #FFD700);
+    z-index: 33;
+}
+
+.boshi-target {
+    animation: boshi-sparkle 0.8s infinite alternate;
+    width: 110px;
+    z-index: 15;
+}
+
+/* Easter Egg (Chien) */
+.targets.dog-target {
+    width: 90px;
+    height: 90px;
+    filter: drop-shadow(0 0 8px #ADFF2F) drop-shadow(0 0 15px #ADFF2F);
+    animation: bounce-dog 1s infinite alternate ease-in-out;
+    z-index: 34;
+}
+
+/* Style spécifique pour Kyurem */
+.kyurem-target {
+    height: 90px;
+    width: 90px;
+    filter: brightness(0.7) drop-shadow(0 0 8px #ff0000);
+    z-index: 35;
+    animation: kyuremPulse 1.5s infinite alternate ease-in-out;
+    pointer-events: auto;
+}
+
+
+/* ===============================================================
+   SOUS SECTION 3.5 : FEEDBACK VISUEL & TEXTES FLOTTANTS
+   =============================================================== */
+
+.combo-text {
+    position: absolute;
+    pointer-events: none;
+    color: #ffffff;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
+    z-index: 9999;
+    animation: comboAnimation 0.8s ease-out forwards;
+}
+
+.combo-text.dog-bonus {
+    color: #ADFF2F !important;
+    font-weight: bold;
+    font-size: 2.2em;
+    animation: pop-up-bonus 0.8s forwards;
+}
+
+.combo-text.malus {
+    color: #ff0000 !important;
+    font-weight: bold;
+    font-size: 2.2em;
+}
+
+.super-combo-active #scoreValue {
+    color: #0077ff !important;
+    text-shadow: 0 0 15px #00ffff, 0 0 25px #0077ff;
+    animation: pulse-score 0.5s infinite alternate;
+}
+
+.low-time-alert {
+    color: #ff0000 !important;
+    animation: pulse-red 0.5s infinite alternate;
+    font-weight: bold;
+    transform: scale(1.2);
+}
+
+/* L'écran noir total quand on le touche Kyurem */
+.darkness-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgb(0, 0, 0);
+    z-index: 999999;
+    pointer-events: none;
+    opacity: 0.9;
+    transition: opacity 1s ease-out;
+}
+
+/* Flash spécifique pour le Lakitu classique (Gentil/Inverse) */
+.classic-flash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 255, 100, 0.4); /* Vert translucide */
+    z-index: 10000;
+    pointer-events: none;
+    animation: classicFlashAnim 0.8s forwards;
+}
+
+@keyframes classicFlashAnim {
+    0% { opacity: 0.4; }
+    100% { opacity: 0; }
+}
+
+/* L'overlay de flash pour l'Evil Lakitu */
+.evil-flash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(253, 0, 0, 0.8);
+    z-index: 10000;
+    pointer-events: none;
+    animation: evilFlashAnim 1.1s forwards;
+}
+
+@keyframes evilFlashAnim {
+    0% { opacity: 0.2; }
+    10% { opacity: 0.2; } /* Petit maintien du rouge */
+    100% { opacity: 0; }
+}
+
+/* ===============================================================
+   SOUS SECTION 3.6 : OVERLAYS (BIENVENUE, PAUSE & FIN)
+   =============================================================== */
+
+/* Style partagé Overlays */
+.welcome-overlay, .end-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2000;
+}
+
+/* Overlay de Bienvenue */
+.welcome-overlay { background: rgba(0, 0, 0, 0.7); }
+
+.welcome-content {
+    background: rgb(181, 181, 181);
+    padding: 40px;
+    border-radius: 30px;
+    text-align: center;
+    border: 5px solid #000;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    animation: zoomIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.welcome-logo {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 5px;
+    display: block;
+}
+
+.input-container {
+    margin-top: -80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#playerNameInput {
+    padding: 30px;
+    font-size: 25px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    width: 450px;
+    margin: 0 auto 50px;
+    text-align: center;
+    outline: none;
+}
+
+#startGameBtn {
+    padding: 15px 100px;
+    font-size: 25px;
+    background: black;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s;
+    border: none;
+}
+
+#startGameBtn:hover { transform: scale(1.1); }
+
+/* Overlay de Fin */
+.end-overlay { 
+    background: rgba(0, 0, 0, 0.2); 
+    flex-direction: column;
+    display: none; 
+    z-index: 1500; 
+}
+
+.end-title {
+    width: 100%;
+    background: rgba(120, 120, 120, 0.9);
+    color: white;
+    text-align: center;
+    padding: 25px 0;
+    font-size: 70px;
+    font-family: 'Arial Black', sans-serif;
+    letter-spacing: 5px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    margin-bottom: 15px;
+}
+
+.end-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.end-score-box {
+    background: #000;
+    color: #fff;
+    padding: 15px 60px;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    margin-bottom: 30px;
+}
+
+.end-comment {
+    font-size: 26px;
+    font-weight: 900;
+    color: #000000;
+}
+
+.click-to-continue {
+    width: 100%;
+    background: rgba(60, 60, 60, 0.9);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 50px;
+    animation: blink 1.5s infinite;
+}
+
+/* Overlay de Pause */
+.pause-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 3000;
+}
+
+.pause-content {
+    background: #b5b5b5;
+    padding: 40px;
+    border-radius: 30px;
+    border: 5px solid #000;
+    text-align: center;
+    min-width: 300px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.pause-title {
+    font-size: 40px;
+    margin-bottom: 30px;
+    font-family: 'Arial Black', sans-serif;
+}
+
+.pause-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.btn-pause-menu {
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.btn-pause-menu:hover { transform: scale(1.05); background: #333; }
+.btn-quit { background: #8b0000; }
+.btn-quit:hover { background: #ff0000; }
+
+/* ===============================================================
+   SOUS SECTION 3.7 : SYSTÈME DE DÉCOMPTE & ÉCRANS INTERMÉDIAIRES
+   =============================================================== */
+
+.start-message {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    color: white;
+    text-shadow: 4px 4px 0 black;
+    z-index: 500;
+}
+
+.restart-countdown {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    color: white;
+    text-shadow: 4px 4px 0 black;
+    z-index: 500;
+    animation: pulseRestart 0.5s infinite alternate;
+}
+
+/* ===============================================================
+   SOUS SECTION 3.8 : ANIMATIONS ET EFFETS SPÉCIAUX (KEYFRAMES)
+   =============================================================== */
+
+/* Vibrations & Secousses */
+.screen-shake {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    transform: scale(1.05); 
+    overflow: hidden;
+}
+
+@keyframes shake {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    10% { transform: translate(-12px, -12px) rotate(-3deg); }
+    20% { transform: translate(12px, 10px) rotate(3deg); }
+    30% { transform: translate(-12px, 8px) rotate(-2.5deg); }
+    40% { transform: translate(12px, -10px) rotate(2.5deg); }
+    50% { transform: translate(-10px, 12px) rotate(-2deg); }
+    60% { transform: translate(10px, -8px) rotate(2deg); }
+    70% { transform: translate(-12px, 10px) rotate(-1.5deg); }
+    80% { transform: translate(12px, -12px) rotate(1.5deg); }
+    90% { transform: translate(-8px, 8px) rotate(-1deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* Explosions Pixel Art */
+.retro-explosion {
+    position: absolute;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.pixel {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #f5c2cf;
+    box-shadow: 2px 2px 0px #000;
+    animation: pixelScatter 0.5s steps(5) forwards;
+}
+
+/* Animation de pulsation maléfique */
+@keyframes kyuremPulse {
+    from {
+        filter: brightness(0.6) drop-shadow(0 0 5px #ff0000);
+        transform: scale(1);
+    }
+    to {
+        filter: brightness(0.9) drop-shadow(0 0 15px #ff0000);
+        transform: scale(1.05);
+    }
+}
+
+@keyframes pixelScatter {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+
+/* Pulsations & Mouvements */
+@keyframes pulseRestart {
+    from { transform: translate(-50%, -50%) scale(1); }
+    to { transform: translate(-50%, -50%) scale(1.05); }
+}
+
+@keyframes pulse-white {
+    from { filter: drop-shadow(0 0 2px rgb(255, 255, 255)); }
+    to { filter: drop-shadow(0 0 15px rgb(216, 216, 216)); transform: scale(1.1); }
+}
+
+@keyframes pulse-red {
+    from { filter: drop-shadow(0 0 2px red); text-shadow: 0 0 5px #ff0000; transform: scale(1.1); }
+    to { filter: drop-shadow(0 0 15px red); text-shadow: 0 0 20px #ff0000; transform: scale(1.3); }
+}
+
+@keyframes bounce-dog {
+    from { transform: translateY(0) rotate(0deg); }
+    to { transform: translateY(-15px) rotate(5deg); }
+}
+
+@keyframes boshi-sparkle {
+    0% { filter: drop-shadow(0 0 5px #0077ff) brightness(1); }
+    100% { filter: drop-shadow(0 0 20px #00ffff) brightness(1.5) hue-rotate(90deg); }
+}
+
+@keyframes comboAnimation {
+    0% { transform: scale(0.5) translateY(0); opacity: 0; }
+    20% { transform: scale(1.2) translateY(-20px); opacity: 1; }
+    100% { transform: scale(1) translateY(-100px); opacity: 0; }
+}
+
+@keyframes pop-up-bonus {
+    0% { opacity: 0; transform: translateY(0) scale(0.5); }
+    50% { opacity: 1; transform: translateY(-50px) scale(1.2); }
+    100% { opacity: 0; transform: translateY(-100px) scale(1); }
+}
+
+@keyframes pulse-score {
+    from { transform: scale(1); }
+    to { transform: scale(1.2); }
+}
+
+@keyframes rocketShakeLeft {
+    0% { transform: scaleX(1) translate(1px, 1px); }
+    50% { transform: scaleX(1) translate(-1px, -2px); }
+    100% { transform: scaleX(1) translate(1px, 1px); }
+}
+
+@keyframes rocketShakeRight {
+    0% { transform: scaleX(-1) translate(1px, 1px); }
+    50% { transform: scaleX(-1) translate(-1px, -2px); }
+    100% { transform: scaleX(-1) translate(1px, 1px); }
+}
+/* ====================================================================================================================================================================================
+   SEGEMENT 4 : SCOREBOARD (CLASSEMENT)
+   ======================================================================================================================================================================================= */
+
+/* ===============================================================
+   SOUS SECTION 4.1 : BASE & FOND
+   =============================================================== */
+body.score-board {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #e5e5e5;
+    overflow-x: hidden;
+}
+
+/* Fond animé */
+body.score-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../images/Kyllian/Entry_Cloud.gif");
+  background-repeat: repeat;
+  background-size: 220px;
+  opacity: 0.15;
+  z-index: 0;
+  animation: cloudsMove 60s linear infinite;
+}
+
+/* Contenu au-dessus */
+body.score-board > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===============================================================
+   SOUS SECTION 4.2 : TITRE PRINCIPAL
+   =============================================================== */
+.title {
+    width: 100%;
+    background-color: #9e9e9e;
+    color: white;
+    font-weight: 900;
+    font-size: 32px;
+    padding: 25px 40px;
+    margin: 0 0 30px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    z-index: 1;
+}
+
+/* ===============================================================
+   SOUS SECTION 4.3 : LISTE DES SCORES
+   =============================================================== */
+.score-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 90%;
+    max-width: 850px;
+    margin: 0 auto;
+    padding-left: 30px;
+    padding-bottom: 120px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Scrollbar personnalisée */
+.score-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.score-list::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 10px;
+}
+
+/* ===============================================================
+   SOUS SECTION 4.4 : ITEM DE SCORE
+   =============================================================== */
+.score-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    opacity: 1;
+}
+
+/* Pastille rang */
+.rank {
+    width: 80px;
+    height: 70px;
+    background-color: #f5c2cf;
+    border-radius: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 22px;
+    position: absolute;
+    left: -25px;
+    z-index: 2;
+}
+
+/* Barre score */
+.score-bar {
+    background-color: black;
+    color: white;
+    border-radius: 50px;
+    padding: 20px 30px 20px 70px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+}
+
+.name { 
+    font-weight: 900; 
+    margin-right: 10px; 
+}
+
+.value { 
+    font-weight: bold; 
+}
+
+/* ===============================================================
+   SOUS SECTION 4.5 : PODIUM (TOP 3)
+   =============================================================== */
+.score-item:nth-child(1) .rank { 
+    background-color: #FFD700; 
+    color: #000; 
+}
+
+.score-item:nth-child(2) .rank { 
+    background-color: #C0C0C0; 
+    color: #000; 
+}
+
+.score-item:nth-child(3) .rank { 
+    background-color: #CD7F32; 
+    color: #000; 
+}
+
+/* ===============================================================
+   SOUS SECTION 4.6 : JOUEUR ACTUEL (HIGHLIGHT)
+   =============================================================== */
+.score-item.current-player .score-bar {
+    background-color: #f5c2cf !important;
+    color: #000 !important;
+    border: 3px solid white;
+    animation: flashCurrentPlayer 0.8s infinite alternate;
+}
+
+/* Animation highlight */
+@keyframes flashCurrentPlayer {
+    from { box-shadow: 0 0 5px #f5c2cf; filter: brightness(1); }
+    to { box-shadow: 0 0 20px #f5c2cf; filter: brightness(1.2); }
+}
+
+/* ===============================================================
+   SOUS SECTION 4.7 : BANDEAU "CONTINUER"
+   =============================================================== */
+.tap-to-continue {
+    width: 100%;
+    background: rgba(60, 60, 60, 0.95);
+    color: white;
+    text-align: center;
+    padding: 25px 0;
+    cursor: pointer;
+    margin-top: 60px;
+    position: fixed;
+    left: 0;
+    z-index: 1000;
+    animation: blink 1.5s infinite;
+}
+
+/* Texte interne */
+.flashing-text {
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+/* ===============================================================
+   SOUS SECTION 4.8 : ANIMATION GLOBALE
+   =============================================================== */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* =========================================================================================================================
+   SEGEMENT 5 : PAGE FINALE (REMERCIEMENTS / ENDING)
+   ========================================================================================================================= */
+
+/* ===============================================================
+   SOUS SECTION 5.1 : BASE & LAYOUT GLOBAL
+   =============================================================== */
+body.ending-game {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #e9e9e9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* ===============================================================
+   SOUS SECTION 5.2 : FOND ANIMÉ
+   =============================================================== */
+body.ending-game::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('../images/Kyllian/Evil_Good_Lakitu.gif') repeat;
+    background-size: 220px;
+    opacity: 0.3;
+    animation: cloudsMoveEnding 60s linear infinite;
+    z-index: -1;
+}
+
+/* Animation fond */
+@keyframes cloudsMoveEnding {
+    from { background-position: 0 0; }
+    to { background-position: 0 2000px; }
+}
+
+/* ===============================================================
+   SOUS SECTION 5.3 : STRUCTURE DES CRÉDITS
+   =============================================================== */
+.credits-layout {
+    text-align: center;
+    width: 1000px;
+    z-index: 1;
+}
+
+.credits-layout h1 {
+    font-size: 75px;
+    margin-bottom: 30px;
+    font-family: 'Franklin Gothic Medium', Arial, sans-serif;
+}
+
+/* ===============================================================
+   SOUS SECTION 5.4 : SCORE FINAL
+   =============================================================== */
+.score-final {
+    display: flex;
+    align-items: center;
+    background-color: #000000;
+    border-radius: 25px;
+    padding: 20px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.rank-final {
+    width: 120px;
+    height: 100px;
+    background-color: #f5c2cf;
+    border-radius: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 50px;
+    position: absolute;
+    left: -25px;
+    z-index: 2;
+}
+
+.final-score-text {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    font-size: 49px;
+    color: white;
+}
+
+/* ===============================================================
+   SOUS SECTION 5.5 : BOÎTE DE CRÉDITS
+   =============================================================== */
+.credits-box {
+    width: 100%;
+    min-height: 200px;
+    background-color: #8f8f8f;
+    border-radius: 20px;
+    margin-bottom: 40px; 
+    border: 2px solid #000;
+    display: flex;
+    align-items: center;
+}
+
+/* Image Lakitu */
+.credits-img {
+    width: 190px;
+    height: auto;
+    margin-left: 20px;
+    animation: lakituFloat 3s ease-in-out infinite, 
+               lakituBounce 0.6s ease-in-out infinite alternate;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+}
+
+#evilCreditsImg {
+    transform: scaleX(-1); /* Retourne l'image horizontalement */
+    animation: lakituFloat 3s ease-in-out infinite, lakituBounce 0.6s ease-in-out infinite alternate;
+}
+
+
+/* Texte crédits */
+.credits-text {
+    flex: 1;
+    padding: 20px;
+    color: white;
+    text-align: left;
+    font-size: 24px;
+    font-weight: bolder;
+    line-height: 1.4;
+}
+
+/* ===============================================================
+   SOUS SECTION 5.6 : ANIMATIONS (LAKITU)
+   =============================================================== */
+@keyframes lakituFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes lakituBounce {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+/* ===============================================================
+   SOUS SECTION 5.7 : BOUTONS FIN
+   =============================================================== */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    padding: 35px 110px;
+    border-radius: 25px;
+    border: 4px solid #000;
+    background-color: #f3cfd3;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #e6b9bf;
+    transform: scale(1.05);
+}
+
+/* =========================================================================================================================
+   SEGEMENT 6 : BADGES (COLLECTIONS)
+   ========================================================================================================================= */
+
+/* ===============================================================
+   SOUS SECTION 6.1 : STRUCTURE GÉNÉRALE DE LA PAGE
+   =============================================================== */
+
+body.badge-page {
+    background-color: #888;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+body.badge-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../images/Kyllian/EvilL.gif");
+  background-repeat: repeat;
+  background-size: 220px;
+  opacity: 0.40;
+  z-index: 0;
+}
+
+/* Contenu au-dessus du fond */
+body.badge-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.badge-main-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* ===============================================================
+   SOUS SECTION 6.2 : NOTEBOOK (CARNET PRINCIPAL)
+   =============================================================== */
+
+.notebook {
+    background: #fff;
+    width: 600px;
+    height: 700px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
+    padding: 20px;
+    background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+    background-size: 20px 20px;
+    border: 3px solid #333;
+    display: flex;
+    flex-direction: column;
+}
+
+.notebook-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Bouton retour */
+.back-btn {
+    background: #cccccc;
+    border: 3px solid #333;
+    border-radius: 50%;
+    width: 68px;
+    height: 65px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 20px;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 11px;
+}
+
+.back-btn:hover {
+    background: #f32d5e;
+}
+
+/* Onglets */
+.game-tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.tab {
+    padding: 5px 15px;
+    border: 2px solid #333;
+    background: #eee;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    opacity: 0.5;
+    cursor: pointer;
+    position: relative;
+}
+
+.tab.active { 
+    opacity: 1; 
+    background: #f5c2cf; 
+}
+
+/* ===============================================================
+   SOUS SECTION 6.3 : GRILLE DES BADGES
+   =============================================================== */
+
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 15px;
+    flex-grow: 1;
+}
+
+.badge-item {
+    aspect-ratio: 1;
+    border: 2px solid #555;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    transition: transform 0.1s;
+    position: relative;
+}
+
+.badge-item:hover { 
+    transform: scale(1.1); 
+    background: #f0f0f0; 
+}
+
+.badge-item.locked {
+    background: #ccc;
+    opacity: 0.5;
+}
+
+.badge-item.unlocked {
+    background-color: #000000;
+    border: 2px solid #444;
+    transition: background-color 0.3s ease;
+}
+
+.badge-item.unlocked:hover {
+    background-color: #1a1a1a;
+}
+
+.badge-item img {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+.lock-icon { 
+    font-size: 24px; 
+    color: #777; 
+}
+
+/* Pagination */
+.page-numbers {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+.page-btn {
+    border: 2px solid #333;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.page-btn.active { 
+    background: #333; 
+    color: white; 
+}
+
+/* ===============================================================
+   SOUS SECTION 6.4 : CARTE DE DÉTAILS
+   =============================================================== */
+
+.details-card {
+    width: 350px;
+    background: white;
+    border: 2px solid #333;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.card-inner {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+.card-photo {
+    width: 100%;
+    height: 200px;
+    background: #f9f9f9;
+    border: 2px solid #333;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.card-photo img { 
+    max-width: 90%; 
+    max-height: 90%; 
+}
+
+.unlocked-photo-bg {
+    background-color: #000000 !important;
+}
+
+.card-name {
+    font-size: 24px;
+    font-weight: bold;
+    background: #f5c2cf;
+    border: 2px solid #333;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.card-description {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    text-align: left;
+    background: #eee;
+    padding: 10px;
+    border-radius: 5px;
+    min-height: 80px;
+}
+
+/* Layout colonne droite */
+.side-column-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    gap: 20px;             
+}
+
+/* ===============================================================
+   SOUS SECTION 6.5 : NOTIFICATIONS (TABS & BADGES)
+   =============================================================== */
+
+/* Notification onglets */
+.tab-notify::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+    background-color: #ff3b3b;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    animation: pulseNotify 1.5s infinite;
+}
+
+@keyframes pulseNotify {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Notification badges */
+.badge-item.new-badge::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 14px;
+    height: 14px;
+    background-color: #ff0000;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    animation: notif-red 2s infinite; 
+    pointer-events: none;
+}
+
+@keyframes notif-red {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+    }
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 5px rgba(255, 0, 0, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    }
+}
+
+/* ===============================================================
+   SOUS SECTION 6.6 : BOUTON ACCÈS JEU
+   =============================================================== */
+
+.btn-rect-rules {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;            
+    max-width: 350px;       
+    height: 60px;
+    background-color:#f5c2cf;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-family: 'Arial Black', sans-serif;
+    border: 3px solid #000000;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 #f5c2cf;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease; 
+}
+
+.btn-rect-rules:hover {
+    background-color: #ff0000;
+    color: #000;              
+    border-color: #ffffff;
+    box-shadow: 0 6px 0 #cc0000; 
+    transform: translateY(-3px);
+    cursor: pointer;
+}
+
+.btn-rect-rules:active {
+    transform: translateY(2px);  
+    box-shadow: 0 2px 0 #00cccc;
+}
+
+/* ===================================== */
+/* ===== CSS KYLLIAN FIN =============== */
+/* ===================================== */
+
+
+
+/* ===================================== */
+/* ========= COOKIE CONSENT ============ */
+/* ===================================== */
+
+/* -- Bandeau -- */
+.ck-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 90%;
+    max-width: 620px;
+    background: linear-gradient(135deg, rgba(30,10,40,0.97), rgba(60,10,50,0.97));
+    border: 2px solid #ff4f9a;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(255, 79, 154, 0.35), 0 4px 16px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    padding: 20px 24px;
+}
+
+.ck-banner__inner { width: 100%; }
+
+.ck-banner__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.ck-banner__icon { font-size: 1.6rem; }
+
+.ck-banner__title {
+    font-family: 'Irish Grover', cursive;
+    color: #ffd700;
+    font-size: 1.1rem;
+    margin: 0;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.ck-banner__text {
+    color: #e0e0e0;
+    font-size: 0.82rem;
+    margin: 0 0 16px;
+    line-height: 1.5;
+    font-family: system-ui, sans-serif;
+}
+
+.ck-banner__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* -- Boutons partagés -- */
+.ck-btn {
+    padding: 9px 22px;
+    border-radius: 30px;
+    font-family: 'Irish Grover', cursive;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.3px;
+}
+.ck-btn:hover { opacity: 0.85; transform: scale(1.03); }
+
+.ck-btn--primary  { background: #ff4f9a; color: #fff; box-shadow: 0 4px 12px rgba(255,79,154,0.4); }
+.ck-btn--secondary { background: #ffd700; color: #1a0020; }
+.ck-btn--ghost    { background: transparent; color: #ccc; border: 1px solid rgba(255,255,255,0.3); font-size: 0.78rem; }
+
+/* -- Modale préférences -- */
+/* Force la modale à ignorer les contraintes des parents */
+.ck-modal {
+    position: fixed !important;
+    inset: 0 !important; /* Top, Right, Bottom, Left à 0 */
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2147483647 !important; /* Priorité absolue sur tout */
+    background: rgba(0, 0, 0, 0.8) !important;
+}
+
+
+.ck-modal__box {
+    background: linear-gradient(160deg, rgba(35,10,50,0.98), rgba(20,5,35,0.98));
+    border: 2px solid #ff4f9a;
+    border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(255,79,154,0.3), 0 4px 20px rgba(0,0,0,0.6);
+    width: 100%;
+    max-width: 520px;
+    padding: 28px 28px 24px;
+    position: relative;
+    z-index: 99999 !important;
+    position: relative !important;
+    z-index: 2147483647 !important;
+    margin: auto !important;
+}
+
+.ck-modal__close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: #aaa;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+    z-index: 99999 !important;
+}
+.ck-modal__close:hover { color: #ff4f9a; }
+
+.ck-modal__title {
+    font-family: 'Irish Grover', cursive;
+    color: #ffd700;
+    font-size: 1.25rem;
+    margin: 0 0 10px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    z-index: 99999 !important;
+}
+
+.ck-modal__intro {
+    color: #ccc;
+    font-size: 0.8rem;
+    margin: 0 0 20px;
+    line-height: 1.5;
+    font-family: system-ui, sans-serif;
+    z-index: 99999 !important;
+}
+
+/* -- Liste des préférences -- */
+.ck-pref-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
+
+.ck-pref-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,79,154,0.2);
+    border-radius: 14px;
+    padding: 12px 16px;
+}
+
+.ck-pref-info { display: flex; flex-direction: column; gap: 3px; }
+
+.ck-pref-name {
+    font-family: 'Irish Grover', cursive;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.ck-pref-desc {
+    color: #aaa;
+    font-size: 0.75rem;
+    font-family: system-ui, sans-serif;
+    line-height: 1.4;
+}
+
+/* -- Toggle switch -- */
+.ck-toggle {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.ck-toggle--disabled { cursor: not-allowed; opacity: 0.6; }
+
+.ck-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+.ck-toggle__slider {
+    position: absolute;
+    inset: 0;
+    background: #444;
+    border-radius: 26px;
+    transition: background 0.25s;
+}
+.ck-toggle__slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.25s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+.ck-toggle input:checked + .ck-toggle__slider { background: #ff4f9a; }
+.ck-toggle input:checked + .ck-toggle__slider::before { transform: translateX(20px); }
+.ck-toggle input:disabled:checked + .ck-toggle__slider { background: #ffd700; }
+
+/* -- Actions modale -- */
+.ck-modal__actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* -- Bouton flottant -- */
+.ck-float-btn {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    z-index: 9998;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff4f9a, #c80a55);
+    border: 2px solid #ffd700;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(255,79,154,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ck-float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(255,79,154,0.6); }
+
+/* -- Responsive -- */
+@media (max-width: 600px) {
+    .ck-banner { bottom: 10px; padding: 16px 16px; }
+    .ck-banner__actions { flex-direction: column; }
+    .ck-btn { width: 100%; text-align: center; }
+    .ck-modal__box { padding: 20px 16px 18px; }
+    .ck-modal__actions { flex-direction: column; }
+}
+
+/* --- Le Bandeau de Cookies --- */
+.ck-banner {
+    position: fixed !important;
+    bottom: 20px !important;    /* Fixé en bas */
+    left: 20px !important;      /* Fixé à gauche */
+    top: auto !important;       /* Annule un éventuel 'top' hérité */
+    transform: none !important; /* Annule le transform: translateX(-50%) précédent */
+    width: 90% !important;
+    max-width: 400px !important;
+    z-index: 99999 !important;  /* Passe au-dessus de tout */
+}
+
+/* --- Le Petit Bouton Flottant (si le bandeau est fermé) --- */
+.ck-float-btn {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 20px !important;
+    top: auto !important;
+    z-index: 10000 !important; /* Juste en dessous du bandeau */
+
+}
+
+
+/* 1. On réinitialise l'overlay pour qu'il ignore le flex du body */
+.ck-modal {
+    position: fixed !important;
+    inset: 0 !important; /* Équivalent à top:0, left:0, right:0, bottom:0 */
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    
+    /* On le détache du flux flexbox */
+    flex: none !important;
+    align-self: auto !important;
+    
+    /* Priorité maximale pour passer devant les containers Wii/Notebook */
+    z-index: 2147483647 !important; 
+    
+    /* Centrage du contenu interne */
+    display: none; /* Ton JS passera ça en 'flex' lors de l'ouverture */
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.85) !important;
+}
+
+/* 2. On s'assure que la boîte de dialogue reste centrée */
+.ck-modal__box {
+    position: relative !important;
+    z-index: 2147483647 !important;
+    margin: auto !important;
+    max-width: 520px !important;
+    width: 90% !important;
+}
+
+/* 3. On neutralise les blocages de contexte des pages spécifiques */
+body.page-règles, body.badge-page {
+    /* Empêche les parents de limiter l'affichage de l'overlay */
+    isolation: auto !important;
+    overflow: visible !important;
+}
+/* ===================================== */
+/* ======= COOKIE CONSENT FIN ========= */
+/* ===================================== */
