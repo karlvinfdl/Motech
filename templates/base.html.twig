@@ -13,7 +13,6 @@
         {% endblock %}
 
         {% block javascripts %}
-            {# Coaster game self-contained, no app.js needed #}
         {% endblock %}
     </head>
 
@@ -21,7 +20,6 @@
         {% block body %}{% endblock %}
 
         {% block cookie_consent %}
-        {# ===== Bandeau Cookie Consent ===== #}
         <div id="cookie-banner" class="ck-banner" role="dialog" aria-label="Consentement aux cookies" style="display:none">
             <div class="ck-banner__inner">
                 <div class="ck-banner__header">
@@ -38,7 +36,6 @@
             </div>
         </div>
 
-        {# ===== Modale Préférences ===== #}
         <div id="ck-modal" class="ck-modal" role="dialog" aria-modal="true" aria-label="Préférences cookies" style="display:none">
             <div class="ck-modal__box">
                 <button id="ck-modal-close" class="ck-modal__close" aria-label="Fermer">✕</button>
@@ -51,27 +48,29 @@
                             <span class="ck-pref-name">Nécessaires</span>
                             <span class="ck-pref-desc">Indispensables au fonctionnement du site (session, sécurité CSRF).</span>
                         </div>
-                        <label class="ck-toggle ck-toggle--disabled" aria-label="Toujours actif">
+                        <label class="ck-toggle ck-toggle--disabled">
                             <input type="checkbox" checked disabled>
                             <span class="ck-toggle__slider"></span>
                         </label>
                     </div>
+
                     <div class="ck-pref-item">
                         <div class="ck-pref-info">
                             <span class="ck-pref-name">Analytiques</span>
                             <span class="ck-pref-desc">Mesure d'audience anonymisée pour améliorer nos jeux.</span>
                         </div>
-                        <label class="ck-toggle" aria-label="Activer les cookies analytiques">
+                        <label class="ck-toggle">
                             <input type="checkbox" id="ck-analytics">
                             <span class="ck-toggle__slider"></span>
                         </label>
                     </div>
+
                     <div class="ck-pref-item">
                         <div class="ck-pref-info">
                             <span class="ck-pref-name">Préférences</span>
                             <span class="ck-pref-desc">Mémorisation de vos choix de jeu et de votre profil.</span>
                         </div>
-                        <label class="ck-toggle" aria-label="Activer les cookies de préférences">
+                        <label class="ck-toggle">
                             <input type="checkbox" id="ck-prefs-cookie">
                             <span class="ck-toggle__slider"></span>
                         </label>
@@ -85,8 +84,7 @@
             </div>
         </div>
 
-        {# ===== Bouton flottant ===== #}
-        <button id="ck-float-btn" class="ck-float-btn" aria-label="Gérer les cookies" title="Gérer les cookies" style="display:none">🍪</button>
+        <button id="ck-float-btn" class="ck-float-btn" style="display:none">🍪</button>
 
         <script>
         (function () {
@@ -132,7 +130,6 @@
         </script>
         {% endblock %}
 
-        {# 1. Mise à jour de la liste des routes autorisées #}
         {% set routes_autorisees = ['app_equipe', 'app_landing', 'app_avis'] %}
         
         {% if app.request.attributes.get('_route') in routes_autorisees %}
@@ -143,7 +140,6 @@
                         <a href="{{ path('app_politique') }}#mentions-legales">Mentions Légales</a>
                         <a href="{{ path('app_politique') }}#cgu">CGU</a>
                         <a href="{{ path('app_politique') }}#politique-confidentialite">Politique de Confidentialité</a>
-                        <a href="#" onclick="tarteaucitron.userInterface.openPanel(); return false;">Gérer mes cookies</a>
                     </nav>
                 </div>
             </footer>

@@ -24,7 +24,7 @@ body {
     bottom: 0; /* Le colle tout en bas */
     left: 0; /* Le colle tout à gauche */
     width: 100%; /* Lui fait prendre toute la largeur */
-    z-index: 99999; /* Force le passage au-dessus des nuages et avatars */
+    z-index: 3 !important; /* Force le passage au-dessus des nuages et avatars */
     background-color: rgba(255, 255, 255, 0.9); /* Fond blanc légèrement transparent */
     padding: 10px 0;
     text-align: center;
@@ -125,12 +125,6 @@ body > * {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.10) 0%,
-        rgba(255, 255, 255, 0.03) 40%,
-        rgba(255, 255, 255, 0.08) 100%
-    );
     pointer-events: none;
     z-index: 1;
 }
@@ -738,7 +732,7 @@ button {
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 9000;
+    z-index: 4 !important;
     background: var(--ck-bg-banner);
     border-top: 2px solid var(--ck-rose);
     display: none;
@@ -926,9 +920,9 @@ button {
 /* Bouton flottant */
 .ck-float-btn {
     position: fixed;
-    bottom: 20px;
+    bottom: 10px;
     right: 20px;
-    z-index: 8900;
+    z-index: 4 !important;
     width: 48px;
     height: 48px;
     border-radius: 50%;
