@@ -1,26 +1,11 @@
-## Star Coaster Fix Plan (Approved ✅)
+# Image Paths Fix Plan
 
-### Current Progress: 6/6 ✅ **COMPLETE**
+## Steps:
 
-✅ **Step 1**: `public/images/Elodie/nuages.png` created
+1. ✅ Create this TODO.md
+2. 🔄 Edit public/assets/styles/app.css - Replace all broken CSS url() paths to '/assets/images/...'
+3. 🔄 Clear Symfony cache: `bin/console cache:clear`
+4. ✅ Test wheel page backgrounds (/wheel) and other pages (landing, equipe, fin)
+5. ✅ attempt_completion
 
-**Step 2: Fix duplicate bgImg declaration**  
-- Edit `templates/coaster/index.html.twig`: Remove duplicate `const bgImg`, fix src path to `{{ asset('images/Elodie/nuages.png') }}`
-
-**Step 3: Clean up drawBackground() function**  
-- Ensure fallback gradient works if image fails
-
-✅ **Step 4**: `assets/app.js` → Stimulus import disabled
-
-**Step 5: Verify asset paths**  
-- All images use `{{ asset('images/...') }}` (Symfony standard)
-
-**Step 6: Test game**  
-- `symfony serve` → `/coaster?page=jeu`  
-- Check console: No errors, bg loads, rails RGB (Rouge/Orange/Violet), 3 difficulty levels
-
-### Notes
-- JS stays **inline in Twig** (no external coaster.js)
-- Rails: 3 colors `[#ff4444, #ffaa00, #aa44ff]`, pentu = currentLevel * 0.1
-- Post-completion: Run `attempt_completion`
-
+**Details:** Standardize ~11 broken relative paths (../images/, img/, ../assets/Axel/) to absolute /assets/images/... for consistency. Wheel template already correct.
