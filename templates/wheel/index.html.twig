@@ -1,20 +1,1065 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello WheelController!{% endblock %}
+{% block title %}La Roulette des Licornes{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello Wheel! ✅</h1>
+{# ================================================================
+   AUDIO GLOBAL (partagé entre toutes les modales)
+   ================================================================ #}
+<audio id="wheelAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/LUCKY WHEEL SPIN SOUND EFFECTS  Copyright Free.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="spinSound" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/LUCKY WHEEL SPIN SOUND EFFECTS  Copyright Free.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="blindTestAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/despacito.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="shapeOfYouAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/shapeofyou.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="papaOutaiAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/papaoutai.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="billieJeanAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/billiejean.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="weWillRockAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/wewillrock.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="daftPunkAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/daftpunk.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="brunoMarsAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/brunomars.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="macarenaAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/macarena.mp3') }}" type="audio/mpeg">
+</audio>
+<audio id="queenAudio" preload="auto">
+  <source src="{{ asset('assets/sound/Axel/queen.mp3') }}" type="audio/mpeg">
+</audio>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/karlv/OneDrive/Desktop/Motech_licorne/Licorne/src/Controller/WheelController.php</code></li>
-        <li>Your template at <code>C:/Users/karlv/OneDrive/Desktop/Motech_licorne/Licorne/templates/wheel/index.html.twig</code></li>
-    </ul>
+{# ================================================================
+   CONTRÔLE DU VOLUME (global, fixé en haut à droite)
+   ================================================================ #}
+<div class="volume-control">
+  <label for="volumeSlider">🔊 Volume</label>
+  <input type="range" id="volumeSlider" min="0" max="100" value="50">
+  <span id="volumeValue">50%</span>
 </div>
+
+{# ================================================================
+   PAGE INDEX — écran d'accueil (toujours visible)
+   ================================================================ #}
+<div id="page-index" class="page-layer active">
+  <body class="intro">
+    <main class="intro-layer">
+      <section class="wheels" aria-label="Choix du mode de jeu">
+        <a class="wheel wheel--quest" href="#" data-open="modal-wheel1">
+          <img src="{{ asset('assets/images/Axel/questwheel.webp') }}" alt="Question / Réponse">
+        </a>
+        <a class="wheel wheel--blind" href="#" data-open="modal-wheel2">
+          <img src="{{ asset('assets/images/Axel/blindwheel.webp') }}" alt="Blind Test">
+        </a>
+        <a class="wheel wheel--stand" href="#" data-open="modal-wheel3">
+          <img src="{{ asset('assets/images/Axel/standwheel.webp') }}" alt="Question Stand">
+        </a>
+      </section>
+      <button type="button" class="play" id="playBtn">JOUER</button>
+    </main>
+  </body>
+</div>
+
+{# ================================================================
+   MODALE WHEEL 1 — Question / Réponse
+   ================================================================ #}
+<div id="modal-wheel1" class="game-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="modal-close" data-close="modal-wheel1" aria-label="Fermer">✕</button>
+  <div class="modal-body page-wheel">
+    <div class="scene" id="scene-wheel1">
+      <div class="game" id="wheelZone-wheel1">
+        <div class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 50 40" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25 40 L0 10 L12 10 L12 0 L38 0 L38 10 L50 10 Z"
+                  fill="#fff" stroke="#0b3a44" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="wheel-wrap">
+          <svg id="wheel-wheel1" viewBox="0 0 200 200" role="img" aria-label="Roue de jeu">
+            <g id="segments-wheel1"></g>
+            <circle cx="100" cy="100" r="48" fill="#ffffff"/>
+            <text x="100" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="#0b3a44">QUESTION /</text>
+            <text x="100" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#0b3a44">REPONSE</text>
+          </svg>
+        </div>
+        <button id="spin-wheel1" class="spin">JOUER</button>
+      </div>
+      <aside class="panel" id="panel-wheel1" aria-hidden="true">
+        <div class="hearts" aria-hidden="false"></div>
+        <h2>Question / Réponse</h2>
+        <div class="panel-card"></div>
+        <div class="panel-card"></div>
+        <div class="panel-card"></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+{# ================================================================
+   MODALE WHEEL 2 — Blind Test
+   ================================================================ #}
+<div id="modal-wheel2" class="game-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="modal-close" data-close="modal-wheel2" aria-label="Fermer">✕</button>
+  <div class="modal-body page-wheel page-wheel2">
+    <div class="scene" id="scene-wheel2">
+      <div class="vinyle-player" id="vinylePlayer">
+        <img src="{{ asset('assets/images/Axel/lecvinyle.svg') }}" alt="Lecteur vinyle">
+      </div>
+      <div class="game" id="wheelZone-wheel2">
+        <div class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 50 40" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25 40 L0 10 L12 10 L12 0 L38 0 L38 10 L50 10 Z"
+                  fill="#fff" stroke="#0b3a44" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="wheel-wrap">
+          <svg id="wheel-wheel2" viewBox="0 0 200 200" role="img" aria-label="Roue de jeu">
+            <g id="segments-wheel2"></g>
+            <circle cx="100" cy="100" r="48" fill="#ffffff"/>
+            <text x="100" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="#0b3a44">BLIND</text>
+            <text x="100" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#0b3a44">TEST</text>
+          </svg>
+        </div>
+        <button id="spin-wheel2" class="spin">JOUER</button>
+      </div>
+      <aside class="panel" id="panel-wheel2" aria-hidden="true">
+        <div class="hearts" aria-hidden="false"></div>
+        <h2>Blind Test</h2>
+        <div id="blindTestPhase" class="panel-card">
+          <div class="timer-container">
+            <div id="blindTestTimer" class="timer-bar"></div>
+          </div>
+          <div id="blindTestQuestion">Devine le titre !</div>
+        </div>
+        <div class="panel-card"></div>
+        <div class="panel-card"></div>
+        <div class="panel-card"></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+{# ================================================================
+   MODALE WHEEL 3 — Question Stand
+   ================================================================ #}
+<div id="modal-wheel3" class="game-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="modal-close" data-close="modal-wheel3" aria-label="Fermer">✕</button>
+  <div class="modal-body page-wheel page-wheel3">
+    <div class="scene" id="scene-wheel3">
+      <div class="game" id="wheelZone-wheel3">
+        <div class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 50 40" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25 40 L0 10 L12 10 L12 0 L38 0 L38 10 L50 10 Z"
+                  fill="#fff" stroke="#0b3a44" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="wheel-wrap">
+          <svg id="wheel-wheel3" viewBox="0 0 200 200" role="img" aria-label="Roue de jeu">
+            <g id="segments-wheel3"></g>
+            <circle cx="100" cy="100" r="48" fill="#ffffff"/>
+            <text x="100" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="#0b3a44">QUESTION</text>
+            <text x="100" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#0b3a44">STAND</text>
+          </svg>
+        </div>
+        <button id="spin-wheel3" class="spin">JOUER</button>
+      </div>
+      <aside class="panel" id="panel-wheel3" aria-hidden="true">
+        <div class="hearts" aria-hidden="false"></div>
+        <h2>Question Stand</h2>
+        <div class="panel-card"></div>
+        <div class="panel-card"></div>
+        <div class="panel-card"></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+{# ================================================================
+   MODALE DÉFAITE
+   ================================================================ #}
+<div id="modal-fail" class="game-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-body fail-page">
+    <h1 class="top-title">Dommage ! Tente de ressayer</h1>
+    <img src="{{ asset('assets/images/Axel/badgebronzeavant.png') }}" alt="Badge bronze" class="badge-center">
+    <img src="{{ asset('assets/images/Axel/tokyosad.png') }}" alt="Fail dog" class="fail-dog">
+    <button class="retry-btn" id="retryBtn">Ressayer</button>
+  </div>
+</div>
+
+{# ================================================================
+   MODALE RÉCOMPENSE / BADGES
+   ================================================================ #}
+<div id="modal-card" class="game-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="modal-close" data-close="modal-card" aria-label="Fermer">✕</button>
+  <div class="modal-body page-card" style="background: url('{{ asset('assets/images/Axel/socles.png') }}') center/cover fixed;">
+    <div class="ach-container">
+
+      {# ROUE 1 #}
+      <div style="text-align: center; flex: 1; min-width: 280px;">
+        <h2 style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); margin-bottom: 20px;">🌀 Roue 1</h2>
+        <div class="ach-grid">
+          <div class="ach-card wheel1-bronze">
+            <div class="ach-flip">
+              <div class="ach-face ach-front"><img src="{{ asset('assets/images/Axel/badgebronzeavant.png') }}" alt="Bronze Roue 1"></div>
+              <div class="ach-face ach-back"><img src="{{ asset('assets/images/Axel/badgebronzearriere.png') }}" alt="Bronze Roue 1 verso"></div>
+            </div>
+          </div>
+          <div class="ach-card wheel1-argent">
+            <div class="ach-flip">
+              <div class="ach-face ach-front"><img src="{{ asset('assets/images/Axel/badgeargavant.png') }}" alt="Argent Roue 1"></div>
+              <div class="ach-face ach-back"><img src="{{ asset('assets/images/Axel/badgeargarriere.png') }}" alt="Argent Roue 1 verso"></div>
+            </div>
+          </div>
+          <div class="ach-card wheel1-diamant">
+            <div class="ach-flip">
+              <div class="ach-face ach-front"><img src="{{ asset('assets/images/Axel/badgediamavant.png') }}" alt="Diamant Roue 1"></div>
+              <div class="ach-face ach-back"><img src="{{ asset('assets/images/Axel/badgediamantarr.png') }}" alt="Diamant Roue 1 verso"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {# ROUE 2 #}
+      <div style="text-align: center; flex: 1; min-width: 280px;">
+        <h2 style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); margin-bottom: 20px;">🎵 Roue 2 (Blind Test)</h2>
+        <div class="ach-grid">
+          <div class="ach-card wheel2-bronze">
+            <div class="ach-flip">
+              <div class="ach-face ach-front"><img src="{{ asset('assets/images/Axel/badgebronzeavant.png') }}" alt="Bronze Roue 2"></div>
+              <div class="ach-face ach-back"><img src="{{ asset('assets/images/Axel/badgebronzearriere.png') }}" alt="Bronze Roue 2 verso"></div>
+            </div>
+          </div>
+          <div class="ach-card wheel2-argent">
+            <div class="ach-flip">
+              <div class="ach-face ach-front"><img src="{{ asset('assets/images/Axel/badgeargavant.png') }}" alt="Argent Roue 2"></div>
+              <div class="ach-face ach-back"><img src="{{ asset('assets/images/Axel/badgeargarriere.png') }}" alt="Argent Roue 2 verso"></div>
+            </div>
+          </div>
+          <div class="ach-card wheel2-diamant">
+            <div class="ach-flip">
+              <div class="ach-face ach-front"><img src="{{ asset('assets/images/Axel/badgediamavant.png') }}" alt="Diamant Roue 2"></div>
+              <div class="ach-face ach-back"><img src="{{ asset('assets/images/Axel/badgediamantarr.png') }}" alt="Diamant Roue 2 verso"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {# ROUE 3 #}
+      <div style="text-align: center; flex: 1; min-width: 280px;">
+        <h2 style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); margin-bottom: 20px;">⭐ Roue 3 (Stand)</h2>
+        <div class="ach-grid">
+          <div class="ach-card wheel3-bronze">
+            <div class="ach-flip">
+              <div class="ach-face ach-front"><img src="{{ asset('assets/images/Axel/badgebronzeavant.png') }}" alt="Bronze Roue 3"></div>
+              <div class="ach-face ach-back"><img src="{{ asset('assets/images/Axel/badgebronzearriere.png') }}" alt="Bronze Roue 3 verso"></div>
+            </div>
+          </div>
+          <div class="ach-card wheel3-argent">
+            <div class="ach-flip">
+              <div class="ach-face ach-front"><img src="{{ asset('assets/images/Axel/badgeargavant.png') }}" alt="Argent Roue 3"></div>
+              <div class="ach-face ach-back"><img src="{{ asset('assets/images/Axel/badgeargarriere.png') }}" alt="Argent Roue 3 verso"></div>
+            </div>
+          </div>
+          <div class="ach-card wheel3-diamant">
+            <div class="ach-flip">
+              <div class="ach-face ach-front"><img src="{{ asset('assets/images/Axel/badgediamavant.png') }}" alt="Diamant Roue 3"></div>
+              <div class="ach-face ach-back"><img src="{{ asset('assets/images/Axel/badgediamantarr.png') }}" alt="Diamant Roue 3 verso"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>{# /.ach-container #}
+  </div>
+</div>
+
+{# ================================================================
+   OVERLAY FOND SOMBRE pour les modales
+   ================================================================ #}
+<div id="modal-overlay" class="modal-overlay"></div>
+
+{# ================================================================
+   SCRIPT — toute la logique JS
+   ================================================================ #}
+<script>
+
+// ─────────────────────────────────────────────
+// SYSTÈME DE MODALES
+// ─────────────────────────────────────────────
+
+// Séquence de jeu: wheel1 → wheel2 → wheel3 → card
+const MODAL_SEQUENCE = ['modal-wheel1', 'modal-wheel2', 'modal-wheel3', 'modal-card'];
+
+function openModal(id) {
+  const modal = document.getElementById(id);
+  const overlay = document.getElementById('modal-overlay');
+  if (!modal) return;
+
+  // Réinitialise le jeu si c'est une modale de roue
+  if (id === 'modal-wheel1') resetWheel('wheel1');
+  if (id === 'modal-wheel2') resetWheel('wheel2');
+  if (id === 'modal-wheel3') resetWheel('wheel3');
+  if (id === 'modal-card') initBadges();
+
+  modal.setAttribute('aria-hidden', 'false');
+  modal.classList.add('is-open');
+  overlay.classList.add('is-visible');
+  document.body.classList.add('modal-open');
+}
+
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  const overlay = document.getElementById('modal-overlay');
+  if (!modal) return;
+
+  // Stoppe tous les audios
+  stopAllAudio();
+
+  modal.setAttribute('aria-hidden', 'true');
+  modal.classList.remove('is-open');
+
+  const anyOpen = document.querySelectorAll('.game-modal.is-open').length > 0;
+  if (!anyOpen) {
+    overlay.classList.remove('is-visible');
+    document.body.classList.remove('modal-open');
+  }
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.game-modal.is-open').forEach(m => {
+    m.setAttribute('aria-hidden', 'true');
+    m.classList.remove('is-open');
+  });
+  document.getElementById('modal-overlay').classList.remove('is-visible');
+  document.body.classList.remove('modal-open');
+  stopAllAudio();
+}
+
+function goToNextModal(currentId) {
+  const idx = MODAL_SEQUENCE.indexOf(currentId);
+  closeModal(currentId);
+  if (idx >= 0 && idx < MODAL_SEQUENCE.length - 1) {
+    setTimeout(() => openModal(MODAL_SEQUENCE[idx + 1]), 300);
+  }
+}
+
+function goToFail() {
+  closeAllModals();
+  setTimeout(() => openModal('modal-fail'), 300);
+}
+
+// Boutons d'ouverture (les images de l'index)
+document.querySelectorAll('[data-open]').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    openModal(btn.dataset.open);
+  });
+});
+
+// Boutons de fermeture
+document.querySelectorAll('[data-close]').forEach(btn => {
+  btn.addEventListener('click', () => closeModal(btn.dataset.close));
+});
+
+// Overlay clique → ferme tout
+document.getElementById('modal-overlay').addEventListener('click', closeAllModals);
+
+// Bouton JOUER de l'index → ouvre wheel1
+const playBtn = document.getElementById('playBtn');
+if (playBtn) {
+  playBtn.addEventListener('click', e => {
+    e.preventDefault();
+    playWheelSound();
+    burstSparkles(playBtn, e.clientX, e.clientY);
+    setTimeout(() => openModal('modal-wheel1'), 300);
+  });
+}
+
+// Bouton Ressayer dans fail
+const retryBtn = document.getElementById('retryBtn');
+if (retryBtn) {
+  retryBtn.addEventListener('click', () => {
+    closeAllModals();
+    localStorage.clear();
+  });
+}
+
+// ─────────────────────────────────────────────
+// AUDIO
+// ─────────────────────────────────────────────
+
+function stopAllAudio() {
+  const ids = ['wheelAudio','spinSound','blindTestAudio','shapeOfYouAudio',
+               'papaOutaiAudio','billieJeanAudio','weWillRockAudio','daftPunkAudio',
+               'brunoMarsAudio','macarenaAudio','queenAudio'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.pause(); el.currentTime = 0; }
+  });
+}
+
+function playWheelSound() {
+  const audio = document.getElementById('wheelAudio');
+  if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+}
+
+// ─────────────────────────────────────────────
+// VOLUME
+// ─────────────────────────────────────────────
+
+const volumeSlider = document.getElementById('volumeSlider');
+const volumeValue  = document.getElementById('volumeValue');
+
+function updateVolume() {
+  if (!volumeSlider) return;
+  const vol = volumeSlider.value / 100;
+  if (volumeValue) volumeValue.textContent = volumeSlider.value + '%';
+  ['wheelAudio','spinSound','blindTestAudio','shapeOfYouAudio',
+   'papaOutaiAudio','billieJeanAudio','weWillRockAudio','daftPunkAudio',
+   'brunoMarsAudio','macarenaAudio','queenAudio'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.volume = vol;
+  });
+}
+if (volumeSlider) { updateVolume(); volumeSlider.addEventListener('input', updateVolume); }
+
+// ─────────────────────────────────────────────
+// EFFET PAILLETTES (bouton JOUER index)
+// ─────────────────────────────────────────────
+
+function rand(min, max) { return Math.random() * (max - min) + min; }
+
+function burstSparkles(btn, clientX, clientY) {
+  const rect = btn.getBoundingClientRect();
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('span');
+    s.className = 'spark';
+    s.style.left = `${x}px`;
+    s.style.top  = `${y}px`;
+    s.style.setProperty('--dx', `${rand(-120,120)}px`);
+    s.style.setProperty('--dy', `${rand(-90,90)}px`);
+    const size = rand(5,11);
+    s.style.width  = `${size}px`;
+    s.style.height = `${size}px`;
+    const colors = ['#fff2ff','#ffd6ff','#fff7c2','#c9fff5','#ffd1a6'];
+    s.style.background = colors[Math.floor(Math.random() * colors.length)];
+    btn.appendChild(s);
+    s.addEventListener('animationend', () => s.remove());
+  }
+}
+
+// ─────────────────────────────────────────────
+// GESTION DES VIES
+// ─────────────────────────────────────────────
+
+const livesPerWheel = { wheel1: 3, wheel2: 3, wheel3: 3 };
+
+function enregistrerErreur(wheelId) {
+  const key = 'fautes' + wheelId.charAt(0).toUpperCase() + wheelId.slice(1);
+  let fautes = parseInt(localStorage.getItem(key) || '0') + 1;
+  localStorage.setItem(key, fautes.toString());
+}
+
+function updateLivesUI(wheelId) {
+  const panel = document.getElementById('panel-' + wheelId);
+  if (!panel) return;
+  const hearts = panel.querySelector('.hearts');
+  if (!hearts) return;
+  const lives = livesPerWheel[wheelId];
+  let html = '';
+  for (let i = 0; i < 3; i++) {
+    const isActive = i < lives;
+    html += `<svg class="heart-svg ${isActive ? '' : 'lost'}" viewBox="0 0 24 24" aria-hidden="true">
+      <defs>
+        <linearGradient id="heartGrad_${wheelId}_${i}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ff6b9d"/>
+          <stop offset="100%" style="stop-color:#e34"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#heartGrad_${wheelId}_${i})" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>`;
+  }
+  hearts.innerHTML = html;
+}
+
+// ─────────────────────────────────────────────
+// QUESTIONS
+// ─────────────────────────────────────────────
+
+const questionsWheel1 = {
+  "Facile": [
+    { q: "À quoi sert un bouton ?", choices: ["Cliquer","Décorer la page","Stocker des données"], answer: 0 },
+    { q: "Que se passe-t-il quand je clique sur un bouton ?", choices: ["Le site s'éteint","Une action se déclenche","Le PC redémarre"], answer: 1 },
+    { q: "Que signifie 'Bravo' à l'écran ?", choices: ["Une erreur","Une réussite","Un bug"], answer: 1 },
+    { q: "Un site web, c'est…", choices: ["Une page sur Internet","Une application téléphone uniquement","Un jeu vidéo"], answer: 0 }
+  ],
+  "Moyen": [
+    { q: "Pour changer la couleur d'un bouton, on modifie :", choices: ["Le texte","L'apparence","Le son"], answer: 1 },
+    { q: "Si un élément 'apparaît', ça veut dire :", choices: ["Il disparaît","Il devient visible","Il est supprimé"], answer: 1 },
+    { q: "Une animation, c'est :", choices: ["Un calcul","Un mouvement ou effet visuel","Une erreur"], answer: 1 },
+    { q: "Si je clique et qu'il se passe quelque chose :", choices: ["C'est un hasard","C'est une interaction","C'est un bug"], answer: 1 }
+  ],
+  "Difficile": [
+    { q: "Si rien ne se passe quand je clique :", choices: ["C'est normal","Il y a un problème","C'est fini"], answer: 1 },
+    { q: '"404 chance not found" veut dire :', choices: ["J'ai gagné","Le site est cassé","Je n'ai pas eu de chance 😄"], answer: 1 },
+    { q: "Si je fais une erreur :", choices: ["Je continue quand même","Je gagne plus","Je recommence à zéro"], answer: 2 },
+    { q: "Plus je réussis :", choices: ["Moins je gagne","Rien ne change","Plus je gagne"], answer: 2 }
+  ],
+  "Énigme": [
+    { q: "Complétez la suite : 1 - 3 - 5 - ?", choices: ["6","7","8"], answer: 1 },
+    { q: "Complétez la suite : 2 - 4 - 8 - 16 - ?", choices: ["24","32","36"], answer: 1 },
+    { q: "Complétez la suite : A - C - E - G - ?", choices: ["H","I","J"], answer: 1 }
+  ],
+  "Rejoue ↻": []
+};
+
+const questionsWheel3 = {
+  "Elodie": [
+    { q: "Quelle est le moyen de transport de la licorne sur le jeux Star Coaster ?", choices: ["Train","Avion","Wagon"], answer: 2 },
+    { q: "Combien il y a de niveau dans le Star Coaster?", choices: ["2","4","3"], answer: 2 }
+  ],
+  "Kyllian": [
+    { q: "Kylian est bon en... ?", choices: ["Maths","Dessin","Cuisine"], answer: 0 },
+    { q: "Quel sport aime Kylian ?", choices: ["Football","Natation","Escalade"], answer: 0 }
+  ],
+  "Karlvin": [
+    { q: "Combien il y a t-il de biome (Monde) dans le Scrabble des Licornes ?", choices: ["2","3","4"], answer: 1 },
+    { q: "Combien de niveau de difficulté possède le Scrabble des Licornes", choices: ["1","3","2"], answer: 1 }
+  ],
+  "Alexis": [
+    { q: "De quel couleur était le mage du jeux Devine le mot?", choices: ["Bleu","Rouge","Vert"], answer: 0 },
+    { q: "Quel est le super pouvoir du mage ?", choices: ["Eau","Feux","Terre"], answer: 1 }
+  ],
+  "Axel": [
+    { q: "Quelle était le thème de la deuxième roue ?", choices: ["Question","Musique","Devinette"], answer: 1 },
+    { q: "1+1= ?", choices: ["10","20","2"], answer: 2 }
+  ]
+};
+
+const blindTestSongs = [
+  { title: "Despacito",              answer: "Despacito",              choices: ["Despacito","Doucement","Latino"],                  audioId: "blindTestAudio" },
+  { title: "Shape of You",           answer: "Shape of You",           choices: ["Shape of You","Perfect","Thinking Out Loud"],       audioId: "shapeOfYouAudio" },
+  { title: "Papa Outai",             answer: "Papa Outai",             choices: ["Papa Outai","Bambino","Dancing"],                   audioId: "papaOutaiAudio" },
+  { title: "Billie Jean",            answer: "Billie Jean",            choices: ["Billie Jean","Thriller","Beat It"],                 audioId: "billieJeanAudio" },
+  { title: "We Will Rock You",       answer: "We Will Rock You",       choices: ["We Will Rock You","Bohemian Rhapsody","Stayin' Alive"], audioId: "weWillRockAudio" },
+  { title: "Get Lucky",              answer: "Get Lucky",              choices: ["One More Time","Get Lucky","Veridis Quo"],          audioId: "daftPunkAudio" },
+  { title: "Uptown Funk",            answer: "Uptown Funk",            choices: ["Bruno Mars","Uptown Funk","24K Magic"],             audioId: "brunoMarsAudio" },
+  { title: "Macarena",               answer: "Macarena",               choices: ["Macarena","La Macarena","Los Del Rio"],             audioId: "macarenaAudio" },
+  { title: "Another One Bites the Dust", answer: "Another One Bites the Dust", choices: ["Queen","Another One Bites the Dust","We Will Rock You"], audioId: "queenAudio" }
+];
+
+function pickQuestion(label, wheelId) {
+  const data = wheelId === 'wheel3' ? questionsWheel3 : questionsWheel1;
+  const pool = data[label] || [];
+  if (!pool.length) return null;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// ─────────────────────────────────────────────
+// ROUES — état par instance
+// ─────────────────────────────────────────────
+
+const wheelState = {
+  wheel1: { spinsDone: 0, correctCount: 0, spinning: false, angle: 0, timeout: null },
+  wheel2: { spinsDone: 0, correctCount: 0, spinning: false, angle: 0, timeout: null, playedSongs: new Set() },
+  wheel3: { spinsDone: 0, correctCount: 0, spinning: false, angle: 0, timeout: null }
+};
+
+const SEGMENTS = {
+  wheel1: [
+    { label: "Facile",    color: "#4fc3a3" },
+    { label: "Moyen",     color: "#f6c23e" },
+    { label: "Facile",    color: "#3fb993" },
+    { label: "Énigme",    color: "#f39c12" },
+    { label: "Facile",    color: "#76c96a" },
+    { label: "Difficile", color: "#e74c3c" },
+    { label: "Moyen",     color: "#f2b72f" },
+    { label: "Rejoue ↻",  color: "#2aa6a1" }
+  ],
+  wheel2: [
+    { label: "1", color: "#000000" },
+    { label: "2", color: "#1a1a1a" },
+    { label: "3", color: "#2d2d2d" },
+    { label: "4", color: "#404040" },
+    { label: "5", color: "#000000" }
+  ],
+  wheel3: [
+    { label: "Elodie",  color: "#FF6B9D" },
+    { label: "Kyllian", color: "#4ECDC4" },
+    { label: "Karlvin", color: "#FFE66D" },
+    { label: "Alexis",  color: "#95E1D3" },
+    { label: "Axel",    color: "#3e9c19" }
+  ]
+};
+
+const MAX_SPINS = 3;
+
+function resetWheel(wheelId) {
+  const state = wheelState[wheelId];
+  state.spinsDone = 0;
+  state.correctCount = 0;
+  state.spinning = false;
+  state.angle = 0;
+  if (state.timeout) { clearTimeout(state.timeout); state.timeout = null; }
+  if (state.playedSongs) state.playedSongs.clear();
+  livesPerWheel[wheelId] = 3;
+
+  const segGroup = document.getElementById('segments-' + wheelId);
+  if (segGroup) {
+    segGroup.style.transition = 'none';
+    segGroup.style.transform  = 'rotate(0deg)';
+  }
+
+  const scene = document.getElementById('scene-' + wheelId);
+  if (scene) scene.classList.remove('is-done', 'is-playing');
+
+  const panel = document.getElementById('panel-' + wheelId);
+  if (panel) {
+    panel.setAttribute('aria-hidden', 'true');
+    panel.style.cssText = '';
+  }
+
+  const spinBtn = document.getElementById('spin-' + wheelId);
+  if (spinBtn) spinBtn.disabled = false;
+
+  updateLivesUI(wheelId);
+  buildWheel(wheelId);
+}
+
+// ─────────────────────────────────────────────
+// CONSTRUCTION SVG DE LA ROUE
+// ─────────────────────────────────────────────
+
+function buildWheel(wheelId) {
+  const segGroup = document.getElementById('segments-' + wheelId);
+  if (!segGroup) return;
+  segGroup.innerHTML = '';
+
+  const segs = SEGMENTS[wheelId];
+  const cx = 100, cy = 100, R = 92, rText = 68;
+  const slice = 360 / segs.length;
+  const deg2rad = d => (d * Math.PI) / 180;
+
+  function polarToXY(r, angleDeg) {
+    const a = deg2rad(angleDeg);
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  }
+
+  function wedgePath(start, end) {
+    const s = start - 90, e = end - 90;
+    const p1 = polarToXY(R, s), p2 = polarToXY(R, e);
+    const largeArc = (end - start) > 180 ? 1 : 0;
+    return `M ${cx} ${cy} L ${p1.x} ${p1.y} A ${R} ${R} 0 ${largeArc} 1 ${p2.x} ${p2.y} Z`;
+  }
+
+  segs.forEach((seg, i) => {
+    const start = i * slice, end = (i + 1) * slice;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', wedgePath(start, end));
+    path.setAttribute('fill', seg.color);
+    path.setAttribute('stroke', '#ffffff');
+    path.setAttribute('stroke-width', '3');
+    segGroup.appendChild(path);
+
+    const mid = (start + end) / 2;
+    const pos = polarToXY(rText, mid - 90);
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', pos.x);
+    text.setAttribute('y', pos.y);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'middle');
+    text.setAttribute('font-size', '9');
+    text.setAttribute('font-weight', '800');
+    text.setAttribute('fill', '#ffffff');
+    text.setAttribute('transform', `rotate(${mid} ${pos.x} ${pos.y})`);
+
+    const parts = seg.label.split(' ').filter(Boolean);
+    if (parts.length >= 2) {
+      const t1 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+      t1.setAttribute('x', pos.x); t1.setAttribute('dy', '-6'); t1.textContent = parts[0];
+      const t2 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+      t2.setAttribute('x', pos.x); t2.setAttribute('dy', '12'); t2.textContent = parts.slice(1).join(' ');
+      text.appendChild(t1); text.appendChild(t2);
+    } else {
+      text.textContent = seg.label;
+    }
+    segGroup.appendChild(text);
+  });
+
+  // Active la transition après le reset
+  requestAnimationFrame(() => {
+    segGroup.style.transition = 'transform 3.2s cubic-bezier(.17,.67,.12,.99)';
+  });
+}
+
+// ─────────────────────────────────────────────
+// SPIN
+// ─────────────────────────────────────────────
+
+function initSpinButton(wheelId) {
+  const spinBtn  = document.getElementById('spin-' + wheelId);
+  const segGroup = document.getElementById('segments-' + wheelId);
+  if (!spinBtn || !segGroup) return;
+
+  spinBtn.addEventListener('click', () => {
+    const state = wheelState[wheelId];
+    if (state.spinning) return;
+    state.spinning = true;
+    spinBtn.disabled = true;
+
+    const scene = document.getElementById('scene-' + wheelId);
+    if (scene) scene.classList.remove('is-done');
+
+    // Son de spin
+    const spinSoundEl = document.getElementById('spinSound');
+    if (spinSoundEl) {
+      spinSoundEl.currentTime = 0;
+      spinSoundEl.volume = volumeSlider ? volumeSlider.value / 100 : 0.5;
+      spinSoundEl.play().catch(() => {});
+      setTimeout(() => { if (spinSoundEl) { spinSoundEl.pause(); spinSoundEl.currentTime = 0; } }, 3000);
+    }
+
+    if (wheelId === 'wheel2') {
+      const vinylePlayer = document.querySelector('#modal-wheel2 .vinyle-player');
+      if (vinylePlayer && scene) scene.classList.add('is-playing');
+    }
+
+    const extra = Math.random() * 360;
+    const spins  = 1080 + Math.random() * 1080;
+    state.angle += spins + extra;
+    segGroup.style.transform = `rotate(${state.angle}deg)`;
+
+    if (state.timeout) clearTimeout(state.timeout);
+    state.timeout = setTimeout(() => handleSpinComplete(wheelId), 3500);
+  });
+
+  segGroup.addEventListener('transitionend', e => {
+    if (e.propertyName !== 'transform') return;
+    const state = wheelState[wheelId];
+    if (!state.spinning) return;
+    if (state.timeout) { clearTimeout(state.timeout); state.timeout = null; }
+    handleSpinComplete(wheelId);
+  });
+}
+
+function handleSpinComplete(wheelId) {
+  const state    = wheelState[wheelId];
+  if (!state.spinning) return;
+
+  const segs  = SEGMENTS[wheelId];
+  const slice = 360 / segs.length;
+  const norm  = ((state.angle % 360) + 360) % 360;
+  const index = Math.floor(((360 - norm) % 360) / slice) % segs.length;
+  const label = segs[index].label;
+
+  // "Rejoue" sur wheel1
+  if (label === 'Rejoue ↻' && wheelId === 'wheel1') {
+    state.spinning = false;
+    setTimeout(() => {
+      const panel = document.getElementById('panel-' + wheelId);
+      if (panel) { panel.style.cssText = ''; panel.setAttribute('aria-hidden', 'true'); }
+      const scene = document.getElementById('scene-' + wheelId);
+      if (scene) scene.classList.remove('is-done');
+      const spinBtn = document.getElementById('spin-' + wheelId);
+      if (spinBtn) spinBtn.disabled = false;
+      state.angle = 0;
+      const segGroup = document.getElementById('segments-' + wheelId);
+      if (segGroup) segGroup.style.transform = 'rotate(0deg)';
+    }, 1500);
+    return;
+  }
+
+  // Wheel2 : Blind Test sur chaque spin
+  if (wheelId === 'wheel2') {
+    state.spinsDone++;
+    state.spinning = false;
+    const scene = document.getElementById('scene-' + wheelId);
+    if (scene) scene.classList.add('is-done');
+    const panel = document.getElementById('panel-' + wheelId);
+    if (panel) panel.style.cssText = '';
+    startBlindTest();
+    return;
+  }
+
+  // Wheel1 & Wheel3 : question
+  state.spinsDone++;
+  state.spinning = false;
+  const qObj = pickQuestion(label, wheelId);
+  if (qObj) {
+    showQuestion(qObj, wheelId);
+  } else {
+    showQuestion({ q: `Catégorie ${label}`, choices: ['OK'], answer: 0 }, wheelId);
+  }
+}
+
+// ─────────────────────────────────────────────
+// AFFICHAGE DE QUESTION
+// ─────────────────────────────────────────────
+
+function showQuestion(qObj, wheelId) {
+  const scene = document.getElementById('scene-' + wheelId);
+  const panel = document.getElementById('panel-' + wheelId);
+  if (!panel) return;
+
+  const cards = panel.querySelectorAll('.panel-card');
+  if (cards[0]) cards[0].textContent = qObj.q || '';
+  if (cards[1]) {
+    cards[1].innerHTML = '';
+    delete cards[1].dataset.answered;
+    (qObj.choices || []).forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'answer-btn';
+      btn.textContent = c;
+      btn.addEventListener('click', () => checkAnswer(i, qObj.answer, wheelId));
+      cards[1].appendChild(btn);
+    });
+  }
+  if (cards[2]) cards[2].textContent = '';
+
+  if (scene) scene.classList.add('is-done');
+  panel.setAttribute('aria-hidden', 'false');
+  const spinBtn = document.getElementById('spin-' + wheelId);
+  if (spinBtn) spinBtn.disabled = true;
+}
+
+function checkAnswer(choiceIndex, correctIndex, wheelId) {
+  const panel   = document.getElementById('panel-' + wheelId);
+  const cards   = panel.querySelectorAll('.panel-card');
+  const choicesCont = cards[1];
+  const feedbackCard = cards[2];
+  const buttons = choicesCont ? Array.from(choicesCont.querySelectorAll('.answer-btn')) : [];
+  const state   = wheelState[wheelId];
+
+  if (choicesCont && choicesCont.dataset.answered === 'true') return;
+
+  const clickedBtn = buttons[choiceIndex];
+  if (clickedBtn) clickedBtn.disabled = true;
+
+  if (choiceIndex === correctIndex) {
+    if (clickedBtn) clickedBtn.classList.add('correct');
+    if (feedbackCard) { feedbackCard.textContent = 'Bonne réponse !'; feedbackCard.style.color = '#27ae60'; }
+    state.correctCount++;
+    if (choicesCont) choicesCont.dataset.answered = 'true';
+
+    setTimeout(() => {
+      buttons.forEach(b => { b.disabled = false; b.classList.remove('selected','wrong','correct'); });
+      panel.setAttribute('aria-hidden', 'true');
+      const scene = document.getElementById('scene-' + wheelId);
+      if (scene) scene.classList.remove('is-done');
+
+      if (state.correctCount >= MAX_SPINS) {
+        goToNextModal('modal-' + wheelId);
+        return;
+      }
+      const spinBtn = document.getElementById('spin-' + wheelId);
+      if (spinBtn) spinBtn.disabled = false;
+    }, 2000);
+    return;
+  }
+
+  // Mauvaise réponse
+  enregistrerErreur(wheelId);
+  livesPerWheel[wheelId] = Math.max(0, livesPerWheel[wheelId] - 1);
+  updateLivesUI(wheelId);
+  if (clickedBtn) clickedBtn.classList.add('wrong');
+  if (feedbackCard) {
+    feedbackCard.textContent = `Mauvaise réponse — il vous reste ${livesPerWheel[wheelId]} cœur(s)`;
+    feedbackCard.style.color = '#e67e22';
+  }
+  if (livesPerWheel[wheelId] === 0) {
+    setTimeout(goToFail, 800);
+  }
+}
+
+// ─────────────────────────────────────────────
+// BLIND TEST
+// ─────────────────────────────────────────────
+
+let blindTestTimerInterval = null;
+
+function startBlindTest() {
+  if (blindTestTimerInterval) { clearInterval(blindTestTimerInterval); blindTestTimerInterval = null; }
+
+  const state = wheelState.wheel2;
+  let available = blindTestSongs.filter((_, i) => !state.playedSongs.has(i));
+  if (!available.length) { state.playedSongs.clear(); available = blindTestSongs; }
+
+  const song  = available[Math.floor(Math.random() * available.length)];
+  const songI = blindTestSongs.indexOf(song);
+  state.playedSongs.add(songI);
+
+  // Stoppe tout audio
+  blindTestSongs.forEach(s => {
+    const el = document.getElementById(s.audioId);
+    if (el) { el.pause(); el.currentTime = 0; }
+  });
+
+  const panel      = document.getElementById('panel-wheel2');
+  const blindPhase = document.getElementById('blindTestPhase');
+  const scene      = document.getElementById('scene-wheel2');
+
+  if (scene) scene.classList.add('is-done');
+  if (panel) { panel.style.cssText = ''; panel.setAttribute('aria-hidden', 'false'); }
+  if (blindPhase) blindPhase.style.display = 'block';
+
+  // Lance la musique
+  const audio = document.getElementById(song.audioId);
+  if (audio) {
+    audio.volume = volumeSlider ? volumeSlider.value / 100 : 0.5;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }
+
+  // Timer de 6s
+  let timeLeft = 6;
+  const timerBar = document.getElementById('blindTestTimer');
+  const questionEl = document.getElementById('blindTestQuestion');
+  if (questionEl) questionEl.textContent = 'Devine le titre !';
+  if (timerBar) {
+    timerBar.style.transition = 'none';
+    timerBar.style.width = '100%';
+    timerBar.classList.remove('low','medium');
+    void timerBar.offsetWidth;
+    timerBar.style.transition = 'width 6s linear';
+    timerBar.style.width = '0%';
+  }
+
+  blindTestTimerInterval = setInterval(() => {
+    timeLeft--;
+    if (timerBar) {
+      timerBar.classList.remove('low','medium');
+      if (timeLeft <= 2) timerBar.classList.add('low');
+      else if (timeLeft <= 3) timerBar.classList.add('medium');
+    }
+    if (timeLeft <= 0) {
+      clearInterval(blindTestTimerInterval); blindTestTimerInterval = null;
+      if (audio) audio.pause();
+      if (blindPhase) blindPhase.style.display = 'none';
+      showBlindTestQuestion(song);
+    }
+  }, 1000);
+}
+
+function showBlindTestQuestion(song) {
+  const panel = document.getElementById('panel-wheel2');
+  if (!panel) return;
+  const cards = Array.from(panel.querySelectorAll('.panel-card')).filter(c => c.id !== 'blindTestPhase');
+
+  if (cards[0]) cards[0].innerHTML = '<div style="text-align:center;font-size:14px;margin-bottom:10px;">Quel est le titre de la chanson ?</div>';
+  if (cards[1]) cards[1].innerHTML = '';
+  if (cards[2]) cards[2].textContent = '';
+
+  if (cards[1]) {
+    let answered = false;
+    song.choices.forEach(choice => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'answer-btn';
+      btn.textContent = choice;
+      btn.addEventListener('click', function () {
+        if (answered) return;
+        if (choice === song.answer) {
+          answered = true;
+          btn.classList.add('correct');
+          if (cards[2]) { cards[2].textContent = 'Bonne réponse ! 🎉'; cards[2].style.color = '#27ae60'; }
+          wheelState.wheel2.correctCount++;
+          wheelState.wheel2.playedSongs.clear();
+          setTimeout(() => {
+            panel.setAttribute('aria-hidden', 'true'); panel.style.cssText = '';
+            const scene = document.getElementById('scene-wheel2');
+            if (scene) scene.classList.remove('is-done');
+            if (wheelState.wheel2.correctCount >= MAX_SPINS) {
+              goToNextModal('modal-wheel2');
+            } else {
+              const spinBtn = document.getElementById('spin-wheel2');
+              if (spinBtn) spinBtn.disabled = false;
+            }
+          }, 3000);
+        } else {
+          btn.classList.add('wrong');
+          btn.disabled = true;
+          enregistrerErreur('wheel2');
+          livesPerWheel.wheel2 = Math.max(0, livesPerWheel.wheel2 - 1);
+          updateLivesUI('wheel2');
+          if (livesPerWheel.wheel2 === 0) {
+            if (cards[2]) { cards[2].textContent = 'Plus de vies ! 💀'; cards[2].style.color = '#e74c3c'; }
+            setTimeout(goToFail, 1500);
+          } else {
+            if (cards[2]) { cards[2].textContent = 'Mauvaise ! Réessayez... 🔥'; cards[2].style.color = '#e67e22'; }
+          }
+        }
+      });
+      cards[1].appendChild(btn);
+    });
+  }
+}
+
+// ─────────────────────────────────────────────
+// BADGES
+// ─────────────────────────────────────────────
+
+function initBadges() {
+  function show(bronze, argent, diam, fautes) {
+    [bronze, argent, diam].forEach(c => { if (c) c.style.display = 'none'; });
+    if      (fautes === 0 && diam)   diam.style.display   = 'block';
+    else if (fautes === 1 && argent) argent.style.display = 'block';
+    else if (fautes >= 2 && bronze)  bronze.style.display = 'block';
+  }
+  const modal = document.getElementById('modal-card');
+  if (!modal) return;
+  ['1','2','3'].forEach(n => {
+    const f = parseInt(localStorage.getItem('fautesWheel' + n) || '0');
+    show(
+      modal.querySelector('.wheel' + n + '-bronze'),
+      modal.querySelector('.wheel' + n + '-argent'),
+      modal.querySelector('.wheel' + n + '-diamant'),
+      f
+    );
+  });
+
+  // Flip 3D badges
+  modal.querySelectorAll('.ach-card').forEach(card => {
+    const flip = card.querySelector('.ach-flip');
+    if (!flip) return;
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const rx = ((e.clientY - r.top  - r.height/2) / (r.height/2)) * -15;
+      const ry = ((e.clientX - r.left - r.width /2) / (r.width /2)) *  15;
+      flip.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    card.addEventListener('mouseleave', () => flip.style.transform = 'rotateX(0deg) rotateY(0deg)');
+    card.addEventListener('mousedown',  () => flip.style.transform = 'rotateY(180deg)');
+    card.addEventListener('mouseup',    () => flip.style.transform = 'rotateX(0deg) rotateY(0deg)');
+  });
+}
+
+// ─────────────────────────────────────────────
+// INITIALISATION
+// ─────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  ['wheel1','wheel2','wheel3'].forEach(id => {
+    buildWheel(id);
+    updateLivesUI(id);
+    initSpinButton(id);
+  });
+});
+
+</script>
+
 {% endblock %}
